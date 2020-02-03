@@ -17,6 +17,7 @@ public:
 	static bool squaredRadiusCheck(GameObject* object1, GameObject* object2);
 
 	static bool AABBCheck(GameObject* object1, GameObject* object2);
+	static bool AABBCheckPlayer(Player* object1, GameObject* object2);
 
 	static bool lineLineCheck(glm::vec2 line1Start, glm::vec2 line1End, glm::vec2 line2Start, glm::vec2 line2End);
 	static bool lineRectCheck(glm::vec2 line1Start, glm::vec2 line1End, glm::vec2 recStart, float recWidth, float recHeight);

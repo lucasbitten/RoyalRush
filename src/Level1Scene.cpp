@@ -23,7 +23,7 @@ void Level1Scene::update()
 	m_pPlayer->update();
 	m_pStartButton->setMousePosition(m_mousePosition);
 	m_pStartButton->ButtonClick();
-	Collision::squaredRadiusCheckPlayer(m_pPlayer, m_pGround);
+	Collision::AABBCheckPlayer(m_pPlayer, m_pGround);
 }
 
 void Level1Scene::clean()

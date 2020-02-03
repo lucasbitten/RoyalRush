@@ -31,6 +31,8 @@ public:
 
 	void _move();
 
+	void stopJump(glm::vec2 newPos);
+
 	// remove anything that needs to be deleted
 	void clean();
 

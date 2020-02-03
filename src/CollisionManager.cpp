@@ -99,6 +99,60 @@ bool CollisionManager::squaredRadiusCheck(GameObject* object1, GameObject* objec
 	}
 }
 
+
+bool CollisionManager::AABBCheckPlayer(Player* player, GameObject* object2)
+{
+	// prepare relevant variables
+	glm::vec2 P1 = player->getPosition();
+	glm::vec2 P2 = object2->getPosition();
+	float P1width = player->getWidth();
+	float P1height = player->getHeight();
+	float P2width = object2->getWidth();
+	float P2height = object2->getHeight();
+
+	if (
+		P1.x < P2.x + P2width &&
+		P1.x + P1width > P2.x&&
+		P1.y < P2.y + P2height &&
+		P1.y + P1height > P2.y
+		)
+	{
+		if (!object2->getIsColliding()) {
+
+			object2->setIsColliding(true);
+
+
+
+			switch (object2->getType()) {
+			case  GROUND:
+
+				player->jumping = false;
+				player->jumpTime = 0;
+				player->setPosition(glm::vec2(P1.x, P2.y - object2->getHeight() / 2 - player->getHeight() / 2));
+
+				break;
+
+
+			default:
+				//std::cout << "Collision with unknown type!" << std::endl;
+				break;
+			}
+			
+			return true;
+		}
+		return false;
+	}
+	else
+	{
+		object2->setIsColliding(false);
+		return false;
+	}
+
+	return false;
+}
+
+
+
 bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 {
 	// prepare relevant variables
@@ -120,6 +174,31 @@ bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 
 			object2->setIsColliding(true);
 
+
+			if(object1->getType() == PLAYER)
+			{
+				std::cout << "Player collided!" << std::endl;
+				switch (object2->getType()) {
+				case  GROUND:
+										
+					std::cout << "Collision with Ground type!" << std::endl;
+					std::cout << "Position: (" << object1->getPosition().x << "," << object1->getPosition().y << ")" << std::endl;
+					std::cout << "Player Instance Position: (" << Player::Instance()->getPosition().x << "," << Player::Instance()->getPosition().y << ")" << std::endl;
+
+					Player::Instance()->jumping = false;
+					Player::Instance()->jumpTime = 0;
+					Player::Instance()->setPosition(glm::vec2(P1.x, P2.y - object2->getHeight() / 2 - Player::Instance()->getHeight() / 2));
+
+					break;
+
+
+				default:
+					//std::cout << "Collision with unknown type!" << std::endl;
+					break;
+				}
+			}
+
+			
 			switch (object2->getType()) {
 			case PLANET:
 				std::cout << "Collision with Platform!" << std::endl;

@@ -2,11 +2,15 @@
 #include "Game.h"
 #include "PhysicsManager.h"
 
+Player* Player::s_pInstance;
+
 Player::Player()
 {
 	TheTextureManager::Instance()->load("../Assets/textures/Player.png", "player", TheGame::Instance()->getRenderer());
-	setPosition(glm::vec2(0, 430.0f));
+	setPosition(glm::vec2(200, 200));
 
+	std::cout << "Player on scene!" << std::endl;
+	
 	glm::vec2 size = TheTextureManager::Instance()->getTextureSize("player");
 	setWidth(size.x);
 	setHeight(size.y);
@@ -53,6 +57,13 @@ void Player::_move()
 	setPosition(newPosition);
 }
 
+void Player::stopJump(glm::vec2 newPos)
+{
+	jumping = false;
+	jumpTime = 0;
+	setPosition(newPos);
+}
+
 void Player::clean()
 {
 }
@@ -61,7 +72,7 @@ void Player::jump()
 {
 	
 	float posY = getPosition().y;
-	posY -= ( 50*jumpTime - ThePhysicsManager::Instance()->gravity * glm::pow(jumpTime,2)/2);
+	posY -= ( 80*jumpTime - ThePhysicsManager::Instance()->gravity * glm::pow(jumpTime,2)/2);
 	setPosition(glm::vec2(getPosition().x, posY));
 	jumpTime += 0.016;
 
