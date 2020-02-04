@@ -109,6 +109,7 @@ bool CollisionManager::AABBCheckPlayer(Player* player, GameObject* object2)
 	float P1height = player->getHeight();
 	float P2width = object2->getWidth();
 	float P2height = object2->getHeight();
+	P2.x = P2.x - (P2width / 2);
 
 	if (
 		P1.x < P2.x + P2width &&
@@ -125,7 +126,16 @@ bool CollisionManager::AABBCheckPlayer(Player* player, GameObject* object2)
 
 			switch (object2->getType()) {
 			case  GROUND:
-
+				std::cout << "#####################" << std::endl;
+				std::cout << "Player X  = " << P1.x;
+				std::cout << " Player Height = " << P1height;
+				std::cout << " Player Y = " << P1.y;
+				std::cout << " Player Width = " << P1width << std::endl;
+				std::cout << "Ground X = " << P2.x;
+				std::cout << " Ground Height = " << P2height;
+				std::cout << " Ground Y = " << P2.y;
+				std::cout << " Ground Width  = " << P2width << std::endl;				
+				std::cout << "#####################" << std::endl;
 				player->jumping = false;
 				player->jumpTime = 0;
 				player->setPosition(glm::vec2(P1.x, P2.y - object2->getHeight() / 2 - player->getHeight() / 2));
