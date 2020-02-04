@@ -22,10 +22,7 @@ Player::Player()
 
 	TheSoundManager::Instance()->playMusic("engine", -1);
 
-	jumpHeight = 1 * ThePhysicsManager::Instance()->pixelsPerMeter;
-	initialJumpVelocity = 4;
-	timeToApex = 0.5;
-	
+
 }
 
 Player::~Player()
@@ -72,7 +69,7 @@ void Player::jump()
 {
 	
 	float posY = getPosition().y;
-	posY -= ( 80*jumpTime - ThePhysicsManager::Instance()->gravity * glm::pow(jumpTime,2)/2);
+	posY -= ( initialJumpVelocity*jumpTime - ThePhysicsManager::Instance()->gravity * glm::pow(jumpTime,2)/2);
 	setPosition(glm::vec2(getPosition().x, posY));
 	jumpTime += 0.016;
 

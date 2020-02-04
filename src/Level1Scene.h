@@ -34,7 +34,9 @@ private:
 
 	Shadow* m_pShadow;
 
-	Ground* m_pGround;
+	std::vector<Ground*> m_pGrounds;
+	std::vector<Ground*> m_pGroundsVertical;
+
 };
 
 #endif /* defined (__LEVEL_1_SCENE__) */

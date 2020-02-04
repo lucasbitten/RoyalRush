@@ -41,18 +41,10 @@ public:
 	void resetClosedAndOpen();
 private:
 	// GameObjects
-	Ship m_ship;
-	std::vector<Mine> m_pMines;
-	Target m_pTarget;
+	
 	Label* m_pLabel;
-	Planet m_planet;
 
-	// utility functions for ship control
-	void m_createShips();
-	void m_drawShips();
-	void m_updateShips();
-	void m_respawnShips();
-	void m_moveShipsAlongPath();
+
 
 	// utility functions for planet control
 	void m_createPlanet();

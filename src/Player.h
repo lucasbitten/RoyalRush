@@ -38,9 +38,7 @@ public:
 
 	bool onShadow;
 	
-	float jumpHeight;
-	float initialJumpVelocity;
-	float timeToApex;
+	float initialJumpVelocity = 100;
 	
 	float jumpTime = 0;
 	float jumpDuration = 1;

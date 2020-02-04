@@ -13,17 +13,32 @@ Level1Scene::~Level1Scene()
 
 void Level1Scene::draw()
 {
-	m_pGround->draw();
+	for (Ground* ground : m_pGrounds) {
+		ground->draw();
+	}
+	for (Ground* ground : m_pGroundsVertical) {
+		ground->draw();
+	}
 	m_pPlayer->draw();
 	m_pShadow->draw();
 }
 
 void Level1Scene::update()
 {
-	m_pPlayer->update();
 	m_pStartButton->setMousePosition(m_mousePosition);
 	m_pStartButton->ButtonClick();
-	Collision::AABBCheckPlayer(m_pPlayer, m_pGround);
+
+	for (Ground* ground : m_pGrounds) {
+		Collision::squaredRadiusCheckPlayer(m_pPlayer, ground);
+	}
+	for (Ground* ground : m_pGroundsVertical) {
+		Collision::squaredRadiusCheckPlayer(m_pPlayer, ground);
+	}
+
+	m_pPlayer->update();
+
+
+	
 }
 
 void Level1Scene::clean()
@@ -93,11 +108,11 @@ void Level1Scene::handleEvents()
 				
 				break;
 			case SDLK_a:
-				m_pPlayer->setVelocity(glm::vec2(-10, m_pPlayer->getVelocity().y));
+				m_pPlayer->setVelocity(glm::vec2(-3, m_pPlayer->getVelocity().y));
 
 				break;
 			case SDLK_d:
-				m_pPlayer->setVelocity(glm::vec2(10, m_pPlayer->getVelocity().y));
+				m_pPlayer->setVelocity(glm::vec2(3, m_pPlayer->getVelocity().y));
 
 				break;
 			}
@@ -140,11 +155,32 @@ void Level1Scene::start()
 
 	m_pPlayer = new Player();
 	m_pShadow = new Shadow();
-	m_pGround = new Ground();
+
+	for (size_t i = 0; i < 10; i++)
+	{
+		m_pGrounds.push_back(new Ground());
+	}
 	
-	m_pPlayer->setPosition(glm::vec2(300, 300));
+	m_pPlayer->setPosition(glm::vec2(300, 310));
 	m_pShadow->setPosition(glm::vec2(500, 300));
-	m_pGround->setPosition(glm::vec2(300,330));
+
+	int i = 0;
+	
+	for (Ground* ground : m_pGrounds) {
+		ground->setPosition(glm::vec2(200 + i, 330));
+		i += 50;
+	}
+	
+	for (size_t i = 0; i < 3; i++)
+	{
+		m_pGroundsVertical.push_back(new Ground());
+	}
+	int j = 0;
+	
+	for (Ground* ground : m_pGroundsVertical) {
+		ground->setPosition(glm::vec2(400,330 - j));
+		j += 50;
+	}
 }
 
 glm::vec2 Level1Scene::getMousePosition()

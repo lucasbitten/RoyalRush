@@ -14,6 +14,8 @@ public:
 	void draw() override;
 	void update() override;
 	void clean() override;
+
+	bool playerColliding;
 	
 };
 

@@ -24,9 +24,6 @@ bool CollisionManager::squaredRadiusCheckPlayer(Player* player, GameObject* obje
 
 	if (CollisionManager::squaredDistance(P1, P2) < (halfHeights * halfHeights)) {
 
-
-
-
 		if (!object2->getIsColliding()) {
 
 			object2->setIsColliding(true);
@@ -35,10 +32,26 @@ bool CollisionManager::squaredRadiusCheckPlayer(Player* player, GameObject* obje
 			{
 			case  GROUND:
 
-				//std::cout << "Collision with Ground type!" << std::endl;
-				player->jumping = false;
-				player->jumpTime = 0;
-				player->setPosition(glm::vec2(P1.x, P2.y - object2->getHeight() / 2 - player->getHeight() / 2));
+
+				
+				if(P1.y < P2.y)
+				{
+					std::cout << "Collision above ground!" << std::endl;
+					player->stopJump(glm::vec2(P1.x, 1 + P2.y - object2->getHeight() / 2.0f - player->getHeight() / 2.0f) );
+				} else if ( P1.x > P2.x)
+				{
+					std::cout << "Collision on the right of ground!" << std::endl;
+					player->setPosition(glm::vec2(player->getPosition().x + 5, player->getPosition().y));
+					player->setVelocity(glm::vec2(0,player->getVelocity().y));
+				} else if( P1.x < P2.x)
+				{
+					std::cout << "Collision on the left of ground!" << std::endl;
+					player->setPosition(glm::vec2(player->getPosition().x - 5, player->getPosition().y));
+					player->setVelocity(glm::vec2(0, player->getVelocity().y));
+				}
+				
+
+
 				break;
 
 			default:
@@ -109,7 +122,15 @@ bool CollisionManager::AABBCheckPlayer(Player* player, GameObject* object2)
 	float P1height = player->getHeight();
 	float P2width = object2->getWidth();
 	float P2height = object2->getHeight();
-	P2.x = P2.x - (P2width / 2);
+
+	if(P2.x < P1.x)
+	{
+		P2.x = P2.x - (P2width / 2);
+	} else
+	{
+		P2.x = P2.x + (P2width / 2);
+	}
+	
 
 	if (
 		P1.x < P2.x + P2width &&
