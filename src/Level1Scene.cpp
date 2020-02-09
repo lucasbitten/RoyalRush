@@ -1,6 +1,7 @@
 #include "Level1Scene.h"
 #include "Game.h"
 #include <iostream>
+#include "DetectShadowManager.h"
 
 Level1Scene::Level1Scene()
 {
@@ -20,26 +21,81 @@ void Level1Scene::draw()
 		ground->draw();
 	}
 	m_pPlayer->draw();
-	m_pShadow->draw();
+	
+	for (Shadow* shadow : m_pShadows) {
+		shadow->draw();
+	}
 }
 
 void Level1Scene::update()
 {
-	m_pStartButton->setMousePosition(m_mousePosition);
-	m_pStartButton->ButtonClick();
 
+	for (Shadow* shadow: m_pShadows)
+	{
+		DetectShadowManager::playerOnShadow(shadow, m_pPlayer);
+	}
+	
+	
 	for (Ground* ground : m_pGrounds) {
-		Collision::squaredRadiusCheckPlayer(m_pPlayer, ground);
+
+		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2 + 22);
+		Collision::lineRectCheck(m_pPlayer, bottomLine, ground, ground->getWidth(), ground->getHeight());
+		
 	}
 	for (Ground* ground : m_pGroundsVertical) {
+		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2 + 22);
+		Collision::lineRectCheck(m_pPlayer, bottomLine, ground, ground->getWidth(), ground->getHeight());
+
 		Collision::squaredRadiusCheckPlayer(m_pPlayer, ground);
+		
 	}
 
-	m_pPlayer->update();
 
+	m_pPlayer->update();
+	m_pPlayer->isGrounded = playerIsGrounded();
+	
+	//m_pPlayer->setVelocity(glm::vec2(m_pPlayer->getVelocity().x * 0.1f, m_pPlayer->getVelocity().y));
+	m_pPlayer->onShadow = playerIsOnShadow();
+	std::cout << "Player on shadow = " << m_pPlayer->onShadow << std::endl;
+
+}
+
+
+bool Level1Scene::playerIsGrounded()
+{
+	for (Ground* ground : m_pGrounds) {
+
+		if (ground->playerAtGround == true)
+		{
+			return true;
+		}
+	}
+
+	for (Ground* ground : m_pGroundsVertical) {
+
+		if (ground->playerAtGround == true)
+		{
+			return true;
+		}
+	}
 
 	
+	return false;
 }
+
+
+bool Level1Scene::playerIsOnShadow()
+{
+	for (Shadow* shadow : m_pShadows) {
+
+		if (shadow->playerAtShadow == true)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 
 void Level1Scene::clean()
 {
@@ -50,7 +106,7 @@ void Level1Scene::handleEvents()
 	int wheel = 0;
 
 	SDL_Event event;
-	if (SDL_PollEvent(&event))
+	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)
 		{
@@ -60,17 +116,12 @@ void Level1Scene::handleEvents()
 		case SDL_MOUSEMOTION:
 			m_mousePosition.x = event.motion.x;
 			m_mousePosition.y = event.motion.y;
-			//m_pPlayer->setPosition(glm::vec2(m_mousePosition.x, m_mousePosition.y));
-			/*std::cout << "Mouse X: " << m_mousePosition.x << std::endl;
-			std::cout << "Mouse Y: " << m_mousePosition.y << std::endl;
-			std::cout << "---------------------------------------------" << std::endl;*/
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
 			switch(event.button.button)
 			{
 			case SDL_BUTTON_LEFT:
-				m_pStartButton->setMouseButtonClicked(true);
 				break;
 			}
 		
@@ -79,7 +130,6 @@ void Level1Scene::handleEvents()
 			switch (event.button.button)
 			{
 			case SDL_BUTTON_LEFT:
-				m_pStartButton->setMouseButtonClicked(false);
 				break;
 			}
 			break;
@@ -102,17 +152,20 @@ void Level1Scene::handleEvents()
 
 				/************************************************************************/
 			case SDLK_w:
-				m_pPlayer->jumping = true;
+				if (m_pPlayer->isGrounded)
+				{
+					m_pPlayer->jump();
+					
+				}
 				break;
 			case SDLK_s:
 				
 				break;
 			case SDLK_a:
-				m_pPlayer->setVelocity(glm::vec2(-3, m_pPlayer->getVelocity().y));
-
+				m_pPlayer->move(LEFT);
 				break;
 			case SDLK_d:
-				m_pPlayer->setVelocity(glm::vec2(3, m_pPlayer->getVelocity().y));
+				m_pPlayer->move(RIGHT);
 
 				break;
 			}
@@ -127,7 +180,7 @@ void Level1Scene::handleEvents()
 				break;
 
 			case SDLK_s:
-				
+
 				break;
 
 			case SDLK_a:
@@ -150,24 +203,36 @@ void Level1Scene::handleEvents()
 void Level1Scene::start()
 {
 	// allocates memory on the heap for this game object
-	m_pStartButton = new StartButton();
-	m_pStartButton->setMouseButtonClicked(false);
 
 	m_pPlayer = new Player();
-	m_pShadow = new Shadow();
+	addChild(m_pPlayer);
+	
+	for (size_t i = 0; i < 1; i++)
+	{
+		m_pShadows.push_back(new Shadow());
 
+	}
+
+	for (Shadow* shadow : m_pShadows) {
+		shadow->setPosition(glm::vec2(474, 265));
+		addChild(shadow);
+	}
+	
+	
 	for (size_t i = 0; i < 10; i++)
 	{
 		m_pGrounds.push_back(new Ground());
+
 	}
 	
-	m_pPlayer->setPosition(glm::vec2(300, 310));
-	m_pShadow->setPosition(glm::vec2(500, 300));
+	m_pPlayer->setPosition(glm::vec2(300, 150));
 
 	int i = 0;
 	
 	for (Ground* ground : m_pGrounds) {
 		ground->setPosition(glm::vec2(200 + i, 330));
+		addChild(ground);
+
 		i += 50;
 	}
 	
@@ -179,6 +244,8 @@ void Level1Scene::start()
 	
 	for (Ground* ground : m_pGroundsVertical) {
 		ground->setPosition(glm::vec2(400,330 - j));
+		addChild(ground);
+
 		j += 50;
 	}
 }
@@ -187,39 +254,3 @@ glm::vec2 Level1Scene::getMousePosition()
 {
 	return m_mousePosition;
 }
-
-/*
-bool Level1Scene::m_MouseOver()
-{
-	float topLeftX = m_pStartButton->getPosition().x - m_pStartButton->getWidth() * 0.5;
-	float topLeftY = m_pStartButton->getPosition().y - m_pStartButton->getHeight() * 0.5;
-	float width = m_pStartButton->getWidth();
-	float height = m_pStartButton->getHeight();
-
-	
-	if(m_mousePosition.x > topLeftX &&
-		m_mousePosition.x < topLeftX + width &&
-		m_mousePosition.y > topLeftY &&
-		m_mousePosition.y < topLeftY + height)
-	{
-		//std::cout << "Mouse Over!!" << std::endl;
-
-		m_pStartButton->setAlpha(178);
-		return true;
-	}
-	else
-	{
-		m_pStartButton->setAlpha(255);
-		return false;
-	}
-}
-
-void Level1Scene::m_MouseClick()
-{
-	if(m_MouseOver() && m_mouseClicked)
-	{
-		std::cout << "Mouse Button Clicked!" << std::endl;
-	}
-}
-
-*/

@@ -181,7 +181,6 @@
     <ClCompile Include="..\src\StartButton.cpp" />
     <ClCompile Include="..\src\StartScene.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
-    <ClCompile Include="..\src\Tile.cpp" />
     <ClCompile Include="..\src\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +203,7 @@
     <ClInclude Include="..\src\Ground.h" />
     <ClInclude Include="..\src\Label.h" />
     <ClInclude Include="..\src\Level1Scene.h" />
+    <ClInclude Include="..\src\Move.h" />
     <ClInclude Include="..\src\PhysicsManager.h" />
     <ClInclude Include="..\src\Player.h" />
     <ClInclude Include="..\src\Scene.h" />
@@ -215,8 +215,6 @@
     <ClInclude Include="..\src\StartScene.h" />
     <ClInclude Include="..\src\SteeringState.h" />
     <ClInclude Include="..\src\TextureManager.h" />
-    <ClInclude Include="..\src\Tile.h" />
-    <ClInclude Include="..\src\TileComparators.h" />
     <ClInclude Include="..\src\Util.h" />
     <ClInclude Include="DetectShadowManager.h" />
   </ItemGroup>

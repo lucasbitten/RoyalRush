@@ -2,9 +2,9 @@
 #ifndef  __Ground__
 #define __Ground__
 
-#include  "GameObject.h"
+#include "DisplayObject.h"
 
-class Ground : public GameObject
+class Ground : public DisplayObject
 {
 public:
 
@@ -15,7 +15,7 @@ public:
 	void update() override;
 	void clean() override;
 
-	bool playerColliding;
+	bool playerAtGround;
 	
 };
 

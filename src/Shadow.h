@@ -2,11 +2,11 @@
 #ifndef __Shadow__
 #define __Shadow__
 
-#include "GameObject.h"
 #include "TextureManager.h"
 #include "SoundManager.h"
+#include "DisplayObject.h"
 
-class Shadow : public GameObject
+class Shadow : public DisplayObject
 {
 public:
 

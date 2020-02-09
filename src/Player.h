@@ -5,8 +5,10 @@
 #include "GameObject.h"
 #include "TextureManager.h"
 #include "SoundManager.h"
+#include "DisplayObject.h"
+#include  "Move.h"
 
-class Player : public GameObject {
+class Player : public DisplayObject {
 public:
 
 	static Player* Instance()
@@ -29,7 +31,7 @@ public:
 	// Update the object
 	void update();
 
-	void _move();
+	void move(Move newMove);
 
 	void stopJump(glm::vec2 newPos);
 
@@ -38,6 +40,9 @@ public:
 
 	bool onShadow;
 	
+	bool isGrounded;
+
+	
 	float initialJumpVelocity = 100;
 	
 	float jumpTime = 0;
@@ -45,9 +50,12 @@ public:
 	
 	bool jumping = false;
 	void jump();
+
+	
 private:
 	static Player* s_pInstance;
 
+	float m_maxSpeed;
 };
 
 typedef  Player ThePlayer;

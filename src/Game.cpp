@@ -2,7 +2,6 @@
 #include <ctime>
 #include "GLM/gtx/string_cast.hpp"
 #include <algorithm>
-#include "TileComparators.h"
 #include <iomanip>
 
 
@@ -200,7 +199,7 @@ void Game::handleEvents()
 	m_currentScene->handleEvents();
 
 	SDL_Event event;
-	if (SDL_PollEvent(&event))
+	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)
 		{

@@ -2,6 +2,7 @@
 #include "Util.h"
 #include <algorithm>
 #include  "Player.h"
+#include "Ground.h"
 
 
 int CollisionManager::squaredDistance(glm::vec2 P1, glm::vec2 P2)
@@ -32,26 +33,24 @@ bool CollisionManager::squaredRadiusCheckPlayer(Player* player, GameObject* obje
 			{
 			case  GROUND:
 
-
-				
-				if(P1.y < P2.y)
-				{
-					std::cout << "Collision above ground!" << std::endl;
-					player->stopJump(glm::vec2(P1.x, 1 + P2.y - object2->getHeight() / 2.0f - player->getHeight() / 2.0f) );
-				} else if ( P1.x > P2.x)
+				if ( P1.x > P2.x && P1.y > P2.y)
 				{
 					std::cout << "Collision on the right of ground!" << std::endl;
-					player->setPosition(glm::vec2(player->getPosition().x + 5, player->getPosition().y));
+
+					float overlapping = P2.x + object2->getWidth() *0.5f - P1.x + player->getWidth() *0.5f;
+					
+					player->setPosition(glm::vec2(player->getPosition().x + overlapping +2, player->getPosition().y));
 					player->setVelocity(glm::vec2(0,player->getVelocity().y));
-				} else if( P1.x < P2.x)
+				} else if( P1.x < P2.x && P1.y > P2.y)
 				{
 					std::cout << "Collision on the left of ground!" << std::endl;
-					player->setPosition(glm::vec2(player->getPosition().x - 5, player->getPosition().y));
+
+					float overlapping = P1.x + player->getWidth() * 0.5f - P2.x + object2->getWidth() * 0.5f;
+
+					
+					player->setPosition(glm::vec2(player->getPosition().x - overlapping - 2, player->getPosition().y));
 					player->setVelocity(glm::vec2(0, player->getVelocity().y));
 				}
-				
-
-
 				break;
 
 			default:
@@ -88,14 +87,6 @@ bool CollisionManager::squaredRadiusCheck(GameObject* object1, GameObject* objec
 			object2->setIsColliding(true);
 
 			switch (object2->getType()) {
-			case PLANET:
-				std::cout << "Collision with Planet!" << std::endl;
-				TheSoundManager::Instance()->playSound("yay", 0);
-				break;
-			case MINE:
-				std::cout << "Collision with Mine!" << std::endl;
-				TheSoundManager::Instance()->playSound("thunder", 0);
-				break;
 			default:
 				//std::cout << "Collision with unknown type!" << std::endl;
 				break;
@@ -231,7 +222,7 @@ bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 
 			
 			switch (object2->getType()) {
-			case PLANET:
+			case PLAYER:
 				std::cout << "Collision with Platform!" << std::endl;
 				TheSoundManager::Instance()->playSound("yay", 0);
 				break;
@@ -264,6 +255,9 @@ bool CollisionManager::lineLineCheck(glm::vec2 line1Start, glm::vec2 line1End, g
 	float y3 = line2Start.y;
 	float y4 = line2End.y;
 
+
+
+	
 	// calculate the distance to intersection point
 	float uA = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
 	float uB = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
@@ -277,14 +271,14 @@ bool CollisionManager::lineLineCheck(glm::vec2 line1Start, glm::vec2 line1End, g
 	return false;
 }
 
-bool CollisionManager::lineRectCheck(glm::vec2 line1Start, glm::vec2 line1End, glm::vec2 recStart, float recWidth, float recHeight)
+bool CollisionManager::lineRectCheck(Player* player, glm::vec2 line1End, Ground* ground, float recWidth, float recHeight)
 {
-	float x1 = line1Start.x;
+	float x1 = player->getPosition().x;
 	float x2 = line1End.x;
-	float y1 = line1Start.y;
+	float y1 = player->getPosition().y;
 	float y2 = line1End.y;
-	float rx = recStart.x;
-	float ry = recStart.y;
+	float rx = ground->getPosition().x - ground->getWidth()/2;
+	float ry = ground->getPosition().y;
 	float rw = recWidth;
 	float rh = recHeight;
 
@@ -299,10 +293,16 @@ bool CollisionManager::lineRectCheck(glm::vec2 line1Start, glm::vec2 line1End, g
 
 	// if ANY of the above are true, the line
 	// has hit the rectangle
-	if (left || right || top || bottom) {
-		return true;
-	}
+	if (top) {
 
+
+		player->stopJump(glm::vec2(player->getPosition().x, ground->getPosition().y - recHeight * 3 / 4));
+		player->isGrounded = true;
+		ground->playerAtGround = true;
+		return true;
+		
+	} 	
+	ground->playerAtGround = false;
 	return false;
 }
 
@@ -378,45 +378,11 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 			//std::cout << "Angle: " << angle << std::endl;
 
 			switch (object2->getType()) {
-			case PLANET:
+			case PLAYER:
 				std::cout << "Collision with Planet!" << std::endl;
 				TheSoundManager::Instance()->playSound("yay", 0);
 				break;
-			case MINE:
-				std::cout << "Collision with Mine!" << std::endl;
-				TheSoundManager::Instance()->playSound("thunder", 0);
-				break;
-			case SHIP:
-				//std::cout << "Collision with Ship!" << std::endl;
-				TheSoundManager::Instance()->playSound("thunder", 0);
-
-				if ((attackVector.x > 0 && attackVector.y < 0) || (attackVector.x < 0 && attackVector.y < 0))
-					// top right or top left
-				{
-					if (angle <= 45)
-					{
-						object1->setVelocity(glm::vec2(object1->getVelocity().x, -object1->getVelocity().y));
-					}
-					else
-					{
-						object1->setVelocity(glm::vec2(-object1->getVelocity().x, object1->getVelocity().y));
-					}
-				}
-
-				if ((attackVector.x > 0 && attackVector.y > 0) || (attackVector.x < 0 && attackVector.y > 0))
-					// bottom right or bottom left
-				{
-					if (angle <= 135)
-					{
-						object1->setVelocity(glm::vec2(-object1->getVelocity().x, object1->getVelocity().y));
-					}
-					else
-					{
-						object1->setVelocity(glm::vec2(object1->getVelocity().x, -object1->getVelocity().y));
-					}
-				}
-
-				break;
+		
 			default:
 				//std::cout << "Collision with unknown type!" << std::endl;
 				break;

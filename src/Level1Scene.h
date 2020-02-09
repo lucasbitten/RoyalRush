@@ -3,7 +3,6 @@
 #define __LEVEL_1_SCENE__
 
 #include "Scene.h"
-#include "StartButton.h"
 #include "Player.h"
 #include  "Shadow.h"
 #include "Ground.h"
@@ -23,19 +22,22 @@ public:
 	// getters
 	glm::vec2 getMousePosition();
 
+	bool playerIsOnShadow();
+	bool playerIsGrounded();
+
+	
 private:
 	// game objects
+	Player* m_pPlayer;
+
+	std::vector<Shadow*> m_pShadows;
+
+	std::vector<Ground*> m_pGrounds; 
+	std::vector<Ground*> m_pGroundsVertical;
 
 	glm::vec2 m_mousePosition;
 	
-	StartButton* m_pStartButton;
 
-	Player* m_pPlayer;
-
-	Shadow* m_pShadow;
-
-	std::vector<Ground*> m_pGrounds;
-	std::vector<Ground*> m_pGroundsVertical;
 
 };
 

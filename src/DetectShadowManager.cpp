@@ -28,23 +28,23 @@ void DetectShadowManager::playerOnShadow(Shadow* shadow, Player* player)
 		DetectShadowManager::squaredDistance(playerPosition, shadowPosition) < halfWidth * halfWidth)
 	{
 
-		glm::vec2 squareAngle = glm::vec2(shadowPosition.x + shadowSize.x / 2, shadowPosition.y + shadowSize.y / 2);
-		glm::vec2 pointOnX = glm::vec2(shadowPosition.x - shadowSize.x / 2, shadowPosition.y + shadowSize.y / 2);
-		glm::vec2 pointOnY = glm::vec2(shadowPosition.x + shadowSize.x / 2, shadowPosition.y - shadowSize.y / 2);
-		glm::vec2 outsidePoint = glm::vec2(shadowPosition.x - shadowSize.x / 2, shadowPosition.y - shadowSize.y / 2);
+		glm::vec2 squareAngle = glm::vec2(shadowPosition.x - shadowSize.x / 2, shadowPosition.y + shadowSize.y / 2);
+		glm::vec2 pointOnX = glm::vec2(shadowPosition.x + shadowSize.x / 2, shadowPosition.y + shadowSize.y / 2);
+		glm::vec2 pointOnY = glm::vec2(shadowPosition.x - shadowSize.x / 2, shadowPosition.y - shadowSize.y / 2);
+		glm::vec2 outsidePoint = glm::vec2(shadowPosition.x + shadowSize.x / 2, shadowPosition.y - shadowSize.y / 2);
 
 		glm::vec2 playerRightBottomPoint = glm::vec2(playerPosition.x + playerSize.x / 2, playerPosition.y + playerSize.y / 2);
 		//glm::vec2 playerLeftBottomPoint = glm::vec2(playerPosition.x - playerSize.x / 2, playerPosition.y + playerSize.y / 2);
-		//glm::vec2 playerRightTopPoint = glm::vec2(playerPosition.x + playerSize.x / 2, playerPosition.y - playerSize.y / 2);
+		glm::vec2 playerRightTopPoint = glm::vec2(playerPosition.x + playerSize.x / 2, playerPosition.y - playerSize.y / 2);
 		glm::vec2 playerLeftTopPoint = glm::vec2(playerPosition.x - playerSize.x / 2, playerPosition.y - playerSize.y / 2);
 
 
 
-		if (playerRightBottomPoint.x > pointOnX.x&& playerRightBottomPoint.x < squareAngle.x &&
+		if (playerRightBottomPoint.x < pointOnX.x && playerRightBottomPoint.x > squareAngle.x &&
 			playerRightBottomPoint.y < pointOnX.y && playerRightBottomPoint.y > pointOnY.y)
 		{
 
-			if (glm::distance(playerLeftTopPoint, squareAngle) < glm::distance(playerLeftTopPoint, outsidePoint))
+			if (glm::distance(playerRightTopPoint, squareAngle) < glm::distance(playerRightTopPoint, outsidePoint))
 			{
 				shadow->playerAtShadow = true;
 			}

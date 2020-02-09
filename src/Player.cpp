@@ -4,7 +4,7 @@
 
 Player* Player::s_pInstance;
 
-Player::Player()
+Player::Player(): m_maxSpeed(5.0f)
 {
 	TheTextureManager::Instance()->load("../Assets/textures/Player.png", "player", TheGame::Instance()->getRenderer());
 	setPosition(glm::vec2(200, 200));
@@ -17,10 +17,10 @@ Player::Player()
 	setIsColliding(false);
 	setType(GameObjectType::PLAYER);
 
-	TheSoundManager::Instance()->load("../Assets/audio/engine.ogg",
-		"engine", sound_type::SOUND_MUSIC);
+	//TheSoundManager::Instance()->load("../Assets/audio/engine.ogg",
+	//	"engine", sound_type::SOUND_MUSIC);
 
-	TheSoundManager::Instance()->playMusic("engine", -1);
+	//TheSoundManager::Instance()->playMusic("engine", -1);
 
 
 }
@@ -36,23 +36,49 @@ void Player::draw()
 
 void Player::update()
 {
+	auto currentPosition = getPosition();
+	if(getVelocity().x > 0.0f && getVelocity().x - currentPosition.x < m_maxSpeed )
+	{
+		setVelocity(glm::vec2(m_maxSpeed, getVelocity().y));
+	}
+
+	if (getVelocity().x < 0.0f && currentPosition.x - getVelocity().x > m_maxSpeed)
+	{
+		setVelocity(glm::vec2(-m_maxSpeed, getVelocity().y));
+	}
+
+
+	
+	setPosition(glm::vec2(currentPosition.x + getVelocity().x, currentPosition.y + getVelocity().y));
+	
 	//glm::vec2 mouseVector = TheGame::Instance()->getMousePosition();
 
-	//setPosition(glm::vec2(mouseVector.x, mouseVector.y));
-	_move();
-	//std::cout << "Player velocity: x = " << getVelocity().x << " Y = " << getVelocity().y << std::endl;
 
-	if(jumping)
+	if(!isGrounded)
 	{
-		jump();
+		setVelocity(glm::vec2(getVelocity().x, getVelocity().y + 0.5f));
+
 	}
+
 }
 
-void Player::_move()
+void Player::move(Move newMove)
 {
-	glm::vec2 newPosition = getPosition() + getVelocity();
-	setPosition(newPosition);
+	auto currentVelocity = getVelocity();
+	
+	switch (newMove)
+	{
+	case RIGHT:
+		setVelocity(glm::vec2(currentVelocity.x + 5, currentVelocity.y));
+		break;
+	case LEFT:
+		setVelocity(glm::vec2(currentVelocity.x - 5, currentVelocity.y));
+		break;
+	}
+
+	
 }
+
 
 void Player::stopJump(glm::vec2 newPos)
 {
@@ -67,18 +93,6 @@ void Player::clean()
 
 void Player::jump()
 {
-	
-	float posY = getPosition().y;
-	posY -= ( initialJumpVelocity*jumpTime - ThePhysicsManager::Instance()->gravity * glm::pow(jumpTime,2)/2);
-	setPosition(glm::vec2(getPosition().x, posY));
-	jumpTime += 0.016;
+	setVelocity(glm::vec2(getVelocity().x, -10));
 
-	if(jumpTime >= jumpDuration)
-	{
-		posY = getPosition().y;
-		posY += (ThePhysicsManager::Instance()->gravity * glm::pow(jumpTime, 2) / 2);
-
-		setPosition(glm::vec2(getPosition().x, posY));
-	
-	}
 }

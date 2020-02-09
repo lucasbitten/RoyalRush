@@ -3,7 +3,6 @@
 #include <ctime>
 #include "GLM/gtx/string_cast.hpp"
 #include <algorithm>
-#include "TileComparators.h"
 #include <iomanip>
 
 StartScene::StartScene()
@@ -38,7 +37,7 @@ void StartScene::clean()
 void StartScene::handleEvents()
 {
 	SDL_Event event;
-	if (SDL_PollEvent(&event))
+	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)
 		{
@@ -57,7 +56,6 @@ void StartScene::handleEvents()
 			switch (event.button.button)
 			{
 			case SDL_BUTTON_LEFT:
-				TheGame::Instance()->changeSceneState(SceneState::LEVEL1_SCENE);
 				m_pStartButton->setMouseButtonClicked(true);
 				break;
 			}
@@ -96,10 +94,14 @@ void StartScene::handleEvents()
 void StartScene::start()
 {
 	m_pStartButton = new StartButton();
+	addChild(m_pStartButton);
+
+	
 	SDL_Color blue = { 0, 0, 255, 255 };
 	m_pStartLabel = new Label("Royal Rush", "Consolas", 40, blue, glm::vec2(400.0f, 40.0f));
 	m_pStartLabel->setParent(this);
 	addChild(m_pStartLabel);
+
 }
 
 glm::vec2 StartScene::getMousePosition()
