@@ -21,9 +21,35 @@ void Level1Scene::draw()
 		ground->draw();
 	}
 	m_pPlayer->draw();
+	m_pEnemy->draw();
 	
 	for (Shadow* shadow : m_pShadows) {
 		shadow->draw();
+	}
+}
+
+void Level1Scene::moveEnemy()
+{
+	float x1 = m_pEnemy->getPosition().x;
+	float x2 = m_pEnemy->getStartPos().x;
+	float x3 = m_pEnemy->getEndPos().x;
+	Move direction = m_pEnemy->getCurrentDirection();
+
+	if(direction == Move::RIGHT)
+	{
+		m_pEnemy->move(Move::RIGHT);
+		if(x1>x3)
+		{
+			m_pEnemy->setCurrentDirection(LEFT);
+		}
+	}
+	else
+	{
+		m_pEnemy->move(Move::LEFT);
+		if (x1 < x2)
+		{
+			m_pEnemy->setCurrentDirection(RIGHT);
+		}
 	}
 }
 
@@ -40,6 +66,9 @@ void Level1Scene::update()
 
 		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2 + 22);
 		Collision::lineRectCheck(m_pPlayer, bottomLine, ground, ground->getWidth(), ground->getHeight());
+
+		bottomLine = glm::vec2(m_pEnemy->getPosition().x, m_pEnemy->getPosition().y + m_pEnemy->getHeight() / 2 + 22);
+		Collision::lineRectCheck(m_pEnemy, bottomLine, ground, ground->getWidth(), ground->getHeight());
 		
 	}
 	for (Ground* ground : m_pGroundsVertical) {
@@ -50,10 +79,11 @@ void Level1Scene::update()
 		
 	}
 
-
+	m_pEnemy->update();
 	m_pPlayer->update();
 	m_pPlayer->isGrounded = playerIsGrounded();
 	
+	moveEnemy();
 	//m_pPlayer->setVelocity(glm::vec2(m_pPlayer->getVelocity().x * 0.1f, m_pPlayer->getVelocity().y));
 	m_pPlayer->onShadow = playerIsOnShadow();
 	std::cout << "Player on shadow = " << m_pPlayer->onShadow << std::endl;
@@ -205,7 +235,9 @@ void Level1Scene::start()
 	// allocates memory on the heap for this game object
 
 	m_pPlayer = new Player();
+	m_pEnemy = new Enemy();
 	addChild(m_pPlayer);
+	addChild(m_pEnemy);
 	
 	for (size_t i = 0; i < 1; i++)
 	{
@@ -214,23 +246,26 @@ void Level1Scene::start()
 	}
 
 	for (Shadow* shadow : m_pShadows) {
-		shadow->setPosition(glm::vec2(474, 265));
+		shadow->setPosition(glm::vec2(374, 265));
 		addChild(shadow);
 	}
 	
 	
-	for (size_t i = 0; i < 10; i++)
+	for (size_t i = 0; i < 15; i++)
 	{
 		m_pGrounds.push_back(new Ground());
 
 	}
 	
-	m_pPlayer->setPosition(glm::vec2(300, 150));
-
+	m_pPlayer->setPosition(glm::vec2(120, 150));
+	m_pEnemy->setPosition(glm::vec2(420, 150));
+	m_pEnemy->setStartPos(glm::vec2(400, 150));
+	m_pEnemy->setEndPos(glm::vec2(500, 150));
+	m_pEnemy->setCurrentDirection(Move::RIGHT);
 	int i = 0;
 	
 	for (Ground* ground : m_pGrounds) {
-		ground->setPosition(glm::vec2(200 + i, 330));
+		ground->setPosition(glm::vec2(80 + i, 330));
 		addChild(ground);
 
 		i += 50;
@@ -243,7 +278,7 @@ void Level1Scene::start()
 	int j = 0;
 	
 	for (Ground* ground : m_pGroundsVertical) {
-		ground->setPosition(glm::vec2(400,330 - j));
+		ground->setPosition(glm::vec2(300,330 - j));
 		addChild(ground);
 
 		j += 50;

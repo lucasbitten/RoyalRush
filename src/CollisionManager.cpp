@@ -3,6 +3,7 @@
 #include <algorithm>
 #include  "Player.h"
 #include "Ground.h"
+#include "Enemy.h"
 
 
 int CollisionManager::squaredDistance(glm::vec2 P1, glm::vec2 P2)
@@ -303,6 +304,40 @@ bool CollisionManager::lineRectCheck(Player* player, glm::vec2 line1End, Ground*
 		
 	} 	
 	ground->playerAtGround = false;
+	return false;
+}
+
+bool CollisionManager::lineRectCheck(Enemy* enemy, glm::vec2 line1End, Ground* ground, float recWidth, float recHeight)
+{
+	float x1 = enemy->getPosition().x;
+	float x2 = line1End.x;
+	float y1 = enemy->getPosition().y;
+	float y2 = line1End.y;
+	float rx = ground->getPosition().x - ground->getWidth() / 2;
+	float ry = ground->getPosition().y;
+	float rw = recWidth;
+	float rh = recHeight;
+
+	//TODO FIX THIS
+
+	// check if the line has hit any of the rectangle's sides
+	// uses the Line/Line function below
+	bool left = lineLineCheck(glm::vec2(x1, y1), glm::vec2(x2, y2), glm::vec2(rx, ry), glm::vec2(rx, ry + rh));
+	bool right = lineLineCheck(glm::vec2(x1, y1), glm::vec2(x2, y2), glm::vec2(rx + rw, ry), glm::vec2(rx + rw, ry + rh));
+	bool top = lineLineCheck(glm::vec2(x1, y1), glm::vec2(x2, y2), glm::vec2(rx, ry), glm::vec2(rx + rw, ry));
+	bool bottom = lineLineCheck(glm::vec2(x1, y1), glm::vec2(x2, y2), glm::vec2(rx, ry + rh), glm::vec2(rx + rw, ry + rh));
+
+	// if ANY of the above are true, the line
+	// has hit the rectangle
+	if (top) {
+
+		enemy->isGrounded = true;
+		enemy->setVelocity(glm::vec2(enemy->getVelocity().x, 0));
+		//ground->playerAtGround = true;
+		return true;
+
+	}
+	//ground->playerAtGround = false;
 	return false;
 }
 

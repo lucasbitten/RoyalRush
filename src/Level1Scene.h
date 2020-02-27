@@ -6,6 +6,7 @@
 #include "Player.h"
 #include  "Shadow.h"
 #include "Ground.h"
+#include "Enemy.h"
 
 class Level1Scene : public Scene
 {
@@ -14,6 +15,7 @@ public:
 	~Level1Scene();
 	
 	void draw() override;
+	void moveEnemy();
 	void update() override;
 	void clean() override;
 	void handleEvents() override;
@@ -29,6 +31,7 @@ public:
 private:
 	// game objects
 	Player* m_pPlayer;
+	Enemy* m_pEnemy;
 
 	std::vector<Shadow*> m_pShadows;
 
