@@ -51,10 +51,9 @@ public:
 	bool jumping = false;
 	void jump();
 
-	
+	bool isCollidingEnemy;
 private:
 	static Player* s_pInstance;
-
 	float m_maxSpeed;
 };
 

@@ -33,6 +33,7 @@ public:
 	bool onShadow;
 
 	bool isGrounded;
+	bool isCollidingPlayer;
 
 private:
 	glm::vec2 m_startPos;

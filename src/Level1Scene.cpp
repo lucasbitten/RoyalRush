@@ -78,15 +78,27 @@ void Level1Scene::update()
 		Collision::squaredRadiusCheckPlayer(m_pPlayer, ground);
 		
 	}
-
+	if(CollisionManager::AABBCheckPlayer(m_pPlayer, m_pEnemy))
+	{
+		std::cout << "Colided"<< std::endl;
+		m_pPlayer->isCollidingEnemy = true;
+		m_pEnemy->isCollidingPlayer = true;
+	}
+	else
+	{
+		m_pPlayer->isCollidingEnemy = false;
+		m_pEnemy->isCollidingPlayer = false;
+	}
 	m_pEnemy->update();
 	m_pPlayer->update();
 	m_pPlayer->isGrounded = playerIsGrounded();
-	
-	moveEnemy();
+	if(!m_pEnemy->isCollidingPlayer)
+	{
+		moveEnemy();
+	}
 	//m_pPlayer->setVelocity(glm::vec2(m_pPlayer->getVelocity().x * 0.1f, m_pPlayer->getVelocity().y));
 	m_pPlayer->onShadow = playerIsOnShadow();
-	std::cout << "Player on shadow = " << m_pPlayer->onShadow << std::endl;
+	//std::cout << "Player on shadow = " << m_pPlayer->onShadow << std::endl;
 
 }
 
