@@ -100,6 +100,50 @@ void Level1Scene::update()
 	m_pPlayer->onShadow = playerIsOnShadow();
 	//std::cout << "Player on shadow = " << m_pPlayer->onShadow << std::endl;
 
+	//manage scrolling
+	if(m_pPlayer->getPosition().x > frontScrollingPoint)
+	{
+		int i = 5;
+
+		for (Ground* ground : m_pGrounds) {
+			ground->setPosition(glm::vec2(ground->getPosition().x - i, 330));
+			
+		}
+		m_pPlayer->setPosition(glm::vec2(m_pPlayer->getPosition().x - i, m_pPlayer->getPosition().y));
+		m_pEnemy->setPosition(glm::vec2(m_pEnemy->getPosition().x - i, m_pEnemy->getPosition().y));
+		m_pEnemy->setStartPos(glm::vec2(m_pEnemy->getStartPos().x - i, m_pEnemy->getStartPos().y));
+		m_pEnemy->setEndPos(glm::vec2(m_pEnemy->getEndPos().x - i, m_pEnemy->getEndPos().y));
+
+
+		for (Shadow* shadow : m_pShadows) {
+			shadow->setPosition(glm::vec2(shadow->getPosition().x - i, shadow->getPosition().y));
+		}
+
+		for (Ground* ground : m_pGroundsVertical) {
+			ground->setPosition(glm::vec2(ground->getPosition().x - i, ground->getPosition().y));
+		}
+	}
+	if(m_pPlayer->getPosition().x < backScrollingPoint)
+	{
+		int i = 5;
+
+		for (Ground* ground : m_pGrounds) {
+			ground->setPosition(glm::vec2(ground->getPosition().x + i, 330));
+			
+		}
+		for (Shadow* shadow : m_pShadows) {
+			shadow->setPosition(glm::vec2(shadow->getPosition().x + i, shadow->getPosition().y));
+		}
+		m_pPlayer->setPosition(glm::vec2(m_pPlayer->getPosition().x + i, m_pPlayer->getPosition().y));
+		m_pEnemy->setPosition(glm::vec2(m_pEnemy->getPosition().x + i, m_pEnemy->getPosition().y));
+		m_pEnemy->setStartPos(glm::vec2(m_pEnemy->getStartPos().x + i, m_pEnemy->getStartPos().y));
+		m_pEnemy->setEndPos(glm::vec2(m_pEnemy->getEndPos().x + i, m_pEnemy->getEndPos().y));
+		
+		for (Ground* ground : m_pGroundsVertical) {
+			ground->setPosition(glm::vec2(ground->getPosition().x + i, ground->getPosition().y));
+		}
+	}
+
 }
 
 
@@ -244,6 +288,9 @@ void Level1Scene::handleEvents()
 
 void Level1Scene::start()
 {
+	backScrollingPoint = 150.0f;
+	frontScrollingPoint = 650.0f;
+	
 	// allocates memory on the heap for this game object
 
 	m_pPlayer = new Player();

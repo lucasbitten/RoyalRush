@@ -32,6 +32,10 @@ private:
 	// game objects
 	Player* m_pPlayer;
 	Enemy* m_pEnemy;
+	float backScrollingPoint;
+	float frontScrollingPoint;
+	float initialStartPoint;
+	float initialEndPoint;
 
 	std::vector<Shadow*> m_pShadows;
 

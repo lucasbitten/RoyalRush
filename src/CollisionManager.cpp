@@ -160,7 +160,7 @@ bool CollisionManager::AABBCheckPlayer(Player* player, GameObject* object2)
 				player->jumpTime = 0;
 				player->setPosition(glm::vec2(P1.x, P2.y - object2->getHeight() / 2 - player->getHeight() / 2));
 				object2->setPosition(glm::vec2(P2.x, P2.y));
-				TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+				//TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
 				break;
 			default:
 				//std::cout << "Collision with unknown type!" << std::endl;
