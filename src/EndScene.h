@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "Label.h"
+#include "PlayAgain.h"
 
 class EndScene : public Scene
 {
@@ -18,8 +19,11 @@ public:
 	virtual void handleEvents() override;
 	virtual void start() override;
 
+	glm::vec2 getMousePosition();
 private:
+	glm::vec2 m_mousePosition;
 	Label* m_Label;
+	PlayAgain* m_pPlayAgain;
 };
 
 #endif /* defined (__END_SCENE__) */

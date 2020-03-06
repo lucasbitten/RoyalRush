@@ -60,6 +60,7 @@ bool Button::m_mouseOver()
 		m_mousePosition.y > topLeftY &&
 		m_mousePosition.y < topLeftY + height)
 	{
+		std::cout << "Here"<<std::endl;
 		m_alpha = 178;
 		return true;
 	}
