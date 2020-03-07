@@ -37,6 +37,7 @@ private:
 	float initialStartPoint;
 	float initialEndPoint;
 
+	const int totalGroundElements = 25;
 	std::vector<Shadow*> m_pShadows;
 
 	std::vector<Ground*> m_pGrounds; 

@@ -48,8 +48,17 @@ void Player::update()
 	}
 
 
-	
-	setPosition(glm::vec2(currentPosition.x + getVelocity().x, currentPosition.y + getVelocity().y));
+	if(getPosition().x >= 800)
+	{
+		setPosition(glm::vec2(790, currentPosition.y + getVelocity().y));
+	}
+	else if(getPosition().x <= 10)
+	{
+		setPosition(glm::vec2(11, currentPosition.y + getVelocity().y));
+	}
+	else {
+		setPosition(glm::vec2(currentPosition.x + getVelocity().x, currentPosition.y + getVelocity().y));
+	}
 	
 	//glm::vec2 mouseVector = TheGame::Instance()->getMousePosition();
 
