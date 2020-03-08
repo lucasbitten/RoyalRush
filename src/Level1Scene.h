@@ -7,6 +7,7 @@
 #include  "Shadow.h"
 #include "Ground.h"
 #include "Enemy.h"
+#include "Background.h"
 
 class Level1Scene : public Scene
 {
@@ -30,6 +31,7 @@ public:
 	
 private:
 	// game objects
+	Background m_background;
 	Player* m_pPlayer;
 	Enemy* m_pEnemy;
 	float backScrollingPoint;

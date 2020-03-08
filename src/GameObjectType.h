@@ -7,7 +7,8 @@ enum GameObjectType {
 	ENEMY,
 	START_BUTTON,
 	SHADOW,
-	GROUND
+	GROUND,
+	BACKGROUND
 };
 
 #endif /* defined (__GAME_OBJECT_TYPE__)*/

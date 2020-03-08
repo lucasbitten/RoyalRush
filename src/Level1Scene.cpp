@@ -14,6 +14,7 @@ Level1Scene::~Level1Scene()
 
 void Level1Scene::draw()
 {
+	m_background.draw();
 	for (Ground* ground : m_pGrounds) {
 		ground->draw();
 	}
@@ -336,13 +337,15 @@ void Level1Scene::handleEvents()
 }
 
 void Level1Scene::start()
-{	
+{
 	backScrollingPoint = 150.0f;
 	frontScrollingPoint = 650.0f;
 	initialStartPoint = 0.0f;
 	initialEndPoint = 800.0f;
 	// allocates memory on the heap for this game object
 
+	m_background = Background();
+	
 	m_pPlayer = new Player();
 	m_pEnemy = new Enemy();
 	addChild(m_pPlayer);

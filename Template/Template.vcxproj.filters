@@ -117,6 +117,9 @@
     <ClCompile Include="..\src\PlayAgain.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Background.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Game.h">
@@ -222,6 +225,9 @@
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\PlayAgain.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Background.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
