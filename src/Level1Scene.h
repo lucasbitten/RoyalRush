@@ -16,7 +16,6 @@ public:
 	~Level1Scene();
 	
 	void draw() override;
-	void moveEnemy();
 	void update() override;
 	void clean() override;
 	void handleEvents() override;
@@ -33,21 +32,24 @@ private:
 	// game objects
 	Background m_background;
 	Player* m_pPlayer;
-	Enemy* m_pEnemy;
 	float backScrollingPoint;
 	float frontScrollingPoint;
 	float initialStartPoint;
 	float initialEndPoint;
 
 	const int totalGroundElements = 25;
+	int m_shadowNum = 2;
 	std::vector<Shadow*> m_pShadows;
 
 	std::vector<Ground*> m_pGrounds; 
 	std::vector<Ground*> m_pGroundsVertical;
 
 	glm::vec2 m_mousePosition;
-	
 
+
+	std::vector<Enemy*> m_pEnemy;
+
+	
 
 };
 

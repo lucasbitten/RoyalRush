@@ -10,7 +10,7 @@ Player::Player(): m_maxSpeed(5.0f)
 	setPosition(glm::vec2(200, 200));
 
 	std::cout << "Player on scene!" << std::endl;
-	
+
 	glm::vec2 size = TheTextureManager::Instance()->getTextureSize("player");
 	setWidth(size.x);
 	setHeight(size.y);
@@ -31,7 +31,7 @@ Player::~Player()
 
 void Player::draw()
 {
-	TheTextureManager::Instance()->draw("player", getPosition().x, getPosition().y, TheGame::Instance()->getRenderer(), true);
+	TheTextureManager::Instance()->draw("player", getPosition().x, getPosition().y, TheGame::Instance()->getRenderer(), true, flip);
 }
 
 void Player::update()
@@ -79,9 +79,13 @@ void Player::move(Move newMove)
 	{
 	case RIGHT:
 		setVelocity(glm::vec2(currentVelocity.x + 5, currentVelocity.y));
+		flip = SDL_FLIP_NONE;
+
 		break;
 	case LEFT:
 		setVelocity(glm::vec2(currentVelocity.x - 5, currentVelocity.y));
+		flip = SDL_FLIP_HORIZONTAL;
+
 		break;
 	}
 

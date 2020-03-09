@@ -6,7 +6,7 @@
 #include "TextureManager.h"
 #include "SoundManager.h"
 #include "DisplayObject.h"
-#include  "Move.h"
+#include "Player.h"
 
 class Enemy : public DisplayObject {
 public:
@@ -19,26 +19,28 @@ public:
 	// Update the object
 	void update();
 
-	void move(Move newMove);
-	glm::vec2 getStartPos() { return  m_startPos; }
-	glm::vec2 getEndPos() { return  m_endPos; }
-	void setStartPos(glm::vec2 sPos);
-	void setEndPos(glm::vec2 ePos);
+	void detectPlayer(Player*);
 
-	void setCurrentDirection(Move cDirection);
-	Move getCurrentDirection() { return m_currentDirection; }
+	
+	void move();
+
 	// remove anything that needs to be deleted
 	void clean();
 
 	bool onShadow;
 
 	bool isGrounded;
-	bool isCollidingPlayer;
 
+	bool facingRight = true;
+	float detectDistance = 100;
+	
+	void setRange();
 private:
-	glm::vec2 m_startPos;
-	glm::vec2 m_endPos;
+
+	SDL_RendererFlip flip;
+	float patrolRange = 50;
 	float m_maxSpeed;
-	Move m_currentDirection;
+	float maxPos;
+	float minPos;
 };
 #endif

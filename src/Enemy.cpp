@@ -1,7 +1,8 @@
 #include "Enemy.h"
 #include "Game.h"
+#include "Player.h"
 
-Enemy::Enemy() :m_maxSpeed(2.0f)
+Enemy::Enemy() :m_maxSpeed(1.0f)
 {
 	TheTextureManager::Instance()->load("../Assets/textures/Enemy.png", "enemy", TheGame::Instance()->getRenderer());
 	setPosition(glm::vec2(200, 200));
@@ -13,6 +14,14 @@ Enemy::Enemy() :m_maxSpeed(2.0f)
 	setHeight(size.y);
 	setIsColliding(false);
 	setType(GameObjectType::ENEMY);
+
+}
+
+
+void Enemy::setRange()
+{
+	maxPos = getPosition().x + patrolRange;
+	minPos = getPosition().x - patrolRange;
 }
 
 Enemy::~Enemy()
@@ -21,63 +30,80 @@ Enemy::~Enemy()
 
 void Enemy::draw()
 {
-	TheTextureManager::Instance()->draw("enemy", getPosition().x, getPosition().y, TheGame::Instance()->getRenderer(), true);
+	TheTextureManager::Instance()->draw("enemy", getPosition().x, getPosition().y, TheGame::Instance()->getRenderer(), true, flip);
 }
 
 void Enemy::update()
 {
-	auto currentPosition = getPosition();
-	if (getVelocity().x > 0.0f && getVelocity().x - currentPosition.x < m_maxSpeed)
+
+	move();
+
+}
+
+void Enemy::detectPlayer(Player* player)
+{
+	if (!player->onShadow)
 	{
-		setVelocity(glm::vec2(m_maxSpeed, getVelocity().y));
+
+		if (player->getPosition().y - getPosition().y < abs(getHeight() / 2) + player->getHeight() / 2.0f + 20)
+		{
+
+			if (facingRight)
+			{
+				if (player->getPosition().x > getPosition().x&& player->getPosition().x - getPosition().x < detectDistance)
+				{
+					std::cout << "Player near" << std::endl;
+				}
+			}
+			else
+			{
+				if (player->getPosition().x < getPosition().x && getPosition().x - player->getPosition().x < detectDistance)
+				{
+					std::cout << "Player near" << std::endl;
+				}
+			}
+		}
+
+	}
+	
+}
+
+void Enemy::move()
+{
+	auto currentVelocity = getVelocity();
+
+	if ( facingRight)
+	{
+		setVelocity(glm::vec2(currentVelocity.x + 0.05, currentVelocity.y));
+		if(getPosition().x >= maxPos)
+		{
+			facingRight = false;
+			setVelocity(glm::vec2(0, currentVelocity.y));
+			flip = SDL_FLIP_HORIZONTAL;
+		}
+
+	} else
+	{
+		setVelocity(glm::vec2(currentVelocity.x - 0.05, currentVelocity.y));
+		if (getPosition().x <= minPos)
+		{
+			facingRight = true;
+			setVelocity(glm::vec2(0, currentVelocity.y));
+			flip = SDL_FLIP_NONE;
+
+		}
 	}
 
-	if (getVelocity().x < 0.0f && currentPosition.x - getVelocity().x > m_maxSpeed)
-	{
-		setVelocity(glm::vec2(-m_maxSpeed, getVelocity().y));
-	}
-
-
-
-	setPosition(glm::vec2(currentPosition.x + getVelocity().x, currentPosition.y + getVelocity().y));
+	setPosition(glm::vec2(getPosition().x + getVelocity().x, getPosition().y + getVelocity().y));
 	if (!isGrounded)
 	{
 		setVelocity(glm::vec2(getVelocity().x, getVelocity().y + 0.5f));
 
 	}
+	
 }
-
-void Enemy::move(Move newMove)
-{
-	auto currentVelocity = getVelocity();
-
-	switch (newMove)
-	{
-	case RIGHT:
-		setVelocity(glm::vec2(currentVelocity.x + 5, currentVelocity.y));
-		break;
-	case LEFT:
-		setVelocity(glm::vec2(currentVelocity.x - 5, currentVelocity.y));
-		break;
-	}
-}
-
-void Enemy::setStartPos(glm::vec2 sPos)
-{
-	m_startPos = sPos;
-}
-
-void Enemy::setEndPos(glm::vec2 ePos)
-{
-	m_endPos = ePos;
-}
-
-void Enemy::setCurrentDirection(Move cDirection)
-{
-	m_currentDirection = cDirection;
-}
-
 
 void Enemy::clean()
 {
 }
+

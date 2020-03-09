@@ -22,37 +22,22 @@ void Level1Scene::draw()
 		ground->draw();
 	}
 	m_pPlayer->draw();
-	m_pEnemy->draw();
 	
+	for (Enemy* enemy : m_pEnemy) {
+
+		enemy->draw();
+	}
+
+
+	
+
 	for (Shadow* shadow : m_pShadows) {
 		shadow->draw();
 	}
+
+	
 }
 
-void Level1Scene::moveEnemy()
-{
-	float x1 = m_pEnemy->getPosition().x;
-	float x2 = m_pEnemy->getStartPos().x;
-	float x3 = m_pEnemy->getEndPos().x;
-	Move direction = m_pEnemy->getCurrentDirection();
-
-	if(direction == Move::RIGHT)
-	{
-		m_pEnemy->move(Move::RIGHT);
-		if(x1>x3)
-		{
-			m_pEnemy->setCurrentDirection(LEFT);
-		}
-	}
-	else
-	{
-		m_pEnemy->move(Move::LEFT);
-		if (x1 < x2)
-		{
-			m_pEnemy->setCurrentDirection(RIGHT);
-		}
-	}
-}
 
 void Level1Scene::update()
 {
@@ -68,8 +53,12 @@ void Level1Scene::update()
 		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2 + 22);
 		Collision::lineRectCheck(m_pPlayer, bottomLine, ground, ground->getWidth(), ground->getHeight());
 
-		bottomLine = glm::vec2(m_pEnemy->getPosition().x, m_pEnemy->getPosition().y + m_pEnemy->getHeight() / 2 + 22);
-		Collision::lineRectCheck(m_pEnemy, bottomLine, ground, ground->getWidth(), ground->getHeight());
+		for (Enemy* enemy : m_pEnemy) {
+			bottomLine = glm::vec2(enemy->getPosition().x, enemy->getPosition().y + enemy->getHeight() / 2 + 22);
+			Collision::lineRectCheck(enemy, bottomLine, ground, ground->getWidth(), ground->getHeight());
+		}
+		
+
 		
 	}
 	for (Ground* ground : m_pGroundsVertical) {
@@ -79,24 +68,21 @@ void Level1Scene::update()
 		Collision::squaredRadiusCheckPlayer(m_pPlayer, ground);
 		
 	}
-	if(CollisionManager::AABBCheckPlayer(m_pPlayer, m_pEnemy))
-	{
-		std::cout << "Colided"<< std::endl;
-		m_pPlayer->isCollidingEnemy = true;
-		m_pEnemy->isCollidingPlayer = true;
+
+
+	for (Enemy* enemy : m_pEnemy) {
+		enemy->update();
+		Collision::squaredRadiusCheck(m_pPlayer, enemy);
+		enemy->detectPlayer(m_pPlayer);
 	}
-	else
-	{
-		m_pPlayer->isCollidingEnemy = false;
-		m_pEnemy->isCollidingPlayer = false;
-	}
-	m_pEnemy->update();
+	
+
+
+
+	
 	m_pPlayer->update();
 	m_pPlayer->isGrounded = playerIsGrounded();
-	if(!m_pEnemy->isCollidingPlayer)
-	{
-		moveEnemy();
-	}
+
 	//m_pPlayer->setVelocity(glm::vec2(m_pPlayer->getVelocity().x * 0.1f, m_pPlayer->getVelocity().y));
 	m_pPlayer->onShadow = playerIsOnShadow();
 	//std::cout << "Player on shadow = " << m_pPlayer->onShadow << std::endl;
@@ -134,11 +120,13 @@ void Level1Scene::update()
 			count++;
 		}
 		if (!isEndPointReached) {
+			
 			m_pPlayer->setPosition(glm::vec2(m_pPlayer->getPosition().x - i, m_pPlayer->getPosition().y));
-			m_pEnemy->setPosition(glm::vec2(m_pEnemy->getPosition().x - i, m_pEnemy->getPosition().y));
-			m_pEnemy->setStartPos(glm::vec2(m_pEnemy->getStartPos().x - i, m_pEnemy->getStartPos().y));
-			m_pEnemy->setEndPos(glm::vec2(m_pEnemy->getEndPos().x - i, m_pEnemy->getEndPos().y));
 
+			for (Enemy* enemy : m_pEnemy) {
+				enemy->setPosition(glm::vec2(enemy->getPosition().x - i, enemy->getPosition().y));
+
+			}
 
 			for (Shadow* shadow : m_pShadows) {
 				shadow->setPosition(glm::vec2(shadow->getPosition().x - i, shadow->getPosition().y));
@@ -179,9 +167,13 @@ void Level1Scene::update()
 			}
 
 			m_pPlayer->setPosition(glm::vec2(m_pPlayer->getPosition().x + i, m_pPlayer->getPosition().y));
-			m_pEnemy->setPosition(glm::vec2(m_pEnemy->getPosition().x + i, m_pEnemy->getPosition().y));
-			m_pEnemy->setStartPos(glm::vec2(m_pEnemy->getStartPos().x + i, m_pEnemy->getStartPos().y));
-			m_pEnemy->setEndPos(glm::vec2(m_pEnemy->getEndPos().x + i, m_pEnemy->getEndPos().y));
+
+			for (Enemy* enemy : m_pEnemy) {
+				enemy->setPosition(glm::vec2(enemy->getPosition().x + i, enemy->getPosition().y));
+
+			}
+			
+
 
 			for (Ground* ground : m_pGroundsVertical) {
 				ground->setPosition(glm::vec2(ground->getPosition().x + i, ground->getPosition().y));
@@ -192,7 +184,6 @@ void Level1Scene::update()
 
 	//set initial position and end position
 
-	//if(gr)
 
 }
 
@@ -347,22 +338,31 @@ void Level1Scene::start()
 	m_background = Background();
 	
 	m_pPlayer = new Player();
-	m_pEnemy = new Enemy();
 	addChild(m_pPlayer);
-	addChild(m_pEnemy);
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		m_pEnemy.push_back(new Enemy());
+		
+	}
+
+	m_pEnemy[0]->setPosition(glm::vec2(400, 300));
+	m_pEnemy[1]->setPosition(glm::vec2(770, 300));
+	m_pEnemy[2]->setPosition(glm::vec2(900, 300));
+
+	for (Enemy* enemy : m_pEnemy) {
+		enemy->setRange();
+	}
 	
-	for (size_t i = 0; i < 1; i++)
+	for (size_t i = 0; i < m_shadowNum; i++)
 	{
 		m_pShadows.push_back(new Shadow());
-
+		
 	}
 
-	for (Shadow* shadow : m_pShadows) {
-		shadow->setPosition(glm::vec2(374, 265));
-		addChild(shadow);
-	}
-	
-	
+	m_pShadows[0]->setPosition(glm::vec2(375, 265));
+	m_pShadows[1]->setPosition(glm::vec2(675, 265));
+
 	for (size_t i = 0; i < totalGroundElements; i++)
 	{
 		m_pGrounds.push_back(new Ground());
@@ -370,10 +370,7 @@ void Level1Scene::start()
 	}
 	
 	m_pPlayer->setPosition(glm::vec2(120, 150));
-	m_pEnemy->setPosition(glm::vec2(420, 150));
-	m_pEnemy->setStartPos(glm::vec2(400, 150));
-	m_pEnemy->setEndPos(glm::vec2(500, 150));
-	m_pEnemy->setCurrentDirection(Move::RIGHT);
+
 	int i = 0;
 	
 	for (Ground* ground : m_pGrounds) {
@@ -383,18 +380,28 @@ void Level1Scene::start()
 		i += 50;
 	}
 	
-	for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < 7; i++)
 	{
 		m_pGroundsVertical.push_back(new Ground());
 	}
-	int j = 0;
-	
-	for (Ground* ground : m_pGroundsVertical) {
-		ground->setPosition(glm::vec2(300,330 - j));
-		addChild(ground);
 
+	int j = 0;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		m_pGroundsVertical[i]->setPosition(glm::vec2(300, 330 - j));
 		j += 50;
 	}
+	j = 0;
+
+	for (int i = 4; i < 7; ++i)
+	{
+		m_pGroundsVertical[i]->setPosition(glm::vec2(600, 330 - j));
+		j += 50;
+	}
+	
+	
+
 }
 
 glm::vec2 Level1Scene::getMousePosition()

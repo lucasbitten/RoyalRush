@@ -55,6 +55,8 @@ public:
 private:
 	static Player* s_pInstance;
 	float m_maxSpeed;
+	SDL_RendererFlip flip;
+
 };
 
 typedef  Player ThePlayer;
