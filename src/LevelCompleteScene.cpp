@@ -1,38 +1,38 @@
-#include "EndScene.h"
+#include "LevelCompleteScene.h"
 #include "Game.h"
 #include <ctime>
 #include "GLM/gtx/string_cast.hpp"
 #include <algorithm>
 #include <iomanip>
 
-EndScene::EndScene()
+LevelCompleteScene::LevelCompleteScene()
 {
-	EndScene::start();
+	LevelCompleteScene::start();
 }
 
-EndScene::~EndScene()
+LevelCompleteScene::~LevelCompleteScene()
 {
 }
 
-void EndScene::draw()
+void LevelCompleteScene::draw()
 {
 	m_Label->draw();
 	m_pPlayAgain->draw();
 }
 
-void EndScene::update()
+void LevelCompleteScene::update()
 {
 	m_pPlayAgain->setMousePosition(m_mousePosition);
 	m_pPlayAgain->ButtonClick();
 }
 
-void EndScene::clean()
+void LevelCompleteScene::clean()
 {
 	delete m_Label;
 	removeAllChildren();
 }
 
-void EndScene::handleEvents()
+void LevelCompleteScene::handleEvents()
 {
 	SDL_Event event;
 	if (SDL_PollEvent(&event))
@@ -86,10 +86,10 @@ void EndScene::handleEvents()
 	}
 }
 
-void EndScene::start()
+void LevelCompleteScene::start()
 {
 	SDL_Color blue = { 0, 0, 255, 255 };
-	m_Label = new Label("You have been spotted!", "Dock51", 50, blue, glm::vec2(Config::SCREEN_WIDTH * 0.5f, 200.0f));
+	m_Label = new Label("Level Completed!", "Dock51", 50, blue, glm::vec2(Config::SCREEN_WIDTH * 0.5f, 200.0f));
 	m_Label->setParent(this);
 	addChild(m_Label);
 
@@ -98,7 +98,7 @@ void EndScene::start()
 	addChild(m_pPlayAgain);
 }
 
-glm::vec2 EndScene::getMousePosition()
+glm::vec2 LevelCompleteScene::getMousePosition()
 {
 	return m_mousePosition;
 }

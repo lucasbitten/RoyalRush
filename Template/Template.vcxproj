@@ -168,12 +168,14 @@
     <ClCompile Include="..\src\DisplayObject.cpp" />
     <ClCompile Include="..\src\EndScene.cpp" />
     <ClCompile Include="..\src\Enemy.cpp" />
+    <ClCompile Include="..\src\FinishLevel.cpp" />
     <ClCompile Include="..\src\FontManager.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GameObject.cpp" />
     <ClCompile Include="..\src\Ground.cpp" />
     <ClCompile Include="..\src\Label.cpp" />
     <ClCompile Include="..\src\Level1Scene.cpp" />
+    <ClCompile Include="..\src\LevelCompleteScene.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\PhysicsManager.cpp" />
     <ClCompile Include="..\src\PlayAgain.cpp" />
@@ -201,6 +203,7 @@
     <ClInclude Include="..\src\DisplayObject.h" />
     <ClInclude Include="..\src\EndScene.h" />
     <ClInclude Include="..\src\Enemy.h" />
+    <ClInclude Include="..\src\FinishLevel.h" />
     <ClInclude Include="..\src\FontManager.h" />
     <ClInclude Include="..\src\Game.h" />
     <ClInclude Include="..\src\GameObject.h" />
@@ -208,6 +211,7 @@
     <ClInclude Include="..\src\Ground.h" />
     <ClInclude Include="..\src\Label.h" />
     <ClInclude Include="..\src\Level1Scene.h" />
+    <ClInclude Include="..\src\LevelCompleteScene.h" />
     <ClInclude Include="..\src\Move.h" />
     <ClInclude Include="..\src\PhysicsManager.h" />
     <ClInclude Include="..\src\PlayAgain.h" />

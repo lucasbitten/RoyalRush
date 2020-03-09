@@ -18,10 +18,21 @@ Enemy::Enemy() :m_maxSpeed(1.0f)
 }
 
 
+void Enemy::setPatrolRange(float range)
+{
+	patrolRange = range;
+	setRange();
+}
+
 void Enemy::setRange()
 {
 	maxPos = getPosition().x + patrolRange;
 	minPos = getPosition().x - patrolRange;
+}
+
+void Enemy::setSpeed(float speed)
+{
+	this->speed = speed;
 }
 
 Enemy::~Enemy()
@@ -45,27 +56,26 @@ void Enemy::detectPlayer(Player* player)
 	if (!player->onShadow)
 	{
 
-		if (player->getPosition().y - getPosition().y < abs(getHeight() / 2) + player->getHeight() / 2.0f + 20)
+		if (player->getPosition().y < getPosition().y + 20 && player->getPosition().y > getPosition().y - 20)
 		{
 
 			if (facingRight)
 			{
-				if (player->getPosition().x > getPosition().x&& player->getPosition().x - getPosition().x < detectDistance)
+				if (player->getPosition().x > getPosition().x && player->getPosition().x - getPosition().x < detectDistance)
 				{
-					std::cout << "Player near" << std::endl;
+					TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
 				}
 			}
 			else
 			{
 				if (player->getPosition().x < getPosition().x && getPosition().x - player->getPosition().x < detectDistance)
 				{
-					std::cout << "Player near" << std::endl;
+					TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
 				}
 			}
 		}
 
 	}
-	
 }
 
 void Enemy::move()
@@ -74,7 +84,7 @@ void Enemy::move()
 
 	if ( facingRight)
 	{
-		setVelocity(glm::vec2(currentVelocity.x + 0.05, currentVelocity.y));
+		setVelocity(glm::vec2(currentVelocity.x + speed, currentVelocity.y));
 		if(getPosition().x >= maxPos)
 		{
 			facingRight = false;
@@ -84,7 +94,7 @@ void Enemy::move()
 
 	} else
 	{
-		setVelocity(glm::vec2(currentVelocity.x - 0.05, currentVelocity.y));
+		setVelocity(glm::vec2(currentVelocity.x - speed, currentVelocity.y));
 		if (getPosition().x <= minPos)
 		{
 			facingRight = true;

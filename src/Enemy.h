@@ -20,8 +20,6 @@ public:
 	void update();
 
 	void detectPlayer(Player*);
-
-	
 	void move();
 
 	// remove anything that needs to be deleted
@@ -32,13 +30,16 @@ public:
 	bool isGrounded;
 
 	bool facingRight = true;
-	float detectDistance = 100;
-	
+	float detectDistance = 50;
+
+	void setPatrolRange(float range);
 	void setRange();
+	void setSpeed(float speed);
 private:
 
 	SDL_RendererFlip flip;
-	float patrolRange = 50;
+	float patrolRange = 70;
+	float speed = 0.008;
 	float m_maxSpeed;
 	float maxPos;
 	float minPos;

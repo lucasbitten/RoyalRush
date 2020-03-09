@@ -8,6 +8,7 @@
 #include "Ground.h"
 #include "Enemy.h"
 #include "Background.h"
+#include "FinishLevel.h"
 
 class Level1Scene : public Scene
 {
@@ -32,12 +33,9 @@ private:
 	// game objects
 	Background m_background;
 	Player* m_pPlayer;
-	float backScrollingPoint;
-	float frontScrollingPoint;
-	float initialStartPoint;
-	float initialEndPoint;
+	FinishLevel* m_pFinishLevel;
 
-	const int totalGroundElements = 25;
+	const int totalGroundElements = 35;
 	int m_shadowNum = 2;
 	std::vector<Shadow*> m_pShadows;
 

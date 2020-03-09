@@ -21,13 +21,16 @@ void Level1Scene::draw()
 	for (Ground* ground : m_pGroundsVertical) {
 		ground->draw();
 	}
+
+	m_pFinishLevel->draw();
+
+	
 	m_pPlayer->draw();
 	
 	for (Enemy* enemy : m_pEnemy) {
 
 		enemy->draw();
 	}
-
 
 	
 
@@ -41,6 +44,12 @@ void Level1Scene::draw()
 
 void Level1Scene::update()
 {
+
+	if (m_pPlayer->getPosition().x > m_pFinishLevel->getPosition().x + 50)
+	{
+		TheGame::Instance()->changeSceneState(SceneState::LEVEL_COMPLETE_SCENE);
+
+	}
 
 	for (Shadow* shadow: m_pShadows)
 	{
@@ -86,105 +95,7 @@ void Level1Scene::update()
 	//m_pPlayer->setVelocity(glm::vec2(m_pPlayer->getVelocity().x * 0.1f, m_pPlayer->getVelocity().y));
 	m_pPlayer->onShadow = playerIsOnShadow();
 	//std::cout << "Player on shadow = " << m_pPlayer->onShadow << std::endl;
-	bool isStartPointReached = false;
-
-	//manage scrolling
-	if(m_pPlayer->getPosition().x > frontScrollingPoint)
-	{
-		int i = 5;
-		int count = 0;
-		bool isEndPointReached = false;
-		for (Ground* ground : m_pGrounds) {
-			if(count == totalGroundElements -1)
-			{
-				if(ground->getPosition().x <= initialEndPoint)
-				{
-					float* tempXvalues = new float[totalGroundElements];
-					float temp = 775;
-					for(int i = totalGroundElements-1; i >= 0; i--)
-					{
-						tempXvalues[i] = temp;
-						temp -= 50;
-					}
-					count = 0;
-					for(Ground* ground : m_pGrounds)
-					{
-						ground->setPosition(glm::vec2(tempXvalues[count], 330));
-						count++;
-					}
-					isEndPointReached = true;
-					break;
-				}
-			}
-			ground->setPosition(glm::vec2(ground->getPosition().x - i, 330));
-			count++;
-		}
-		if (!isEndPointReached) {
-			
-			m_pPlayer->setPosition(glm::vec2(m_pPlayer->getPosition().x - i, m_pPlayer->getPosition().y));
-
-			for (Enemy* enemy : m_pEnemy) {
-				enemy->setPosition(glm::vec2(enemy->getPosition().x - i, enemy->getPosition().y));
-
-			}
-
-			for (Shadow* shadow : m_pShadows) {
-				shadow->setPosition(glm::vec2(shadow->getPosition().x - i, shadow->getPosition().y));
-			}
-
-			for (Ground* ground : m_pGroundsVertical) {
-				ground->setPosition(glm::vec2(ground->getPosition().x - i, ground->getPosition().y));
-			}
-		}
-	}
-	if(m_pPlayer->getPosition().x < backScrollingPoint)
-	{
-		int i = 5;
-		int count = 0;
-		
-		for (Ground* ground : m_pGrounds) {
-			if (count == 0)
-			{
-				if (ground->getPosition().x >= initialStartPoint)
-				{
-					float temp = 25;
-					
-					for (Ground* ground : m_pGrounds)
-					{
-						ground->setPosition(glm::vec2(temp, 330));
-						temp += 50;
-					}
-					isStartPointReached = true;
-					break;
-				}
-			}
-			ground->setPosition(glm::vec2(ground->getPosition().x + i, 330));
-			count++;
-		}
-		if (!isStartPointReached) {
-			for (Shadow* shadow : m_pShadows) {
-				shadow->setPosition(glm::vec2(shadow->getPosition().x + i, shadow->getPosition().y));
-			}
-
-			m_pPlayer->setPosition(glm::vec2(m_pPlayer->getPosition().x + i, m_pPlayer->getPosition().y));
-
-			for (Enemy* enemy : m_pEnemy) {
-				enemy->setPosition(glm::vec2(enemy->getPosition().x + i, enemy->getPosition().y));
-
-			}
-			
-
-
-			for (Ground* ground : m_pGroundsVertical) {
-				ground->setPosition(glm::vec2(ground->getPosition().x + i, ground->getPosition().y));
-			}
-		}
-	}
-
-
-	//set initial position and end position
-
-
+	
 }
 
 
@@ -329,12 +240,11 @@ void Level1Scene::handleEvents()
 
 void Level1Scene::start()
 {
-	backScrollingPoint = 150.0f;
-	frontScrollingPoint = 650.0f;
-	initialStartPoint = 0.0f;
-	initialEndPoint = 800.0f;
-	// allocates memory on the heap for this game object
 
+	// allocates memory on the heap for this game object
+	m_pFinishLevel = new FinishLevel();
+	m_pFinishLevel->setPosition(glm::vec2(1300, 295));
+	
 	m_background = Background();
 	
 	m_pPlayer = new Player();
@@ -348,11 +258,17 @@ void Level1Scene::start()
 
 	m_pEnemy[0]->setPosition(glm::vec2(400, 300));
 	m_pEnemy[1]->setPosition(glm::vec2(770, 300));
-	m_pEnemy[2]->setPosition(glm::vec2(900, 300));
+	m_pEnemy[2]->setPosition(glm::vec2(1100, 300));
 
+	m_pEnemy[0]->setSpeed(0.01);
+	m_pEnemy[1]->setSpeed(0.009);
+	m_pEnemy[2]->setSpeed(0.007);
+	
 	for (Enemy* enemy : m_pEnemy) {
 		enemy->setRange();
 	}
+
+	m_pEnemy[2]->setPatrolRange(100);
 	
 	for (size_t i = 0; i < m_shadowNum; i++)
 	{
@@ -374,7 +290,7 @@ void Level1Scene::start()
 	int i = 0;
 	
 	for (Ground* ground : m_pGrounds) {
-		ground->setPosition(glm::vec2(80 + i, 330));
+		ground->setPosition(glm::vec2(i, 330));
 		addChild(ground);
 
 		i += 50;
