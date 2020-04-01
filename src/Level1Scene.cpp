@@ -80,6 +80,7 @@ void Level1Scene::update()
 	}
 	if(CollisionManager::AABBCheckPlayer(m_pPlayer, m_pEnemy))
 	{
+		TheSoundManager::Instance()->playSound("yay", 0);
 		std::cout << "Colided"<< std::endl;
 		m_pPlayer->isCollidingEnemy = true;
 		m_pEnemy->isCollidingPlayer = true;
@@ -287,12 +288,12 @@ void Level1Scene::handleEvents()
 
 				/************************************************************************/
 			case SDLK_w:
-				if (m_pPlayer->isGrounded)
-				{
-					m_pPlayer->jump();
-					
-				}
-				break;
+					if (m_pPlayer->isGrounded)
+					{
+						m_pPlayer->jump();
+						
+					}
+				break;	
 			case SDLK_s:
 				
 				break;
@@ -336,7 +337,15 @@ void Level1Scene::handleEvents()
 }
 
 void Level1Scene::start()
-{	
+{
+
+	//sounds load
+
+	TheSoundManager::Instance()->load("../Assets/audio/lose.wav", "yay", SOUND_SFX);
+	TheSoundManager::Instance()->load("../Assets/audio/jing.ogg", "bg", SOUND_SFX);
+	TheSoundManager::Instance()->playSound("bg", 1);
+
+	
 	backScrollingPoint = 150.0f;
 	frontScrollingPoint = 650.0f;
 	initialStartPoint = 0.0f;
