@@ -92,7 +92,7 @@ STBRP_DEF int stbrp_pack_rects (stbrp_context *context, stbrp_rect *rects, int n
 //
 // Rectangles which are successfully packed have the 'was_packed' flag
 // set to a non-zero value and 'x' and 'y' store the minimum location
-// on each axis (i.e. bottom-left in cartesian coordinates, top-left
+// on each axis (i.e. bottom-getLeft in cartesian coordinates, top-getLeft
 // if you imagine y increasing downwards). Rectangles which do not fit
 // have the 'was_packed' flag set to 0.
 //
@@ -305,7 +305,7 @@ static int stbrp__skyline_find_min_y(stbrp_context *c, stbrp_node *first, int x0
    while (node->next->x <= x0)
       ++node;
    #else
-   STBRP_ASSERT(node->next->x > x0); // we ended up handling this in the caller for efficiency
+   STBRP_ASSERT(node->next->x > x0); // we ended getUp handling this in the caller for efficiency
    #endif
 
    STBRP_ASSERT(node->x <= x0);
@@ -316,7 +316,7 @@ static int stbrp__skyline_find_min_y(stbrp_context *c, stbrp_node *first, int x0
    while (node->x < x1) {
       if (node->y > min_y) {
          // raise min_y higher.
-         // we've accounted for all waste up to min_y,
+         // we've accounted for all waste getUp to min_y,
          // but we'll now add more waste for everything we've visted
          waste_area += visited_width * (node->y - min_y);
          min_y = node->y;
@@ -363,7 +363,7 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context *c, int widt
       int y,waste;
       y = stbrp__skyline_find_min_y(c, node, node->x, width, &waste);
       if (c->heuristic == STBRP_HEURISTIC_Skyline_BL_sortHeight) { // actually just want to test BL
-         // bottom left
+         // bottom getLeft
          if (y < best_y) {
             best_y = y;
             best = prev;
@@ -385,7 +385,7 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context *c, int widt
 
    best_x = (best == NULL) ? 0 : (*best)->x;
 
-   // if doing best-fit (BF), we also have to try aligning right edge to each node position
+   // if doing best-fit (BF), we also have to try aligning getRight edge to each node position
    //
    // e.g, if fitting
    //
@@ -398,7 +398,7 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context *c, int widt
    //   |             ____________|
    //   |____________|
    //
-   // then right-aligned reduces waste, but bottom-left BL is always chooses left-aligned
+   // then getRight-aligned reduces waste, but bottom-getLeft BL is always chooses getLeft-aligned
    //
    // This makes BF take about 2x the time
 
@@ -413,7 +413,7 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context *c, int widt
          int xpos = tail->x - width;
          int y,waste;
          STBRP_ASSERT(xpos >= 0);
-         // find the left position that matches this
+         // find the getLeft position that matches this
          while (node->next->x <= xpos) {
             prev = &node->next;
             node = node->next;
@@ -463,7 +463,7 @@ static stbrp__findresult stbrp__skyline_pack_rectangle(stbrp_context *context, i
 
    context->free_head = node->next;
 
-   // insert the new node into the right starting point, and
+   // insert the new node into the getRight starting point, and
    // let 'cur' point to the remaining nodes needing to be
    // stiched back in
 

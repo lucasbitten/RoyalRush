@@ -1,17 +1,16 @@
 #pragma once
-#ifndef __Label__
-#define __Label__
+#ifndef __LABEL__
+#define __LABEL__
 
 #include <string>
 
 #include "DisplayObject.h"
 #include "FontManager.h"
-#include "Scene.h"
 
-class Label : public DisplayObject
+class Label final : public DisplayObject
 {
 public:
-	Label(std::string text = "Default Label Text", std::string fontName = "lazy", int size = 20, SDL_Color colour = {0, 0, 0, 255}, glm::vec2 position = glm::vec2(), int fontStyle = TTF_STYLE_NORMAL, bool isCentered = true);
+	explicit Label(const std::string& text = "Default Label Text", const std::string& font_name = "lazy", int size = 20, SDL_Color colour = {0, 0, 0, 255}, glm::vec2 position = glm::vec2(), int font_style = TTF_STYLE_NORMAL, bool is_centered = true);
 	~Label();
 
 	// Inherited via GameObject
@@ -19,9 +18,9 @@ public:
 	virtual void update() override;
 	virtual void clean() override;
 
-	void setText(std::string newText);
-	void setColour(SDL_Color newColour);
-	void setSize(int newSize);
+	void setText(const std::string& new_text);
+	void setColour(SDL_Color new_colour) const;
+	void setSize(int new_size);
 
 private:
 	std::string m_fontPath;
@@ -36,4 +35,4 @@ private:
 	void m_buildFontID();
 };
 
-#endif /* defined (__Label__) */
+#endif /* defined (__LABEL__) */

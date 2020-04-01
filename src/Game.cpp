@@ -1,30 +1,28 @@
 #include "Game.h"
-#include <ctime>
-#include "GLM/gtx/string_cast.hpp"
 #include <algorithm>
+#include <ctime>
 #include <iomanip>
+#include "glm/gtx/string_cast.hpp"
+#include "IMGUI_SDL/imgui_sdl.h"
 
 
-Game* Game::s_pInstance = 0;
+Game* Game::s_pInstance = nullptr;
 
 // Game functions - DO NOT REMOVE ***********************************************
 
 Game::Game() :
-	m_pWindow(NULL), m_pRenderer(NULL), m_currentFrame(0), m_currentScene(NULL), m_bRunning(true), m_currentSceneState(SceneState::NO_SCENE), m_frames(0)
+	m_pWindow(nullptr), m_pRenderer(nullptr), m_currentFrame(0), m_bRunning(true), m_frames(0), m_currentScene(nullptr), m_currentSceneState(NO_SCENE)
 {
-	srand((unsigned)time(NULL));  // random seed
-
-	
+	srand(unsigned(time(nullptr)));  // random seed
 }
 
 Game::~Game()
-{
-}
+= default;
 
 
-bool Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
+bool Game::init(const char* title, const int x, const int y, const int width, const int height, const bool fullscreen)
 {
-	int flags = 0;
+	auto flags = 0;
 
 	if (fullscreen)
 	{
@@ -37,19 +35,23 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		std::cout << "SDL Init success" << std::endl;
 
 		// if succeeded create our window
-		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+		//m_pWindow = SDL_CreateWindow(title, x, y, width, height, flags);
+		m_pWindow = (Config::make_resource(SDL_CreateWindow(title, x, y, width, height, flags)));
 
+		
+		
 		// if window creation successful create our renderer
 		if (m_pWindow != nullptr)
 		{
 			std::cout << "window creation success" << std::endl;
-			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+			//m_pRenderer = SDL_CreateRenderer(m_pWindow.get(), -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
+			m_pRenderer = (Config::make_resource(SDL_CreateRenderer(m_pWindow.get(), -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)));
 
 			if (m_pRenderer != nullptr) // render init success
 			{
 				std::cout << "renderer creation success" << std::endl;
-				SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
+				SDL_SetRenderDrawColor(m_pRenderer.get(), 255, 255, 255, 255);
 			}
 			else
 			{
@@ -59,7 +61,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 			// IMGUI 
 			ImGui::CreateContext();
-			ImGuiSDL::Initialize(m_pRenderer, width, height);
+			ImGuiSDL::Initialize(m_pRenderer.get(), width, height);
 
 			// Initialize Font Support
 			if (TTF_Init() == -1)
@@ -68,9 +70,6 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 				return false;
 			}
 
-			
-
-			//TheTextureManager::Instance()->load("../../Assets/textures/animate-alpha.png", "animate", m_pRenderer);
 			start();
 
 		}
@@ -99,31 +98,31 @@ void Game::start()
 	changeSceneState(SceneState::START_SCENE);
 }
 
-SDL_Renderer * Game::getRenderer()
+SDL_Renderer * Game::getRenderer() const
 {
-	return m_pRenderer;
+	return m_pRenderer.get();
 }
 
-glm::vec2 Game::getMousePosition()
+glm::vec2 Game::getMousePosition() const
 {
 	return m_mousePosition;
 }
 
-void Game::setFrames(Uint32 frames)
+void Game::setFrames(const Uint32 frames)
 {
 	m_frames = frames;
 }
 
-Uint32 Game::getFrames()
+Uint32 Game::getFrames() const
 {
 	return m_frames;
 }
 
-void Game::changeSceneState(SceneState newState)
+void Game::changeSceneState(const SceneState new_state)
 {
-	if (newState != m_currentSceneState) {
+	if (new_state != m_currentSceneState) {
 
-		// if this is not the first time we're rendering a new scene
+		// scene clean up
 		if (m_currentSceneState != SceneState::NO_SCENE) 
 		{
 			m_currentScene->clean();
@@ -133,8 +132,11 @@ void Game::changeSceneState(SceneState newState)
 			TextureManager::Instance()->clean();
 			std::cout << "cleaning TextureManager" << std::endl;
 		}
+		// clean up more
+		delete m_currentScene;
+		m_currentScene = nullptr;
 
-		m_currentSceneState = newState;
+		m_currentSceneState = new_state;
 		
 		switch (m_currentSceneState)
 		{
@@ -144,11 +146,7 @@ void Game::changeSceneState(SceneState newState)
 			break;
 		case SceneState::LEVEL1_SCENE:
 			m_currentScene = new Level1Scene();
-			std::cout << "play scene activated" << std::endl;
-			break;
-		case SceneState::LEVEL_COMPLETE_SCENE:
-			m_currentScene = new LevelCompleteScene();
-			std::cout << "play scene activated" << std::endl;
+			std::cout << "Level 1 scene activated" << std::endl;
 			break;
 		case SceneState::END_SCENE:
 			m_currentScene = new EndScene();
@@ -167,26 +165,23 @@ void Game::quit()
 	m_bRunning = false;
 }
 
-void Game::render()
+void Game::render() const
 {
-	SDL_RenderClear(m_pRenderer); // clear the renderer to the draw colour
+	SDL_RenderClear(m_pRenderer.get()); // clear the renderer to the draw colour
 
 	m_currentScene->draw();
 
-	SDL_RenderPresent(m_pRenderer); // draw to the screen
+	SDL_RenderPresent(m_pRenderer.get()); // draw to the screen
 }
 
-void Game::update()
+void Game::update() const
 {
 	m_currentScene->update();
 }
 
-void Game::clean()
+void Game::clean() const
 {
 	std::cout << "cleaning game" << std::endl;
-
-	SDL_DestroyRenderer(m_pRenderer);
-	SDL_DestroyWindow(m_pWindow);
 
 	// Clean Up for ImGui
 	ImGui::DestroyContext();
@@ -194,8 +189,6 @@ void Game::clean()
 	TTF_Quit();
 
 	SDL_Quit();
-
-	
 }
 
 void Game::handleEvents()
@@ -203,7 +196,7 @@ void Game::handleEvents()
 	m_currentScene->handleEvents();
 
 	SDL_Event event;
-	while (SDL_PollEvent(&event))
+	if (SDL_PollEvent(&event))
 	{
 		switch (event.type)
 		{

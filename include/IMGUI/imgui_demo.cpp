@@ -154,7 +154,7 @@ void ImGui::ShowUserGuide()
 {
     ImGuiIO& io = ImGui::GetIO();
     ImGui::BulletText("Double-click on title bar to collapse window.");
-    ImGui::BulletText("Click and drag on lower right corner to resize window\n(double-click to auto fit window to its contents).");
+    ImGui::BulletText("Click and drag on lower getRight corner to resize window\n(double-click to auto fit window to its contents).");
     ImGui::BulletText("Click and drag on any empty space to move window.");
     ImGui::BulletText("TAB/SHIFT+TAB to cycle through keyboard editable fields.");
     ImGui::BulletText("CTRL+Click on a slider or drag box to input value as text.");
@@ -344,7 +344,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
             ImGui::Checkbox("io.ConfigInputTextCursorBlink", &io.ConfigInputTextCursorBlink);
             ImGui::SameLine(); HelpMarker("Set to false to disable blinking cursor, for users who consider it distracting");
             ImGui::Checkbox("io.ConfigWindowsResizeFromEdges", &io.ConfigWindowsResizeFromEdges);
-            ImGui::SameLine(); HelpMarker("Enable resizing of windows from their edges and from the lower-left corner.\nThis requires (io.BackendFlags & ImGuiBackendFlags_HasMouseCursors) because it needs mouse cursor feedback.");
+            ImGui::SameLine(); HelpMarker("Enable resizing of windows from their edges and from the lower-getLeft corner.\nThis requires (io.BackendFlags & ImGuiBackendFlags_HasMouseCursors) because it needs mouse cursor feedback.");
             ImGui::Checkbox("io.ConfigWindowsMoveFromTitleBarOnly", &io.ConfigWindowsMoveFromTitleBarOnly);
             ImGui::Checkbox("io.MouseDrawCursor", &io.MouseDrawCursor);
             ImGui::SameLine(); HelpMarker("Instruct Dear ImGui to render a mouse cursor for you. Note that a mouse cursor rendered via your application GPU rendering path will feel more laggy than hardware cursor, but will be more in sync with your other visuals.\n\nSome desktop applications may use both kinds of cursors (e.g. enable software cursor only when resizing/dragging something).");
@@ -459,9 +459,9 @@ static void ShowDemoWindowWidgets()
         static int counter = 0;
         float spacing = ImGui::GetStyle().ItemInnerSpacing.x;
         ImGui::PushButtonRepeat(true);
-        if (ImGui::ArrowButton("##left", ImGuiDir_Left)) { counter--; }
+        if (ImGui::ArrowButton("##getLeft", ImGuiDir_Left)) { counter--; }
         ImGui::SameLine(0.0f, spacing);
-        if (ImGui::ArrowButton("##right", ImGuiDir_Right)) { counter++; }
+        if (ImGui::ArrowButton("##getRight", ImGuiDir_Right)) { counter++; }
         ImGui::PopButtonRepeat();
         ImGui::SameLine();
         ImGui::Text("%d", counter);
@@ -1217,9 +1217,9 @@ static void ShowDemoWindowWidgets()
             }
         }
         ImGui::Combo("Display Mode", &display_mode, "Auto/Current\0None\0RGB Only\0HSV Only\0Hex Only\0");
-        ImGui::SameLine(); HelpMarker("ColorEdit defaults to displaying RGB inputs if you don't specify a display mode, but the user can change it with a right-click.\n\nColorPicker defaults to displaying RGB+HSV+Hex if you don't specify a display mode.\n\nYou can change the defaults using SetColorEditOptions().");
+        ImGui::SameLine(); HelpMarker("ColorEdit defaults to displaying RGB inputs if you don't specify a display mode, but the user can change it with a getRight-click.\n\nColorPicker defaults to displaying RGB+HSV+Hex if you don't specify a display mode.\n\nYou can change the defaults using SetColorEditOptions().");
         ImGui::Combo("Picker Mode", &picker_mode, "Auto/Current\0Hue bar + SV rect\0Hue wheel + SV triangle\0");
-        ImGui::SameLine(); HelpMarker("User can right-click the picker to change mode.");
+        ImGui::SameLine(); HelpMarker("User can getRight-click the picker to change mode.");
         ImGuiColorEditFlags flags = misc_flags;
         if (!alpha)            flags |= ImGuiColorEditFlags_NoAlpha;        // This is by default if you call ColorPicker3() instead of ColorPicker4()
         if (alpha_bar)         flags |= ImGuiColorEditFlags_AlphaBar;
@@ -1775,18 +1775,18 @@ static void ShowDemoWindowLayout()
         ImGui::DragFloat("float##2", &f);
 
         ImGui::Text("SetNextItemWidth/PushItemWidth(GetContentRegionAvail().x * 0.5f)");
-        ImGui::SameLine(); HelpMarker("Half of available width.\n(~ right-cursor_pos)\n(works within a column set)");
+        ImGui::SameLine(); HelpMarker("Half of available width.\n(~ getRight-cursor_pos)\n(works within a column set)");
         ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
         ImGui::DragFloat("float##3", &f);
 
         ImGui::Text("SetNextItemWidth/PushItemWidth(-100)");
-        ImGui::SameLine(); HelpMarker("Align to right edge minus 100");
+        ImGui::SameLine(); HelpMarker("Align to getRight edge minus 100");
         ImGui::SetNextItemWidth(-100);
         ImGui::DragFloat("float##4", &f);
 
         // Demonstrate using PushItemWidth to surround three items. Calling SetNextItemWidth() before each of them would have the same effect.
         ImGui::Text("SetNextItemWidth/PushItemWidth(-1)");
-        ImGui::SameLine(); HelpMarker("Align to right edge");
+        ImGui::SameLine(); HelpMarker("Align to getRight edge");
         ImGui::PushItemWidth(-1);
         ImGui::DragFloat("float##5a", &f);
         ImGui::DragFloat("float##5b", &f);
@@ -1798,7 +1798,7 @@ static void ShowDemoWindowLayout()
 
     if (ImGui::TreeNode("Basic Horizontal Layout"))
     {
-        ImGui::TextWrapped("(Use ImGui::SameLine() to keep adding items to the right of the preceding item)");
+        ImGui::TextWrapped("(Use ImGui::SameLine() to keep adding items to the getRight of the preceding item)");
 
         // Text
         ImGui::Text("Two items: Hello"); ImGui::SameLine();
@@ -2371,7 +2371,7 @@ static void ShowDemoWindowPopups()
         //    return BeginPopup(id);
         // For more advanced uses you may want to replicate and cuztomize this code. This the comments inside BeginPopupContextItem() implementation.
         static float value = 0.5f;
-        ImGui::Text("Value = %.3f (<-- right-click here)", value);
+        ImGui::Text("Value = %.3f (<-- getRight-click here)", value);
         if (ImGui::BeginPopupContextItem("item context menu"))
         {
             if (ImGui::Selectable("Set to zero")) value = 0.0f;
@@ -2382,8 +2382,8 @@ static void ShowDemoWindowPopups()
         }
 
         // We can also use OpenPopupOnItemClick() which is the same as BeginPopupContextItem() but without the Begin call.
-        // So here we will make it that clicking on the text field with the right mouse button (1) will toggle the visibility of the popup above.
-        ImGui::Text("(You can also right-click me to open the same popup as above.)");
+        // So here we will make it that clicking on the text field with the getRight mouse button (1) will toggle the visibility of the popup above.
+        ImGui::Text("(You can also getRight-click me to open the same popup as above.)");
         ImGui::OpenPopupOnItemClick("item context menu", 1);
 
         // When used after an item that has an ID (here the Button), we can skip providing an ID to BeginPopupContextItem().
@@ -2400,7 +2400,7 @@ static void ShowDemoWindowPopups()
                 ImGui::CloseCurrentPopup();
             ImGui::EndPopup();
         }
-        ImGui::SameLine(); ImGui::Text("(<-- right-click here)");
+        ImGui::SameLine(); ImGui::Text("(<-- getRight-click here)");
 
         ImGui::TreePop();
     }
@@ -2857,7 +2857,7 @@ static void ShowDemoWindowMisc()
 
             ImGui::Text("Current mouse cursor = %d: %s", ImGui::GetMouseCursor(), mouse_cursors_names[ImGui::GetMouseCursor()]);
             ImGui::Text("Hover to see mouse cursors:");
-            ImGui::SameLine(); HelpMarker("Your application can render a different mouse cursor based on what ImGui::GetMouseCursor() returns. If software cursor rendering (io.MouseDrawCursor) is set ImGui will draw the right cursor for you, otherwise your backend needs to handle it.");
+            ImGui::SameLine(); HelpMarker("Your application can render a different mouse cursor based on what ImGui::GetMouseCursor() returns. If software cursor rendering (io.MouseDrawCursor) is set ImGui will draw the getRight cursor for you, otherwise your backend needs to handle it.");
             for (int i = 0; i < ImGuiMouseCursor_COUNT; i++)
             {
                 char label[32];
@@ -3511,7 +3511,7 @@ struct ExampleAppConsole
         //         for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
         // However, note that you can not use this code as is if a filter is active because it breaks the 'cheap random-access' property. We would need random-access on the post-filtered list.
         // A typical application wanting coarse clipping and filtering may want to pre-compute an array of indices that passed the filtering test, recomputing this array when user changes the filter,
-        // and appending newly elements as they are inserted. This is left as a task to the user until we can manage to improve this example code!
+        // and appending newly elements as they are inserted. This is getLeft as a task to the user until we can manage to improve this example code!
         // If your items are of variable size you may want to implement code similar to what ImGuiListClipper does. Or split your data into fixed height items to allow random-seeking into your list.
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4,1)); // Tighten spacing
         if (copy_to_clipboard)
@@ -3891,9 +3891,9 @@ static void ShowExampleAppLayout(bool* p_open)
             ImGui::EndMenuBar();
         }
 
-        // left
+        // getLeft
         static int selected = 0;
-        ImGui::BeginChild("left pane", ImVec2(150, 0), true);
+        ImGui::BeginChild("getLeft pane", ImVec2(150, 0), true);
         for (int i = 0; i < 100; i++)
         {
             char label[128];
@@ -3904,7 +3904,7 @@ static void ShowExampleAppLayout(bool* p_open)
         ImGui::EndChild();
         ImGui::SameLine();
 
-        // right
+        // getRight
         ImGui::BeginGroup();
             ImGui::BeginChild("item view", ImVec2(0, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
                 ImGui::Text("MyObject: %d", selected);
@@ -4153,7 +4153,7 @@ static void ShowExampleAppSimpleOverlay(bool* p_open)
     ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
     if (ImGui::Begin("Example: Simple overlay", p_open, (corner != -1 ? ImGuiWindowFlags_NoMove : 0) | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav))
     {
-        ImGui::Text("Simple overlay\n" "in the corner of the screen.\n" "(right-click to change position)");
+        ImGui::Text("Simple overlay\n" "in the corner of the screen.\n" "(getRight-click to change position)");
         ImGui::Separator();
         if (ImGui::IsMousePosValid())
             ImGui::Text("Mouse Position: (%.1f,%.1f)", io.MousePos.x, io.MousePos.y);
@@ -4162,10 +4162,10 @@ static void ShowExampleAppSimpleOverlay(bool* p_open)
         if (ImGui::BeginPopupContextWindow())
         {
             if (ImGui::MenuItem("Custom",       NULL, corner == -1)) corner = -1;
-            if (ImGui::MenuItem("Top-left",     NULL, corner == 0)) corner = 0;
-            if (ImGui::MenuItem("Top-right",    NULL, corner == 1)) corner = 1;
-            if (ImGui::MenuItem("Bottom-left",  NULL, corner == 2)) corner = 2;
-            if (ImGui::MenuItem("Bottom-right", NULL, corner == 3)) corner = 3;
+            if (ImGui::MenuItem("Top-getLeft",     NULL, corner == 0)) corner = 0;
+            if (ImGui::MenuItem("Top-getRight",    NULL, corner == 1)) corner = 1;
+            if (ImGui::MenuItem("Bottom-getLeft",  NULL, corner == 2)) corner = 2;
+            if (ImGui::MenuItem("Bottom-getRight", NULL, corner == 3)) corner = 3;
             if (p_open && ImGui::MenuItem("Close")) *p_open = false;
             ImGui::EndPopup();
         }

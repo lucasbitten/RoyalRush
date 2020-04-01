@@ -1,43 +1,74 @@
 #include "Player.h"
 #include "Game.h"
-#include "PhysicsManager.h"
 
 Player* Player::s_pInstance;
 
-Player::Player(): m_maxSpeed(5.0f)
+
+Player::Player(): m_currentFrame(0), m_currentAnimationState(PLAYER_IDLE_RIGHT), m_maxSpeed(3.0f)
 {
-	TheTextureManager::Instance()->load("../Assets/textures/Player.png", "player", TheGame::Instance()->getRenderer());
-	setPosition(glm::vec2(200, 200));
+	TheTextureManager::Instance()->loadSpriteSheet(
+		"../Assets/sprites/atlas.txt",
+		"../Assets/sprites/atlas.png", 
+		"spritesheet", TheGame::Instance()->getRenderer());
 
-	std::cout << "Player on scene!" << std::endl;
+	m_pSpriteSheet = TheTextureManager::Instance()->getSpriteSheet("spritesheet");
+	
+	// set frame width
+	setWidth(30);
 
-	glm::vec2 size = TheTextureManager::Instance()->getTextureSize("player");
-	setWidth(size.x);
-	setHeight(size.y);
+	// set frame height
+	setHeight(30);
+
+	setPosition(glm::vec2(400.0f, 300.0f));
+	setVelocity(glm::vec2(0.0f, 0.0f));
+	setAcceleration(glm::vec2(0.0f, 0.0f));
 	setIsColliding(false);
-	setType(GameObjectType::PLAYER);
+	setType(PLAYER);
 
-	//TheSoundManager::Instance()->load("../Assets/audio/engine.ogg",
-	//	"engine", sound_type::SOUND_MUSIC);
-
-	//TheSoundManager::Instance()->playMusic("engine", -1);
-
-
+	m_buildAnimations();
 }
 
 Player::~Player()
-{
-}
+= default;
 
 void Player::draw()
 {
-	TheTextureManager::Instance()->draw("player", getPosition().x, getPosition().y, TheGame::Instance()->getRenderer(), true, flip);
+	const int xComponent = getPosition().x;
+	const int yComponent = getPosition().y;
+
+	switch(m_currentAnimationState)
+	{
+	case PLAYER_IDLE_RIGHT:
+		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["idle"],
+			getPosition().x, getPosition().y, m_currentFrame, 0.12f,
+			TheGame::Instance()->getRenderer(), 0, 255, true);
+		break;
+	case PLAYER_IDLE_LEFT:
+		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["idle"],
+			getPosition().x, getPosition().y, m_currentFrame, 0.12f,
+			TheGame::Instance()->getRenderer(), 0, 255, true, SDL_FLIP_HORIZONTAL);
+		break;
+	case PLAYER_RUN_RIGHT:
+		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["run"],
+			getPosition().x, getPosition().y, m_currentFrame, 0.25f,
+			TheGame::Instance()->getRenderer(), 0, 255, true);
+		break;
+	case PLAYER_RUN_LEFT:
+		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["run"],
+			getPosition().x, getPosition().y, m_currentFrame, 0.25f,
+			TheGame::Instance()->getRenderer(), 0, 255, true, SDL_FLIP_HORIZONTAL);
+		break;
+	}
+	
+	
+	
 }
 
 void Player::update()
 {
+
 	auto currentPosition = getPosition();
-	if(getVelocity().x > 0.0f && getVelocity().x - currentPosition.x < m_maxSpeed )
+	if (getVelocity().x > 0.0f && getVelocity().x - currentPosition.x < m_maxSpeed)
 	{
 		setVelocity(glm::vec2(m_maxSpeed, getVelocity().y));
 	}
@@ -49,40 +80,43 @@ void Player::update()
 
 
 	setPosition(glm::vec2(currentPosition.x + getVelocity().x, currentPosition.y + getVelocity().y));
-	
-	
+
+
 	//glm::vec2 mouseVector = TheGame::Instance()->getMousePosition();
 
 
-	if(!isGrounded)
+	if (!isGrounded)
 	{
 		setVelocity(glm::vec2(getVelocity().x, getVelocity().y + 0.5f));
 
 	}
+	
+}
 
+void Player::clean()
+{
 }
 
 void Player::move(Move newMove)
 {
 	auto currentVelocity = getVelocity();
-	
+
 	switch (newMove)
 	{
 	case RIGHT:
-		setVelocity(glm::vec2(currentVelocity.x + 5, currentVelocity.y));
+		setVelocity(glm::vec2(currentVelocity.x + 1, currentVelocity.y));
 		flip = SDL_FLIP_NONE;
 
 		break;
 	case LEFT:
-		setVelocity(glm::vec2(currentVelocity.x - 5, currentVelocity.y));
+		setVelocity(glm::vec2(currentVelocity.x - 1, currentVelocity.y));
 		flip = SDL_FLIP_HORIZONTAL;
 
 		break;
 	}
 
-	
-}
 
+}
 
 void Player::stopJump(glm::vec2 newPos)
 {
@@ -91,12 +125,46 @@ void Player::stopJump(glm::vec2 newPos)
 	setPosition(newPos);
 }
 
-void Player::clean()
-{
-}
-
 void Player::jump()
 {
 	setVelocity(glm::vec2(getVelocity().x, -10));
 
+}
+
+void Player::setAnimationState(const PlayerAnimationState new_state)
+{
+	m_currentAnimationState = new_state;
+}
+
+void Player::setAnimation(const Animation& animation)
+{
+	m_pAnimations[animation.name] = animation;
+}
+
+void Player::m_buildAnimations()
+{
+	Animation idleAnimation = Animation();
+
+	idleAnimation.name = "idle";
+
+	for (int i = 1; i < 16; ++i)
+	{
+		idleAnimation.frames.push_back(m_pSpriteSheet->getFrame("player_idle-" + std::to_string(i)));
+
+	}
+
+
+	m_pAnimations["idle"] = idleAnimation;
+
+	Animation runAnimation = Animation();
+
+	runAnimation.name = "run";
+	
+	for (int i = 1; i < 9; ++i)
+	{
+		runAnimation.frames.push_back(m_pSpriteSheet->getFrame("player_run-" + std::to_string(i)));
+	}
+
+
+	m_pAnimations["run"] = runAnimation;
 }

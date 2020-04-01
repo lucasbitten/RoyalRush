@@ -9,7 +9,8 @@ enum GameObjectType {
 	SHADOW,
 	GROUND,
 	BACKGROUND,
-	FINISH_LEVEL
+	FINISH_LEVEL,
+	EXPLOSION,
+	NUM_OF_TYPES
 };
-
-#endif /* defined (__GAME_OBJECT_TYPE__)*/
+#endif /* defined (__GAME_OBJECT_TYPE__) */

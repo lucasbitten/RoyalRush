@@ -16,8 +16,8 @@ StartScene::~StartScene()
 
 void StartScene::draw()
 {
-	m_pStartLabel->draw();
-	m_pStartButton->draw();
+	drawDisplayList();
+
 
 }
 
@@ -30,6 +30,7 @@ void StartScene::update()
 void StartScene::clean()
 {
 	delete m_pStartLabel;
+	delete m_pStartButton;
 	
 	removeAllChildren();
 }
@@ -53,6 +54,7 @@ void StartScene::handleEvents()
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
+			std::cout << "click" << std::endl;
 			switch (event.button.button)
 			{
 			case SDL_BUTTON_LEFT:
@@ -96,9 +98,9 @@ void StartScene::start()
 	m_pStartButton = new StartButton();
 	addChild(m_pStartButton);
 
-	
+
 	SDL_Color blue = { 0, 0, 255, 255 };
-	m_pStartLabel = new Label("Royal Rush", "Consolas", 40, blue, glm::vec2(Config::SCREEN_WIDTH*0.5f, 40.0f));
+	m_pStartLabel = new Label("Royal Rush", "Consolas", 40, blue, glm::vec2(Config::SCREEN_WIDTH * 0.5f, 40.0f));
 	m_pStartLabel->setParent(this);
 	addChild(m_pStartLabel);
 

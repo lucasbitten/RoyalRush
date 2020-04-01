@@ -1,29 +1,10 @@
 // Core Libraries
-#include <stdlib.h>
 #include <crtdbg.h>
-
 #include <iostream>
-#include <string>
-
-#include <math.h>
 #include <Windows.h>
-#include "Config.h"
 
-//#include <map> // for std::map
-//#include <memory> // for std::shared_ptr
-//#include <fstream>
-
-// 3rd Party Libraries
-#include <GLEW\glew.h>
-//#include <GLUT/freeglut.h>
-//#include <IL/il.h> // for ilInit()
-//#include "IL\ilu.h"
-#include <glm\vec3.hpp>
-#include <glm\gtx\color_space.hpp>
-
-
-#include "TextureManager.h"
 #include "Game.h"
+#include "TextureManager.h"
 
 const int FPS = 60;
 const int DELAY_TIME = 1000.0f / FPS;
@@ -39,23 +20,20 @@ int main(int argc, char * args[])
 	freopen("CON", "w", stdout);
 
 
-	TheGame::Instance()->init("Royal Rush", 100, 100, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, false);
+	TheGame::Instance()->init("Decision Making", 100, 100, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, false);
 
-	// The main Game Loop
 	while (TheGame::Instance()->running())
 	{
 		frameStart = SDL_GetTicks();
 
-		// LifeCycle functions of the Game Class
 		TheGame::Instance()->handleEvents();
 		TheGame::Instance()->update();
 		TheGame::Instance()->render();
 
-		// Frame Limiter
 		frameTime = SDL_GetTicks() - frameStart;
 		if (frameTime< DELAY_TIME)
 		{
-			SDL_Delay((int)(DELAY_TIME - frameTime));
+			SDL_Delay(int(DELAY_TIME - frameTime));
 		}
 
 		frames++;

@@ -2,12 +2,11 @@
 #ifndef __GameObject__
 #define __GameObject__
 
-#include <glm\vec2.hpp>
+#include <glm/vec2.hpp>
 #include <string>
 
+// enums
 #include "GameObjectType.h"
-
-#include "SteeringState.h"
 
 class GameObject {
 public:
@@ -24,26 +23,26 @@ public:
 	virtual void clean() = 0;
 
 	// getters for common variables
-	glm::vec2 getPosition();
-	glm::vec2 getRotation();
-	glm::vec2 getScale();
-	glm::vec2 getVelocity();
-	glm::vec2 getAcceleration();
-	int getWidth();
-	int getHeight();
-	bool getIsColliding();
-	GameObjectType getType();
-	SteeringState getState();
+	glm::vec2 getPosition() const;
+	glm::vec2 getRotation() const;
+	glm::vec2 getScale() const;
+	glm::vec2 getVelocity() const;
+	glm::vec2 getAcceleration() const;
+	int getWidth() const;
+	int getHeight() const;
+	bool getIsColliding() const;
+	GameObjectType getType() const;
 
 	// setters for common variables
-	void setPosition(glm::vec2 newPosition);
-	void setWidth(int newWidth);
-	void setHeight(int newHeight);
-	void setVelocity(glm::vec2 newVelocity);
+	void setPosition(glm::vec2 new_position);
+	void setPosition(float x, float y);
+	void setWidth(int new_width);
+	void setHeight(int new_height);
+	void setVelocity(glm::vec2 new_velocity);
+	void setVelocity(float x, float y);
 	void setIsColliding(bool collision);
-	void setType(GameObjectType newType);
-	void setState(SteeringState newState);
-	void setAcceleration(glm::vec2 newAcceleration);
+	void setType(GameObjectType new_type);
+	void setAcceleration(glm::vec2 new_acceleration);
 
 private:
 	// transform variables
@@ -68,7 +67,6 @@ private:
 	// collision variables
 	bool m_isColliding;
 	GameObjectType m_type;
-	SteeringState m_state;
 };
 
 #endif

@@ -401,8 +401,8 @@ void ImGui::BulletTextV(const char* fmt, va_list args)
 // with PressedOnClickRelease:             return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
 //   Frame N+0 (mouse is outside bb)        -             -                -               -                  -                    -    
 //   Frame N+1 (mouse moves inside bb)      -             true             -               -                  -                    -    
-//   Frame N+2 (mouse button is down)       -             true             true            true               -                    true
-//   Frame N+3 (mouse button is down)       -             true             true            -                  -                    -    
+//   Frame N+2 (mouse button is getDown)       -             true             true            true               -                    true
+//   Frame N+3 (mouse button is getDown)       -             true             true            -                  -                    -    
 //   Frame N+4 (mouse moves outside bb)     -             -                true            -                  -                    -
 //   Frame N+5 (mouse moves inside bb)      -             true             true            -                  -                    -
 //   Frame N+6 (mouse button is released)   true          true             -               -                  true                 -    
@@ -410,24 +410,24 @@ void ImGui::BulletTextV(const char* fmt, va_list args)
 //   Frame N+8 (mouse moves outside bb)     -             -                -               -                  -                    -    
 //------------------------------------------------------------------------------------------------------------------------------------------------
 // with PressedOnClick:                    return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
-//   Frame N+2 (mouse button is down)       true          true             true            true               -                    true
-//   Frame N+3 (mouse button is down)       -             true             true            -                  -                    -    
+//   Frame N+2 (mouse button is getDown)       true          true             true            true               -                    true
+//   Frame N+3 (mouse button is getDown)       -             true             true            -                  -                    -    
 //   Frame N+6 (mouse button is released)   -             true             -               -                  true                 -    
 //   Frame N+7 (mouse button is released)   -             true             -               -                  -                    -    
 //------------------------------------------------------------------------------------------------------------------------------------------------
 // with PressedOnRelease:                  return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
-//   Frame N+2 (mouse button is down)       -             true             -               -                  -                    true
-//   Frame N+3 (mouse button is down)       -             true             -               -                  -                    -    
+//   Frame N+2 (mouse button is getDown)       -             true             -               -                  -                    true
+//   Frame N+3 (mouse button is getDown)       -             true             -               -                  -                    -    
 //   Frame N+6 (mouse button is released)   true          true             -               -                  -                    -
 //   Frame N+7 (mouse button is released)   -             true             -               -                  -                    -    
 //------------------------------------------------------------------------------------------------------------------------------------------------
 // with PressedOnDoubleClick:              return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
-//   Frame N+0 (mouse button is down)       -             true             -               -                  -                    true
-//   Frame N+1 (mouse button is down)       -             true             -               -                  -                    -    
+//   Frame N+0 (mouse button is getDown)       -             true             -               -                  -                    true
+//   Frame N+1 (mouse button is getDown)       -             true             -               -                  -                    -    
 //   Frame N+2 (mouse button is released)   -             true             -               -                  -                    -
 //   Frame N+3 (mouse button is released)   -             true             -               -                  -                    -    
-//   Frame N+4 (mouse button is down)       true          true             true            true               -                    true
-//   Frame N+5 (mouse button is down)       -             true             true            -                  -                    -    
+//   Frame N+4 (mouse button is getDown)       true          true             true            true               -                    true
+//   Frame N+5 (mouse button is getDown)       -             true             true            -                  -                    -    
 //   Frame N+6 (mouse button is released)   -             true             -               -                  true                 -
 //   Frame N+7 (mouse button is released)   -             true             -               -                  -                    -    
 //------------------------------------------------------------------------------------------------------------------------------------------------
@@ -439,7 +439,7 @@ void ImGui::BulletTextV(const char* fmt, va_list args)
 //                                         Repeat+                  Repeat+           Repeat+             Repeat+
 //                                         PressedOnClickRelease    PressedOnClick    PressedOnRelease    PressedOnDoubleClick
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-//   Frame N+0 (mouse button is down)       -                        true              -                   true 
+//   Frame N+0 (mouse button is getDown)       -                        true              -                   true 
 //   ...                                    -                        -                 -                   -
 //   Frame N + RepeatDelay                  true                     true              -                   true
 //   ...                                    -                        -                 -                   -
@@ -529,7 +529,7 @@ bool ImGui::ButtonBehavior(const ImRect& bb, ImGuiID id, bool* out_hovered, bool
             }
 
             // 'Repeat' mode acts when held regardless of _PressedOn flags (see table above).
-            // Relies on repeat logic of IsMouseClicked() but we may as well do it ourselves if we end up exposing finer RepeatDelay/RepeatRate settings.
+            // Relies on repeat logic of IsMouseClicked() but we may as well do it ourselves if we end getUp exposing finer RepeatDelay/RepeatRate settings.
             if ((flags & ImGuiButtonFlags_Repeat) && g.ActiveId == id && g.IO.MouseDownDuration[0] > 0.0f && IsMouseClicked(0, true))
                 pressed = true;
         }
@@ -822,7 +822,7 @@ bool ImGui::ScrollbarEx(const ImRect& bb_frame, ImGuiID id, ImGuiAxis axis, floa
     const float grab_h_pixels = ImClamp(scrollbar_size_v * (size_avail_v / win_size_v), style.GrabMinSize, scrollbar_size_v);
     const float grab_h_norm = grab_h_pixels / scrollbar_size_v;
 
-    // Handle input right away. None of the code of Begin() is relying on scrolling position before calling Scrollbar().
+    // Handle input getRight away. None of the code of Begin() is relying on scrolling position before calling Scrollbar().
     bool held = false;
     bool hovered = false;
     ButtonBehavior(bb, id, &hovered, &held, ImGuiButtonFlags_NoNavFocus);
@@ -851,7 +851,7 @@ bool ImGui::ScrollbarEx(const ImRect& bb_frame, ImGuiID id, ImGuiAxis axis, floa
         }
 
         // Apply scroll
-        // It is ok to modify Scroll here because we are being called in Begin() after the calculation of ContentSize and before setting up our starting position
+        // It is ok to modify Scroll here because we are being called in Begin() after the calculation of ContentSize and before setting getUp our starting position
         const float scroll_v_norm = ImSaturate((clicked_v_norm - g.ScrollbarClickDeltaToGrabCenter - grab_h_norm * 0.5f) / (1.0f - grab_h_norm));
         *p_scroll_v = (float)(int)(0.5f + scroll_v_norm * scroll_max);//(win_size_contents_v - win_size_v));
 
@@ -1921,7 +1921,7 @@ bool ImGui::DragBehaviorT(ImGuiDataType data_type, TYPE* v, float v_speed, const
         adjust_delta = -adjust_delta;
 
     // Clear current value on activation
-    // Avoid altering values and clamping when we are _already_ past the limits and heading in the same direction, so e.g. if range is 0..255, current value is 300 and we are pushing to the right side, keep the 300.
+    // Avoid altering values and clamping when we are _already_ past the limits and heading in the same direction, so e.g. if range is 0..255, current value is 300 and we are pushing to the getRight side, keep the 300.
     bool is_just_activated = g.ActiveIdIsJustActivated;
     bool is_already_past_limits_and_pushing_outward = has_min_max && ((*v >= v_max && adjust_delta > 0.0f) || (*v <= v_min && adjust_delta < 0.0f));
     bool is_drag_direction_change_with_power = is_power && ((adjust_delta < 0 && g.DragCurrentAccum > 0) || (adjust_delta > 0 && g.DragCurrentAccum < 0));
@@ -3191,20 +3191,20 @@ static bool STB_TEXTEDIT_INSERTCHARS(STB_TEXTEDIT_STRING* obj, int pos, const Im
 }
 
 // We don't use an enum so we can build even with conflicting symbols (if another user of stb_textedit.h leak their STB_TEXTEDIT_K_* symbols)
-#define STB_TEXTEDIT_K_LEFT         0x10000 // keyboard input to move cursor left
-#define STB_TEXTEDIT_K_RIGHT        0x10001 // keyboard input to move cursor right
-#define STB_TEXTEDIT_K_UP           0x10002 // keyboard input to move cursor up
-#define STB_TEXTEDIT_K_DOWN         0x10003 // keyboard input to move cursor down
+#define STB_TEXTEDIT_K_LEFT         0x10000 // keyboard input to move cursor getLeft
+#define STB_TEXTEDIT_K_RIGHT        0x10001 // keyboard input to move cursor getRight
+#define STB_TEXTEDIT_K_UP           0x10002 // keyboard input to move cursor getUp
+#define STB_TEXTEDIT_K_DOWN         0x10003 // keyboard input to move cursor getDown
 #define STB_TEXTEDIT_K_LINESTART    0x10004 // keyboard input to move cursor to start of line
 #define STB_TEXTEDIT_K_LINEEND      0x10005 // keyboard input to move cursor to end of line
 #define STB_TEXTEDIT_K_TEXTSTART    0x10006 // keyboard input to move cursor to start of text
 #define STB_TEXTEDIT_K_TEXTEND      0x10007 // keyboard input to move cursor to end of text
 #define STB_TEXTEDIT_K_DELETE       0x10008 // keyboard input to delete selection or character under cursor
-#define STB_TEXTEDIT_K_BACKSPACE    0x10009 // keyboard input to delete selection or character left of cursor
+#define STB_TEXTEDIT_K_BACKSPACE    0x10009 // keyboard input to delete selection or character getLeft of cursor
 #define STB_TEXTEDIT_K_UNDO         0x1000A // keyboard input to perform undo
 #define STB_TEXTEDIT_K_REDO         0x1000B // keyboard input to perform redo
-#define STB_TEXTEDIT_K_WORDLEFT     0x1000C // keyboard input to move cursor left one word
-#define STB_TEXTEDIT_K_WORDRIGHT    0x1000D // keyboard input to move cursor right one word
+#define STB_TEXTEDIT_K_WORDLEFT     0x1000C // keyboard input to move cursor getLeft one word
+#define STB_TEXTEDIT_K_WORDRIGHT    0x1000D // keyboard input to move cursor getRight one word
 #define STB_TEXTEDIT_K_SHIFT        0x20000
 
 #define STB_TEXTEDIT_IMPLEMENTATION
@@ -3353,7 +3353,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
     if (window->SkipItems)
         return false;
 
-    IM_ASSERT(!((flags & ImGuiInputTextFlags_CallbackHistory) && (flags & ImGuiInputTextFlags_Multiline)));        // Can't use both together (they both use up/down keys)
+    IM_ASSERT(!((flags & ImGuiInputTextFlags_CallbackHistory) && (flags & ImGuiInputTextFlags_Multiline)));        // Can't use both together (they both use getUp/getDown keys)
     IM_ASSERT(!((flags & ImGuiInputTextFlags_CallbackCompletion) && (flags & ImGuiInputTextFlags_AllowTabInput))); // Can't use both together (they both use tab key)
 
     ImGuiContext& g = *GImGui;
@@ -3540,7 +3540,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         state->UserCallback = callback;
         state->UserCallbackData = callback_user_data;
 
-        // Although we are active we don't prevent mouse from hovering other elements unless we are interacting right now with the widget.
+        // Although we are active we don't prevent mouse from hovering other elements unless we are interacting getRight now with the widget.
         // Down the line we should have a cleaner library-wide concept of Selected vs Active.
         g.ActiveIdAllowOverlap = !io.MouseDown[0];
         g.WantTextInputNextFrame = 1;
@@ -4355,7 +4355,7 @@ static inline ImU32 ImAlphaBlendColor(ImU32 col_a, ImU32 col_b)
 
 // Helper for ColorPicker4()
 // NB: This is rather brittle and will show artifact when rounding this enabled if rounded corners overlap multiple cells. Caller currently responsible for avoiding that.
-// I spent a non reasonable amount of time trying to getting this right for ColorButton with rounding+anti-aliasing+ImGuiColorEditFlags_HalfAlphaPreview flag + various grid sizes and offsets, and eventually gave up... probably more reasonable to disable rounding alltogether.
+// I spent a non reasonable amount of time trying to getting this getRight for ColorButton with rounding+anti-aliasing+ImGuiColorEditFlags_HalfAlphaPreview flag + various grid sizes and offsets, and eventually gave getUp... probably more reasonable to disable rounding alltogether.
 void ImGui::RenderColorRectWithAlphaCheckerboard(ImVec2 p_min, ImVec2 p_max, ImU32 col, float grid_step, ImVec2 grid_off, float rounding, int rounding_corners_flags)
 {
     ImGuiWindow* window = GetCurrentWindow();
@@ -5135,7 +5135,7 @@ bool ImGui::TreeNodeBehavior(ImGuiID id, ImGuiTreeNodeFlags flags, const char* l
         label_end = FindRenderedTextEnd(label);
     const ImVec2 label_size = CalcTextSize(label, label_end, false);
 
-    // We vertically grow up to current line height up the typical widget height.
+    // We vertically grow getUp to current line height getUp the typical widget height.
     const float text_base_offset_y = ImMax(padding.y, window->DC.CurrLineTextBaseOffset); // Latch before ItemSize changes it
     const float frame_height = ImMax(ImMin(window->DC.CurrLineSize.y, g.FontSize + style.FramePadding.y*2), label_size.y + padding.y*2);
     ImRect frame_bb = ImRect(window->DC.CursorPos, ImVec2(window->WorkRect.Max.x, window->DC.CursorPos.y + frame_height));
@@ -5151,7 +5151,7 @@ bool ImGui::TreeNodeBehavior(ImGuiID id, ImGuiTreeNodeFlags flags, const char* l
     ItemSize(ImVec2(text_width, frame_height), text_base_offset_y);
 
     // For regular tree nodes, we arbitrary allow to click past 2 worth of ItemSpacing
-    // (Ideally we'd want to add a flag for the user to specify if we want the hit test to be done up to the right side of the content or not)
+    // (Ideally we'd want to add a flag for the user to specify if we want the hit test to be done getUp to the getRight side of the content or not)
     const ImRect interact_bb = display_frame ? frame_bb : ImRect(frame_bb.Min.x, frame_bb.Min.y, frame_bb.Min.x + text_width + style.ItemSpacing.x*2, frame_bb.Max.y);
     bool is_open = TreeNodeBehaviorIsOpen(id, flags);
     bool is_leaf = (flags & ImGuiTreeNodeFlags_Leaf) != 0;
@@ -5535,7 +5535,7 @@ bool ImGui::Selectable(const char* label, bool* p_selected, ImGuiSelectableFlags
 //-------------------------------------------------------------------------
 
 // FIXME: In principle this function should be called BeginListBox(). We should rename it after re-evaluating if we want to keep the same signature.
-// Helper to calculate the size of a listbox and display a label on the right.
+// Helper to calculate the size of a listbox and display a label on the getRight.
 // Tip: To have a list filling the entire window width, PushItemWidth(-1) and pass an non-visible label e.g. "##empty"
 bool ImGui::ListBoxHeader(const char* label, const ImVec2& size_arg)
 {
@@ -5548,7 +5548,7 @@ bool ImGui::ListBoxHeader(const char* label, const ImVec2& size_arg)
     const ImGuiID id = GetID(label);
     const ImVec2 label_size = CalcTextSize(label, NULL, true);
 
-    // Size default to hold ~7 items. Fractional number of items helps seeing that we can scroll down/up without looking at scrollbar.
+    // Size default to hold ~7 items. Fractional number of items helps seeing that we can scroll getDown/getUp without looking at scrollbar.
     ImVec2 size = CalcItemSize(size_arg, CalcItemWidth(), GetTextLineHeightWithSpacing() * 7.4f + style.ItemSpacing.y);
     ImVec2 frame_size = ImVec2(size.x, ImMax(size.y, label_size.y));
     ImRect frame_bb(window->DC.CursorPos, window->DC.CursorPos + frame_size);
@@ -5575,7 +5575,7 @@ bool ImGui::ListBoxHeader(const char* label, const ImVec2& size_arg)
 bool ImGui::ListBoxHeader(const char* label, int items_count, int height_in_items)
 {
     // Size default to hold ~7.25 items.
-    // We add +25% worth of item height to allow the user to see at a glance if there are more items up/down, without looking at the scrollbar.
+    // We add +25% worth of item height to allow the user to see at a glance if there are more items getUp/getDown, without looking at the scrollbar.
     // We don't add this extra bit if items_count <= height_in_items. It is slightly dodgy, because it means a dynamic list of items will make the widget resize occasionally when it crosses that size.
     // I am expecting that someone will come and complain about this behavior in a remote future, then we can advise on a better solution.
     if (height_in_items < 0)
@@ -5922,7 +5922,7 @@ void ImGui::EndMainMenuBar()
 {
     EndMenuBar();
 
-    // When the user has left the menu layer (typically: closed menus through activation of an item), we restore focus to the previous window
+    // When the user has getLeft the menu layer (typically: closed menus through activation of an item), we restore focus to the previous window
     // FIXME: With this strategy we won't be able to restore a NULL focus.
     ImGuiContext& g = *GImGui;
     if (g.CurrentWindow == g.NavWindow && g.NavLayer == 0 && !g.NavAnyRequest)
@@ -5944,7 +5944,7 @@ bool ImGui::BeginMenuBar()
     PushID("##menubar");
 
     // We don't clip with current window clipping rectangle as it is already set to the area below. However we clip with window full rect.
-    // We remove 1 worth of rounding to Max.x to that text in long menus and small windows don't tend to display over the lower-right rounded area, which looks particularly glitchy.
+    // We remove 1 worth of rounding to Max.x to that text in long menus and small windows don't tend to display over the lower-getRight rounded area, which looks particularly glitchy.
     ImRect bar_rect = window->MenuBarRect();
     ImRect clip_rect(ImFloor(bar_rect.Min.x + 0.5f), ImFloor(bar_rect.Min.y + window->WindowBorderSize + 0.5f), ImFloor(ImMax(bar_rect.Min.x, bar_rect.Max.x - window->WindowRounding) + 0.5f), ImFloor(bar_rect.Max.y + 0.5f));
     clip_rect.ClipWith(window->OuterRectClipped);
@@ -6056,7 +6056,7 @@ bool ImGui::BeginMenu(const char* label, bool enabled)
     if (window->DC.LayoutType == ImGuiLayoutType_Vertical) // (window->Flags & (ImGuiWindowFlags_Popup|ImGuiWindowFlags_ChildMenu))
     {
         // Close menu when not hovering it anymore unless we are moving roughly in the direction of the menu
-        // Implement http://bjk5.com/post/44698559168/breaking-down-amazons-mega-dropdown to avoid using timers, so menus feels more reactive.
+        // Implement http://bjk5.com/post/44698559168/breaking-getDown-amazons-mega-dropdown to avoid using timers, so menus feels more reactive.
         bool moving_toward_other_child_menu = false;
 
         ImGuiWindow* child_menu_window = (g.BeginPopupStack.Size < g.OpenPopupStack.Size && g.OpenPopupStack[g.BeginPopupStack.Size].SourceWindow == window) ? g.OpenPopupStack[g.BeginPopupStack.Size].Window : NULL;
@@ -6145,7 +6145,7 @@ bool ImGui::BeginMenu(const char* label, bool enabled)
 
 void ImGui::EndMenu()
 {
-    // Nav: When a left move request _within our child menu_ failed, close ourselves (the _parent_ menu).
+    // Nav: When a getLeft move request _within our child menu_ failed, close ourselves (the _parent_ menu).
     // A menu doesn't close itself because EndMenuBar() wants the catch the last Left<>Right inputs.
     // However, it means that with the current code, a BeginMenu() from outside another menu or a menu-bar won't be closable with the Left direction.
     ImGuiContext& g = *GImGui;
@@ -6218,7 +6218,7 @@ bool ImGui::MenuItem(const char* label, const char* shortcut, bool* p_selected, 
 // [SECTION] Widgets: BeginTabBar, EndTabBar, etc.
 //-------------------------------------------------------------------------
 // [BETA API] API may evolve! This code has been extracted out of the Docking branch,
-// and some of the construct which are not used in Master may be left here to facilitate merging.
+// and some of the construct which are not used in Master may be getLeft here to facilitate merging.
 //-------------------------------------------------------------------------
 // - BeginTabBar()
 // - BeginTabBarEx() [Internal]
@@ -6466,7 +6466,7 @@ static void ImGui::TabBarLayout(ImGuiTabBar* tab_bar)
 
         width_total_contents += (tab_n > 0 ? g.Style.ItemInnerSpacing.x : 0.0f) + tab->WidthContents;
 
-        // Store data so we can build an array sorted by width if we need to shrink tabs down
+        // Store data so we can build an array sorted by width if we need to shrink tabs getDown
         g.ShrinkWidthBuffer[tab_n].Index = tab_n;
         g.ShrinkWidthBuffer[tab_n].Width = tab->WidthContents;
     }
@@ -6477,7 +6477,7 @@ static void ImGui::TabBarLayout(ImGuiTabBar* tab_bar)
     float width_excess = (width_avail < width_total_contents) ? (width_total_contents - width_avail) : 0.0f;
     if (width_excess > 0.0f && (tab_bar->Flags & ImGuiTabBarFlags_FittingPolicyResizeDown))
     {
-        // If we don't have enough room, resize down the largest tabs first
+        // If we don't have enough room, resize getDown the largest tabs first
         ShrinkWidths(g.ShrinkWidthBuffer.Data, g.ShrinkWidthBuffer.Size, width_excess);
         for (int tab_n = 0; tab_n < tab_bar->Tabs.Size; tab_n++)
             tab_bar->Tabs[g.ShrinkWidthBuffer[tab_n].Index].Width = (float)(int)g.ShrinkWidthBuffer[tab_n].Width;
@@ -6731,7 +6731,7 @@ static ImGuiTabItem* ImGui::TabBarTabListPopupButton(ImGuiTabBar* tab_bar)
 // [SECTION] Widgets: BeginTabItem, EndTabItem, etc.
 //-------------------------------------------------------------------------
 // [BETA API] API may evolve! This code has been extracted out of the Docking branch,
-// and some of the construct which are not used in Master may be left here to facilitate merging.
+// and some of the construct which are not used in Master may be getLeft here to facilitate merging.
 //-------------------------------------------------------------------------
 // - BeginTabItem()
 // - EndTabItem()
@@ -6947,7 +6947,7 @@ bool    ImGui::TabItemEx(ImGuiTabBar* tab_bar, const char* label, bool* p_open, 
     TabItemBackground(display_draw_list, bb, flags, tab_col);
     RenderNavHighlight(bb, id);
 
-    // Select with right mouse button. This is so the common idiom for context menu automatically highlight the current widget.
+    // Select with getRight mouse button. This is so the common idiom for context menu automatically highlight the current widget.
     const bool hovered_unblocked = IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup);
     if (hovered_unblocked && (IsMouseClicked(1) || IsMouseReleased(1)))
         tab_bar->NextSelectedTabId = id;
@@ -6969,7 +6969,7 @@ bool    ImGui::TabItemEx(ImGuiTabBar* tab_bar, const char* label, bool* p_open, 
         PopClipRect();
     window->DC.CursorPos = backup_main_cursor_pos;
 
-    // Tooltip (FIXME: Won't work over the close button because ItemOverlap systems messes up with HoveredIdTimer)
+    // Tooltip (FIXME: Won't work over the close button because ItemOverlap systems messes getUp with HoveredIdTimer)
     // We test IsItemHovered() to discard e.g. when another item is active or drag and drop over the tab bar (which g.HoveredId ignores)
     if (g.HoveredId == id && !held && g.HoveredIdNotActiveTimer > 0.50f && IsItemHovered())
         if (!(tab_bar->Flags & ImGuiTabBarFlags_NoTooltip))

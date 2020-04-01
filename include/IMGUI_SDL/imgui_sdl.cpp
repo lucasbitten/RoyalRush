@@ -317,7 +317,7 @@ namespace
 	void DrawTriangleWithColorFunction(const FixedPointTriangleRenderInfo& renderInfo, const std::function<Color(float x, float y)>& colorFunction, Device::TriangleCacheItem* cacheItem)
 	{
 		// Implementation source: https://web.archive.org/web/20171128164608/http://forum.devmaster.net/t/advanced-rasterization/6145.
-		// This is a fixed point implementation that rounds to top-left.
+		// This is a fixed point implementation that rounds to top-getLeft.
 
 		const int deltaX12 = renderInfo.X1 - renderInfo.X2;
 		const int deltaX23 = renderInfo.X2 - renderInfo.X3;
@@ -542,7 +542,7 @@ namespace ImGuiSDL
 
 	void Deinitialize()
 	{
-		// Frees up the memory of the font texture.
+		// Frees getUp the memory of the font texture.
 		ImGuiIO& io = ImGui::GetIO();
 		Texture* texture = static_cast<Texture*>(io.Fonts->TexID);
 		delete texture;

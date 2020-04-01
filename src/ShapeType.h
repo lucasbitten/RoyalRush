@@ -13,3 +13,4 @@ enum ShapeType
 
 
 #endif /* defined (__SHAPE_TYPE__) */
+

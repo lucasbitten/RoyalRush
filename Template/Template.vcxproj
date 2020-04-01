@@ -79,8 +79,7 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>
-    </LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Intermediate\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -127,14 +126,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FREEGLUT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)include\;$(SolutionDir)include\GLM\;$(SolutionDir)include\SDL\include\;$(SolutionDir)include\SDL_Image\include\;$(SolutionDir)include\SDL_Mixer\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include\;$(SolutionDir)include\GLM\;$(SolutionDir)include\SDL\include\;$(SolutionDir)include\SDL_Image\include\;$(SolutionDir)include\SDL_Mixer\include\;$(SolutionDir)include\SDL2_ttf\include\;$(SolutionDir)include\IMGUI\;$(SolutionDir)include\IMGUI_SDL\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut_static.lib;DevIL.lib;ILU.lib;glew32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freeglut_static.lib;DevIL.lib;ILU.lib;glew32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
@@ -168,6 +167,8 @@
     <ClCompile Include="..\src\DisplayObject.cpp" />
     <ClCompile Include="..\src\EndScene.cpp" />
     <ClCompile Include="..\src\Enemy.cpp" />
+    <ClCompile Include="..\src\Explosion.cpp" />
+    <ClCompile Include="..\src\ExplosionManager.cpp" />
     <ClCompile Include="..\src\FinishLevel.cpp" />
     <ClCompile Include="..\src\FontManager.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
@@ -183,6 +184,7 @@
     <ClCompile Include="..\src\Scene.cpp" />
     <ClCompile Include="..\src\Shadow.cpp" />
     <ClCompile Include="..\src\SoundManager.cpp" />
+    <ClCompile Include="..\src\SpriteSheet.cpp" />
     <ClCompile Include="..\src\StartButton.cpp" />
     <ClCompile Include="..\src\StartScene.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
@@ -196,15 +198,21 @@
     <ClInclude Include="..\include\IMGUI\imstb_textedit.h" />
     <ClInclude Include="..\include\IMGUI\imstb_truetype.h" />
     <ClInclude Include="..\include\IMGUI_SDL\imgui_sdl.h" />
+    <ClInclude Include="..\src\Animation.h" />
     <ClInclude Include="..\src\Background.h" />
     <ClInclude Include="..\src\Button.h" />
     <ClInclude Include="..\src\CollisionManager.h" />
+    <ClInclude Include="..\src\CollisionShape.h" />
     <ClInclude Include="..\src\Config.h" />
+    <ClInclude Include="..\src\DetectShadowManager.h" />
     <ClInclude Include="..\src\DisplayObject.h" />
     <ClInclude Include="..\src\EndScene.h" />
     <ClInclude Include="..\src\Enemy.h" />
+    <ClInclude Include="..\src\Explosion.h" />
+    <ClInclude Include="..\src\ExplosionManager.h" />
     <ClInclude Include="..\src\FinishLevel.h" />
     <ClInclude Include="..\src\FontManager.h" />
+    <ClInclude Include="..\src\Frame.h" />
     <ClInclude Include="..\src\Game.h" />
     <ClInclude Include="..\src\GameObject.h" />
     <ClInclude Include="..\src\GameObjectType.h" />
@@ -216,17 +224,17 @@
     <ClInclude Include="..\src\PhysicsManager.h" />
     <ClInclude Include="..\src\PlayAgain.h" />
     <ClInclude Include="..\src\Player.h" />
+    <ClInclude Include="..\src\PlayerAnimationState.h" />
     <ClInclude Include="..\src\Scene.h" />
     <ClInclude Include="..\src\SceneState.h" />
     <ClInclude Include="..\src\Shadow.h" />
     <ClInclude Include="..\src\ShapeType.h" />
     <ClInclude Include="..\src\SoundManager.h" />
+    <ClInclude Include="..\src\SpriteSheet.h" />
     <ClInclude Include="..\src\StartButton.h" />
     <ClInclude Include="..\src\StartScene.h" />
-    <ClInclude Include="..\src\SteeringState.h" />
     <ClInclude Include="..\src\TextureManager.h" />
     <ClInclude Include="..\src\Util.h" />
-    <ClInclude Include="DetectShadowManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

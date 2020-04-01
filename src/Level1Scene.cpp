@@ -1,49 +1,29 @@
 #include "Level1Scene.h"
-#include "Game.h"
-#include <iostream>
+
 #include "DetectShadowManager.h"
+#include "Game.h"
 
 Level1Scene::Level1Scene()
 {
-	start();
+	Level1Scene::start();
 }
 
 Level1Scene::~Level1Scene()
-{
-}
+= default;
 
 void Level1Scene::draw()
 {
-	m_background.draw();
-	for (Ground* ground : m_pGrounds) {
-		ground->draw();
-	}
-	for (Ground* ground : m_pGroundsVertical) {
-		ground->draw();
-	}
-
-	m_pFinishLevel->draw();
-
-	
-	m_pPlayer->draw();
-	
-	for (Enemy* enemy : m_pEnemy) {
-
-		enemy->draw();
-	}
-
-	
-
-	for (Shadow* shadow : m_pShadows) {
-		shadow->draw();
-	}
+	drawDisplayList();
+	//ExplosionManager::Instance()->draw();
 
 	
 }
 
-
 void Level1Scene::update()
 {
+	updateDisplayList();
+	
+	//ExplosionManager::Instance()->update();
 
 	if (m_pPlayer->getPosition().x > m_pFinishLevel->getPosition().x + 50)
 	{
@@ -51,12 +31,12 @@ void Level1Scene::update()
 
 	}
 
-	for (Shadow* shadow: m_pShadows)
+	for (Shadow* shadow : m_pShadows)
 	{
 		DetectShadowManager::playerOnShadow(shadow, m_pPlayer);
 	}
-	
-	
+
+
 	for (Ground* ground : m_pGrounds) {
 
 		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2 + 22);
@@ -66,35 +46,34 @@ void Level1Scene::update()
 			bottomLine = glm::vec2(enemy->getPosition().x, enemy->getPosition().y + enemy->getHeight() / 2 + 22);
 			Collision::lineRectCheck(enemy, bottomLine, ground, ground->getWidth(), ground->getHeight());
 		}
-		
 
-		
+
+
 	}
 	for (Ground* ground : m_pGroundsVertical) {
 		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2 + 22);
 		Collision::lineRectCheck(m_pPlayer, bottomLine, ground, ground->getWidth(), ground->getHeight());
 
 		Collision::squaredRadiusCheckPlayer(m_pPlayer, ground);
-		
+
 	}
 
 
 	for (Enemy* enemy : m_pEnemy) {
-		enemy->update();
 		Collision::squaredRadiusCheck(m_pPlayer, enemy);
 		enemy->detectPlayer(m_pPlayer);
 	}
-	
 
 
 
-	
-	m_pPlayer->update();
+
+
 	m_pPlayer->isGrounded = playerIsGrounded();
 
 	//m_pPlayer->setVelocity(glm::vec2(m_pPlayer->getVelocity().x * 0.1f, m_pPlayer->getVelocity().y));
 	m_pPlayer->onShadow = playerIsOnShadow();
 	//std::cout << "Player on shadow = " << m_pPlayer->onShadow << std::endl;
+
 	
 }
 
@@ -117,7 +96,7 @@ bool Level1Scene::playerIsGrounded()
 		}
 	}
 
-	
+
 	return false;
 }
 
@@ -135,14 +114,43 @@ bool Level1Scene::playerIsOnShadow()
 }
 
 
+
 void Level1Scene::clean()
 {
+	delete m_pFinishLevel;
+	delete m_background;
+
+	for (Ground* ground : m_pGrounds) {
+
+		delete ground;
+	}
+
+	for (Ground* ground : m_pGroundsVertical) {
+
+		delete ground;
+
+	}
+
+	for (Enemy* enemy : m_pEnemy) {
+		delete enemy;
+	}
+
+	for (Shadow* shadow : m_pShadows) {
+		delete shadow;
+	}
+	
+	delete m_pPlayer;
+	
+	removeAllChildren();
 }
 
 void Level1Scene::handleEvents()
 {
-	int wheel = 0;
+	auto wheel = 0;
 
+	SDL_Keycode keyPressed;
+	SDL_Keycode keyReleased;
+	
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
@@ -155,85 +163,81 @@ void Level1Scene::handleEvents()
 			m_mousePosition.x = event.motion.x;
 			m_mousePosition.y = event.motion.y;
 			break;
-
-		case SDL_MOUSEBUTTONDOWN:
-			switch(event.button.button)
-			{
-			case SDL_BUTTON_LEFT:
-				break;
-			}
-		
-			break;
-		case SDL_MOUSEBUTTONUP:
-			switch (event.button.button)
-			{
-			case SDL_BUTTON_LEFT:
-				break;
-			}
-			break;
 		case SDL_MOUSEWHEEL:
 			wheel = event.wheel.y;
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			//{
+			//auto explosion = ExplosionManager::Instance()->getExplosion();
+			//explosion->activate();
+			//explosion->setPosition(m_mousePosition);
+			//}
+			break;
 		case SDL_KEYDOWN:
-			switch (event.key.keysym.sym)
+			keyPressed = event.key.keysym.sym;
+			switch (keyPressed)
 			{
 			case SDLK_ESCAPE:
 				TheGame::Instance()->quit();
 				break;
 			case SDLK_1:
-				TheGame::Instance()->changeSceneState(SceneState::START_SCENE);
+				//TheGame::Instance()->changeSceneState(SceneState::PLAY_SCENE);
 				break;
 			case SDLK_2:
-				TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+				//TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
 				break;
-			
-
-				/************************************************************************/
-			case SDLK_w:
-				if (m_pPlayer->isGrounded)
+			}
+			// movement keys
+			{
+				if(keyPressed == SDLK_w)
 				{
-					m_pPlayer->jump();
-					
-				}
-				break;
-			case SDLK_s:
-				
-				break;
-			case SDLK_a:
-				m_pPlayer->move(LEFT);
-				break;
-			case SDLK_d:
-				m_pPlayer->move(RIGHT);
+					if (m_pPlayer->isGrounded)
+					{
+						m_pPlayer->jump();
 
-				break;
+					}
+				}
+
+				if (keyPressed == SDLK_a)
+				{
+					//std::cout << "move left" << std::endl;
+					m_pPlayer->move(LEFT);
+					m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
+				}
+
+				if (keyPressed == SDLK_s)
+				{
+					std::cout << "move back" << std::endl;
+				
+				}
+
+				if (keyPressed == SDLK_d)
+				{
+					//std::cout << "move right" << std::endl;
+					m_pPlayer->move(RIGHT);
+					m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
+				}
 			}
 			
 			break;
 		case SDL_KEYUP:
-			switch (event.key.keysym.sym)
+			keyReleased = event.key.keysym.sym;
+
+			if (keyReleased == SDLK_a)
 			{
-			case SDLK_w:
-				//m_pPlayer->jumping = false;
-
-				break;
-
-			case SDLK_s:
-
-				break;
-
-			case SDLK_a:
 				m_pPlayer->setVelocity(glm::vec2(0, m_pPlayer->getVelocity().y));
 
-				break;
-			case SDLK_d:
-				m_pPlayer->setVelocity(glm::vec2(0, m_pPlayer->getVelocity().y));
-
-				break;
+				m_pPlayer->setAnimationState(PLAYER_IDLE_LEFT);
 			}
+
+			if (keyReleased == SDLK_d)
+			{
+				m_pPlayer->setVelocity(glm::vec2(0, m_pPlayer->getVelocity().y));
+
+				m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
+			}
+			break;
 			
-			break;
-		default:
-			break;
 		}
 	}
 }
@@ -241,67 +245,35 @@ void Level1Scene::handleEvents()
 void Level1Scene::start()
 {
 
+
 	// allocates memory on the heap for this game object
-	m_pFinishLevel = new FinishLevel();
-	m_pFinishLevel->setPosition(glm::vec2(1300, 295));
-	
-	m_background = Background();
-	
-	m_pPlayer = new Player();
-	addChild(m_pPlayer);
 
-	for (size_t i = 0; i < 3; i++)
-	{
-		m_pEnemy.push_back(new Enemy());
-		
-	}
 
-	m_pEnemy[0]->setPosition(glm::vec2(400, 300));
-	m_pEnemy[1]->setPosition(glm::vec2(770, 300));
-	m_pEnemy[2]->setPosition(glm::vec2(1100, 300));
+	m_background = new Background();
+	addChild(m_background);
 
-	m_pEnemy[0]->setSpeed(0.01);
-	m_pEnemy[1]->setSpeed(0.009);
-	m_pEnemy[2]->setSpeed(0.007);
-	
-	for (Enemy* enemy : m_pEnemy) {
-		enemy->setRange();
-	}
 
-	m_pEnemy[2]->setPatrolRange(100);
-	
-	for (size_t i = 0; i < m_shadowNum; i++)
-	{
-		m_pShadows.push_back(new Shadow());
-		
-	}
-
-	m_pShadows[0]->setPosition(glm::vec2(375, 265));
-	m_pShadows[1]->setPosition(glm::vec2(675, 265));
+	int j = 0;
 
 	for (size_t i = 0; i < totalGroundElements; i++)
 	{
-		m_pGrounds.push_back(new Ground());
-
-	}
-	
-	m_pPlayer->setPosition(glm::vec2(120, 150));
-
-	int i = 0;
-	
-	for (Ground* ground : m_pGrounds) {
-		ground->setPosition(glm::vec2(i, 330));
+		auto ground = new Ground();
+		m_pGrounds.push_back(ground);
 		addChild(ground);
+		ground->setPosition(glm::vec2(j, 330));
+		j += 50;
 
-		i += 50;
 	}
-	
+
+
 	for (size_t i = 0; i < 7; i++)
 	{
-		m_pGroundsVertical.push_back(new Ground());
+		auto ground = new Ground();
+		m_pGroundsVertical.push_back(ground);
+		addChild(ground);
 	}
 
-	int j = 0;
+	j = 0;
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -315,12 +287,49 @@ void Level1Scene::start()
 		m_pGroundsVertical[i]->setPosition(glm::vec2(600, 330 - j));
 		j += 50;
 	}
-	
-	
 
-}
 
-glm::vec2 Level1Scene::getMousePosition()
-{
-	return m_mousePosition;
+	m_pFinishLevel = new FinishLevel();
+	m_pFinishLevel->setPosition(glm::vec2(1300, 295));
+	addChild(m_pFinishLevel);
+	
+	m_pPlayer = new Player();
+	m_pPlayer->setPosition(glm::vec2(120, 150));
+
+	addChild(m_pPlayer);
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		auto enemy = new Enemy();
+		m_pEnemy.push_back(enemy);
+		addChild(enemy);
+
+	}
+
+	m_pEnemy[0]->setPosition(glm::vec2(400, 300));
+	m_pEnemy[1]->setPosition(glm::vec2(770, 300));
+	m_pEnemy[2]->setPosition(glm::vec2(1100, 300));
+
+	m_pEnemy[0]->setSpeed(0.01);
+	m_pEnemy[1]->setSpeed(0.009);
+	m_pEnemy[2]->setSpeed(0.007);
+
+	for (Enemy* enemy : m_pEnemy) {
+		enemy->setRange();
+	}
+
+	m_pEnemy[2]->setPatrolRange(100);
+
+	for (size_t i = 0; i < m_shadowNum; i++)
+	{
+		auto shadow = new Shadow();
+		m_pShadows.push_back(shadow);
+		addChild(shadow);
+
+	}
+
+	m_pShadows[0]->setPosition(glm::vec2(375, 265));
+	m_pShadows[1]->setPosition(glm::vec2(675, 265));
+
+
 }

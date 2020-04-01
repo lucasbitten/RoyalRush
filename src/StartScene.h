@@ -21,16 +21,16 @@ public:
 	virtual void clean() override;
 	virtual void handleEvents() override;
 	virtual void start() override;
-	
+
 	// getters
 	glm::vec2 getMousePosition();
 private:
-	
+
 	glm::vec2 m_mousePosition;
 
 	StartButton* m_pStartButton;
 	Label* m_pStartLabel;
-	
+
 };
 
 #endif /* defined (__START_SCENE__) */

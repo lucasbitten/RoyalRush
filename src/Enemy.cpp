@@ -53,6 +53,8 @@ void Enemy::update()
 
 void Enemy::detectPlayer(Player* player)
 {
+
+	
 	if (!player->onShadow)
 	{
 
@@ -63,6 +65,7 @@ void Enemy::detectPlayer(Player* player)
 			{
 				if (player->getPosition().x > getPosition().x && player->getPosition().x - getPosition().x < detectDistance)
 				{
+
 					TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
 				}
 			}

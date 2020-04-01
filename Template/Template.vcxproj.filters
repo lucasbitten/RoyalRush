@@ -26,10 +26,10 @@
       <UniqueIdentifier>{4df01ff0-0e04-4c4d-ac5d-b7efa07fd705}</UniqueIdentifier>
     </Filter>
     <Filter Include="Managers">
-      <UniqueIdentifier>{ee74c10a-5fee-40d7-95ee-b96d1c7cd836}</UniqueIdentifier>
+      <UniqueIdentifier>{51ce5c17-6a00-499a-87ee-383140ca7329}</UniqueIdentifier>
     </Filter>
     <Filter Include="Enums">
-      <UniqueIdentifier>{c00e61a2-9515-4297-a699-76a9a5f3005e}</UniqueIdentifier>
+      <UniqueIdentifier>{69bcf506-2bc6-4cdf-8f1d-6d6aff28c8e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +75,9 @@
     <ClCompile Include="..\src\DisplayObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CollisionManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\FontManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
@@ -84,47 +87,53 @@
     <ClCompile Include="..\src\TextureManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CollisionManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Level1Scene.cpp">
       <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Player.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Explosion.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ExplosionManager.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="..\src\StartButton.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Button.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PhysicsManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Player.cpp">
+    <ClCompile Include="..\src\SpriteSheet.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Shadow.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\DetectShadowManager.cpp">
-      <Filter>Managers</Filter>
+    <ClCompile Include="..\src\PlayAgain.cpp">
+      <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Ground.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FinishLevel.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Enemy.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\PlayAgain.cpp">
+    <ClCompile Include="..\src\Button.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Background.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\DetectShadowManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PhysicsManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\LevelCompleteScene.cpp">
       <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FinishLevel.cpp">
-      <Filter>Game Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,19 +191,13 @@
     <ClInclude Include="..\src\FontManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\TextureManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\SoundManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ShapeType.h">
-      <Filter>Enums</Filter>
+    <ClInclude Include="..\src\TextureManager.h">
+      <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="..\src\GameObjectType.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SteeringState.h">
       <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\SceneState.h">
@@ -203,44 +206,68 @@
     <ClInclude Include="..\src\Level1Scene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\StartButton.h">
+    <ClInclude Include="..\src\Player.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PlayerAnimationState.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SpriteSheet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CollisionShape.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ShapeType.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Explosion.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ExplosionManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Background.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Button.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\PhysicsManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="DetectShadowManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Player.h">
+    <ClInclude Include="..\src\Enemy.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Shadow.h">
+    <ClInclude Include="..\src\FinishLevel.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Ground.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Move.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Enemy.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\PlayAgain.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Background.h">
+    <ClInclude Include="..\src\Shadow.h">
       <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\StartButton.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PhysicsManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\DetectShadowManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Move.h">
+      <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\LevelCompleteScene.h">
       <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\FinishLevel.h">
-      <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

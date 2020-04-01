@@ -2,13 +2,9 @@
 #ifndef __SCENE__
 #define __SCENE__
 
-#include <iostream>
 #include <vector>
-#include <string>
-
 #include "GameObject.h"
 
-#include "SceneState.h"
 
 class Scene : public GameObject
 {
@@ -26,7 +22,10 @@ public:
 
 	void addChild(DisplayObject* child);
 	void removeAllChildren();
-	int numberOfChildren();
+	int numberOfChildren() const;
+
+	void updateDisplayList();
+	void drawDisplayList();
 
 private:
 	std::vector<DisplayObject*> m_displayList;
