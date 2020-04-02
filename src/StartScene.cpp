@@ -23,8 +23,17 @@ void StartScene::draw()
 
 void StartScene::update()
 {
+
 	m_pStartButton->setMousePosition(m_mousePosition);
 	m_pStartButton->ButtonClick();
+
+	TheSoundManager::Instance()->load("../Assets/audio/door-01.flac", "dr", SOUND_SFX);
+
+	//if(m_pStartButton->ButtonClick())
+	//{
+	//	TheSoundManager::Instance()->playSound("dr", 0);
+
+	//}
 }
 
 void StartScene::clean()

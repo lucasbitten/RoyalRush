@@ -62,6 +62,11 @@ void Level1Scene::update()
 	for (Enemy* enemy : m_pEnemy) {
 		Collision::squaredRadiusCheck(m_pPlayer, enemy);
 		enemy->detectPlayer(m_pPlayer);
+		if(Collision::squaredRadiusCheck(m_pPlayer, enemy))
+		{
+			TheSoundManager::Instance()->playSound("yay", 0);
+		}
+
 	}
 
 
@@ -244,7 +249,11 @@ void Level1Scene::handleEvents()
 
 void Level1Scene::start()
 {
+	//sounds add
+	TheSoundManager::Instance()->load("../Assets/audio/lose.wav", "yay", SOUND_SFX);
 
+	TheSoundManager::Instance()->load("../Assets/audio/jing.ogg", "bg", SOUND_SFX);
+	TheSoundManager::Instance()->playSound("bg", 1);
 
 	// allocates memory on the heap for this game object
 
