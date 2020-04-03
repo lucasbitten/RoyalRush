@@ -100,7 +100,7 @@ void Player::clean()
 void Player::move(Move newMove)
 {
 	auto currentVelocity = getVelocity();
-	m_currentFrame = 0;
+
 	switch (newMove)
 	{
 	case RIGHT:
@@ -147,7 +147,7 @@ void Player::m_buildAnimations()
 
 	idleAnimation.name = "idle";
 
-	for (int i = 1; i < 11; ++i)
+	for (int i = 1; i < 9; ++i)
 	{
 		idleAnimation.frames.push_back(m_pSpriteSheet->getFrame("player_idle-" + std::to_string(i)));
 
