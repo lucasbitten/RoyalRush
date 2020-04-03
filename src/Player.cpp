@@ -40,22 +40,22 @@ void Player::draw()
 	{
 	case PLAYER_IDLE_RIGHT:
 		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["idle"],
-			getPosition().x, getPosition().y, m_currentFrame, 0.12f,
+			getPosition().x, getPosition().y, m_currentFrame, 1.3f,
 			TheGame::Instance()->getRenderer(), 0, 255, true);
 		break;
 	case PLAYER_IDLE_LEFT:
 		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["idle"],
-			getPosition().x, getPosition().y, m_currentFrame, 0.12f,
+			getPosition().x, getPosition().y, m_currentFrame, 1.3f,
 			TheGame::Instance()->getRenderer(), 0, 255, true, SDL_FLIP_HORIZONTAL);
 		break;
 	case PLAYER_RUN_RIGHT:
 		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["run"],
-			getPosition().x, getPosition().y, m_currentFrame, 0.25f,
+			getPosition().x, getPosition().y, m_currentFrame, 1.0f,
 			TheGame::Instance()->getRenderer(), 0, 255, true);
 		break;
 	case PLAYER_RUN_LEFT:
 		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["run"],
-			getPosition().x, getPosition().y, m_currentFrame, 0.25f,
+			getPosition().x, getPosition().y, m_currentFrame, 1.0f,
 			TheGame::Instance()->getRenderer(), 0, 255, true, SDL_FLIP_HORIZONTAL);
 		break;
 	}
@@ -100,13 +100,13 @@ void Player::clean()
 void Player::move(Move newMove)
 {
 	auto currentVelocity = getVelocity();
-
+	m_currentFrame = 0;
 	switch (newMove)
 	{
 	case RIGHT:
 		setVelocity(glm::vec2(currentVelocity.x + 1, currentVelocity.y));
 		flip = SDL_FLIP_NONE;
-
+		
 		break;
 	case LEFT:
 		setVelocity(glm::vec2(currentVelocity.x - 1, currentVelocity.y));
@@ -147,7 +147,7 @@ void Player::m_buildAnimations()
 
 	idleAnimation.name = "idle";
 
-	for (int i = 1; i < 16; ++i)
+	for (int i = 1; i < 11; ++i)
 	{
 		idleAnimation.frames.push_back(m_pSpriteSheet->getFrame("player_idle-" + std::to_string(i)));
 

@@ -186,12 +186,30 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">enemy-run-1.png</key>
+            <key type="filename">enemy-run-2.png</key>
+            <key type="filename">enemy-run-3.png</key>
+            <key type="filename">enemy-run-4.png</key>
+            <key type="filename">enemy-run-5.png</key>
+            <key type="filename">enemy-run-6.png</key>
+            <key type="filename">enemy-run-7.png</key>
+            <key type="filename">enemy-run-8.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>32,32,64,64</rect>
+                <key>scale9Paddings</key>
+                <rect>32,32,64,64</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">player_idle-1.png</key>
-            <key type="filename">player_idle-14.png</key>
-            <key type="filename">player_idle-15.png</key>
             <key type="filename">player_idle-2.png</key>
-            <key type="filename">player_idle-3.png</key>
-            <key type="filename">player_idle-4.png</key>
             <key type="filename">player_idle-5.png</key>
             <key type="filename">player_idle-6.png</key>
             <key type="filename">../textures/Player.png</key>
@@ -239,36 +257,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">player_idle-12.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>6,7,11,15</rect>
-                <key>scale9Paddings</key>
-                <rect>6,7,11,15</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">player_idle-13.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>6,8,11,15</rect>
-                <key>scale9Paddings</key>
-                <rect>6,8,11,15</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
+            <key type="filename">player_idle-3.png</key>
             <key type="filename">player_idle-7.png</key>
             <key type="filename">player_run-1.png</key>
             <key type="filename">player_run-7.png</key>
@@ -286,6 +275,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">player_idle-4.png</key>
             <key type="filename">player_idle-8.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -515,16 +505,8 @@
             <filename>../textures/Player.png</filename>
             <filename>../textures/Shadow.png</filename>
             <filename>../textures/StartButton.png</filename>
-            <filename>player_idle-1.png</filename>
             <filename>player_idle-10.png</filename>
             <filename>player_idle-11.png</filename>
-            <filename>player_idle-12.png</filename>
-            <filename>player_idle-13.png</filename>
-            <filename>player_idle-14.png</filename>
-            <filename>player_idle-15.png</filename>
-            <filename>player_idle-2.png</filename>
-            <filename>player_idle-3.png</filename>
-            <filename>player_idle-4.png</filename>
             <filename>player_idle-5.png</filename>
             <filename>player_idle-6.png</filename>
             <filename>player_idle-7.png</filename>
@@ -545,6 +527,18 @@
             <filename>player_run-6.png</filename>
             <filename>player_run-7.png</filename>
             <filename>player_run-8.png</filename>
+            <filename>enemy-run-1.png</filename>
+            <filename>enemy-run-2.png</filename>
+            <filename>enemy-run-3.png</filename>
+            <filename>enemy-run-4.png</filename>
+            <filename>enemy-run-5.png</filename>
+            <filename>enemy-run-6.png</filename>
+            <filename>enemy-run-7.png</filename>
+            <filename>enemy-run-8.png</filename>
+            <filename>player_idle-1.png</filename>
+            <filename>player_idle-2.png</filename>
+            <filename>player_idle-3.png</filename>
+            <filename>player_idle-4.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

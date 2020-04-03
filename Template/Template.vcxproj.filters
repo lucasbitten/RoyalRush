@@ -269,5 +269,8 @@
     <ClInclude Include="..\src\LevelCompleteScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\EnemyAnimationState.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

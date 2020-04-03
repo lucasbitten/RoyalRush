@@ -7,6 +7,7 @@
 #include "SoundManager.h"
 #include "DisplayObject.h"
 #include "Player.h"
+#include "EnemyAnimationState.h"
 
 class Enemy : public DisplayObject {
 public:
@@ -35,6 +36,10 @@ public:
 	void setPatrolRange(float range);
 	void setRange();
 	void setSpeed(float speed);
+
+	// SetAnimations for Enemy
+	void setAnimationState(EnemyAnimationState new_state);
+	void setAnimation(const Animation& animation);
 private:
 
 	SDL_RendererFlip flip;
@@ -43,5 +48,12 @@ private:
 	float m_maxSpeed;
 	float maxPos;
 	float minPos;
+
+	SpriteSheet* m_pSpriteSheet;
+	int m_currentFrame;
+	
+	void m_buildAnimations();
+	EnemyAnimationState m_currentAnimationState;
+	std::unordered_map<std::string, Animation> m_pAnimations;
 };
 #endif
