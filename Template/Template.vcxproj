@@ -181,6 +181,7 @@
     <ClCompile Include="..\src\Level1Scene.cpp" />
     <ClCompile Include="..\src\Key.cpp" />
     <ClCompile Include="..\src\Level2Scene.cpp" />
+    <ClCompile Include="..\src\Level3Scene .cpp" />
     <ClCompile Include="..\src\LevelCompleteScene.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\PhysicsManager.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="..\src\Key.h" />
     <ClInclude Include="..\src\Level1Scene.h" />
     <ClInclude Include="..\src\Level2Scene.h" />
+    <ClInclude Include="..\src\Level3Scene.h" />
     <ClInclude Include="..\src\LevelCompleteScene.h" />
     <ClInclude Include="..\src\Move.h" />
     <ClInclude Include="..\src\PhysicsManager.h" />

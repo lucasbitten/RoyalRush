@@ -290,7 +290,7 @@ void Level2Scene::start()
 	}
 
 	m_pFinishLevel = new Door();
-	m_pFinishLevel->setPosition(glm::vec2(1330, 500));
+	m_pFinishLevel->setPosition(glm::vec2(1380, 460));
 	addChild(m_pFinishLevel);
 
 	m_pKey = new Key();

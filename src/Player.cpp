@@ -84,6 +84,10 @@ void Player::update()
 	if (currentPosition.x < 5)
 	{
 		setPosition(glm::vec2(5, currentPosition.y));
+	} else if (currentPosition.x > Config::SCREEN_WIDTH - 5)
+	{
+		setPosition(glm::vec2(Config::SCREEN_WIDTH - 5, currentPosition.y));
+
 	} else
 	{
 		setPosition(glm::vec2(currentPosition.x + getVelocity().x, currentPosition.y + getVelocity().y));

@@ -62,7 +62,8 @@ public:
 	void changeSceneState(SceneState new_state);
 	void quit();
 
-	
+	SceneState m_currentSceneState;
+
 private:
 	Game();
 	~Game();
@@ -84,7 +85,6 @@ private:
 	Uint32 m_frames;
 
 	Scene* m_currentScene;
-	SceneState m_currentSceneState;
 };
 
 typedef Game TheGame;
