@@ -163,6 +163,7 @@
     <ClCompile Include="..\src\Background.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CollisionManager.cpp" />
+    <ClCompile Include="..\src\ControlsImage.cpp" />
     <ClCompile Include="..\src\DetectShadowManager.cpp" />
     <ClCompile Include="..\src\DisplayObject.cpp" />
     <ClCompile Include="..\src\EndScene.cpp" />
@@ -189,6 +190,7 @@
     <ClCompile Include="..\src\StartButton.cpp" />
     <ClCompile Include="..\src\StartScene.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
+    <ClCompile Include="..\src\TutorialInfo.cpp" />
     <ClCompile Include="..\src\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +207,7 @@
     <ClInclude Include="..\src\CollisionManager.h" />
     <ClInclude Include="..\src\CollisionShape.h" />
     <ClInclude Include="..\src\Config.h" />
+    <ClInclude Include="..\src\ControlsImage.h" />
     <ClInclude Include="..\src\DetectShadowManager.h" />
     <ClInclude Include="..\src\DisplayObject.h" />
     <ClInclude Include="..\src\EndScene.h" />
@@ -237,6 +240,7 @@
     <ClInclude Include="..\src\StartButton.h" />
     <ClInclude Include="..\src\StartScene.h" />
     <ClInclude Include="..\src\TextureManager.h" />
+    <ClInclude Include="..\src\TutorialInfo.h" />
     <ClInclude Include="..\src\Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

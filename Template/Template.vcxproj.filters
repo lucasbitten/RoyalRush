@@ -138,6 +138,12 @@
     <ClCompile Include="..\src\GroundPlatform.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ControlsImage.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TutorialInfo.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Game.h">
@@ -276,6 +282,12 @@
       <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\GroundPlatform.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ControlsImage.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TutorialInfo.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>

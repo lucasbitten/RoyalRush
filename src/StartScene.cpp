@@ -103,12 +103,17 @@ void StartScene::handleEvents()
 // this function is used for initialization
 void StartScene::start()
 {
+	m_background = new Background();
+	addChild(m_background);
+	
 	m_pStartButton = new StartButton();
+	m_pStartButton->setPosition(glm::vec2(Config::SCREEN_WIDTH * 0.5f, 420.0f));
 	addChild(m_pStartButton);
 
 
-	SDL_Color blue = { 0, 0, 255, 255 };
-	m_pStartLabel = new Label("Royal Rush", "Consolas", 40, blue, glm::vec2(Config::SCREEN_WIDTH * 0.5f, 40.0f));
+	SDL_Color white = { 255, 255, 255, 255 };
+	m_pStartLabel = new Label("Royal Rush", "Minecraft", 95, white,
+		glm::vec2(Config::SCREEN_WIDTH * 0.5f, 150.0f));
 	m_pStartLabel->setParent(this);
 	addChild(m_pStartLabel);
 

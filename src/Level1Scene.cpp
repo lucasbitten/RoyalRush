@@ -141,6 +141,8 @@ void Level1Scene::clean()
 	}
 	
 	delete m_pPlayer;
+	delete m_pControlsImage;
+	delete m_pTutorialInfo;
 	
 	removeAllChildren();
 }
@@ -313,12 +315,22 @@ void Level1Scene::start()
 	m_pFinishLevel = new FinishLevel();
 	m_pFinishLevel->setPosition(glm::vec2(1300, 515));
 	addChild(m_pFinishLevel);
-	
+
+	// Tutorial infos
+	m_pControlsImage = new ControlsImage();
+	m_pControlsImage->setPosition(glm::vec2(60, 300));
+	addChild(m_pControlsImage);
+
+	m_pTutorialInfo = new TutorialInfo();
+	m_pTutorialInfo->setPosition(glm::vec2(270, 350));
+	addChild(m_pTutorialInfo);
+
+	// Player
 	m_pPlayer = new Player();
 	m_pPlayer->setPosition(glm::vec2(30, 505));
-
 	addChild(m_pPlayer);
 
+	// Enemies
 	for (size_t i = 0; i < 3; i++)
 	{
 		auto enemy = new Enemy();
@@ -326,7 +338,7 @@ void Level1Scene::start()
 		addChild(enemy);
 
 	}
-
+	// Enemies positions
 	m_pEnemy[0]->setPosition(glm::vec2(600, 515));
 	m_pEnemy[1]->setPosition(glm::vec2(970, 515));
 	m_pEnemy[2]->setPosition(glm::vec2(1100, 515));
@@ -339,6 +351,7 @@ void Level1Scene::start()
 
 	m_pEnemy[2]->setPatrolRange(100);
 
+	// Shadows
 	for (size_t i = 0; i < m_shadowNum; i++)
 	{
 		auto shadow = new Shadow();
@@ -346,10 +359,11 @@ void Level1Scene::start()
 		addChild(shadow);
 
 	}
-
+	// Shadows Positions
 	m_pShadows[0]->setPosition(glm::vec2(245, 485));
 	m_pShadows[1]->setPosition(glm::vec2(495, 485));
 	m_pShadows[2]->setPosition(glm::vec2(895, 485));
 
-
+	
+	
 }

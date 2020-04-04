@@ -11,6 +11,8 @@ enum GameObjectType {
 	BACKGROUND,
 	FINISH_LEVEL,
 	EXPLOSION,
-	NUM_OF_TYPES
+	NUM_OF_TYPES,
+	CONTROLS_IMAGE,
+	SHADOW_INFO
 };
 #endif /* defined (__GAME_OBJECT_TYPE__) */

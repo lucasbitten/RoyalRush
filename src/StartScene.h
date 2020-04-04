@@ -6,6 +6,7 @@
 #include "Label.h"
 #include "Button.h"
 #include "StartButton.h"
+#include "Background.h"
 
 class StartScene : public Scene
 {
@@ -26,6 +27,8 @@ public:
 	glm::vec2 getMousePosition();
 private:
 
+	Background* m_background;
+	
 	glm::vec2 m_mousePosition;
 
 	StartButton* m_pStartButton;

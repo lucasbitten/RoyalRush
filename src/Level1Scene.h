@@ -15,6 +15,8 @@
 #include "Background.h"
 #include "FinishLevel.h"
 #include "GroundPlatform.h"
+#include "ControlsImage.h"
+#include "TutorialInfo.h"
 
 
 class Level1Scene : public Scene
@@ -52,6 +54,9 @@ private:
 
 
 	std::vector<Enemy*> m_pEnemy;
+
+	ControlsImage* m_pControlsImage;
+	TutorialInfo* m_pTutorialInfo;
 };
 
 #endif /* defined (__LEVEL1_SCENE__) */
