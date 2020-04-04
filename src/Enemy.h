@@ -31,7 +31,7 @@ public:
 	bool isGrounded;
 
 	bool facingRight = true;
-	float detectDistance = 50;
+	float detectDistance = 80;
 
 	void setPatrolRange(float range);
 	void setRange();

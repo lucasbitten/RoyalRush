@@ -42,7 +42,7 @@ void Level3Scene::update()
 	}
 
 	for (GroundPlatform* ground : m_pGroundPlatforms) {
-		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2 + ground->getHeight() * 0.5);
+		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2);
 		Collision::lineRectCheck(m_pPlayer, bottomLine, ground, ground->getWidth(), ground->getHeight());
 
 		Collision::squaredRadiusCheckPlayer(m_pPlayer, ground);

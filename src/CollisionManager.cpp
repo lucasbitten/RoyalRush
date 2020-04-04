@@ -37,7 +37,6 @@ bool CollisionManager::squaredRadiusCheckPlayer(Player* player, GameObject* obje
 
 				if ( P1.x > P2.x && P1.y > P2.y)
 				{
-					std::cout << "Collision on the right of ground!" << std::endl;
 
 					float overlapping = P2.x + object2->getWidth() *0.5f - P1.x + player->getWidth() *0.5f;
 					player->setVelocity(glm::vec2(0, player->getVelocity().y));
@@ -45,11 +44,33 @@ bool CollisionManager::squaredRadiusCheckPlayer(Player* player, GameObject* obje
 					player->setPosition(glm::vec2(player->getPosition().x + overlapping +10, player->getPosition().y));
 				} else if( P1.x < P2.x && P1.y > P2.y)
 				{
-					std::cout << "Collision on the left of ground!" << std::endl;
 
 					float overlapping = P1.x + player->getWidth() * 0.5f - P2.x + object2->getWidth() * 0.5f;
 
 					
+					player->setPosition(glm::vec2(player->getPosition().x - overlapping - 2, player->getPosition().y));
+					player->setVelocity(glm::vec2(0, player->getVelocity().y));
+				}
+			break;
+
+			case  GROUND_PLATFORM:
+
+				if (P1.x > P2.x&& P1.y > P2.y)
+				{
+					std::cout << "Collision on the right of ground!" << std::endl;
+
+					float overlapping = P2.x + object2->getWidth() * 0.5f - P1.x + player->getWidth() * 0.5f;
+					player->setVelocity(glm::vec2(0, player->getVelocity().y));
+
+					player->setPosition(glm::vec2(player->getPosition().x + overlapping + 10, player->getPosition().y));
+				}
+				else if (P1.x < P2.x && P1.y > P2.y)
+				{
+					std::cout << "Collision on the left of ground!" << std::endl;
+
+					float overlapping = P1.x + player->getWidth() * 0.5f - P2.x + object2->getWidth() * 0.5f;
+
+
 					player->setPosition(glm::vec2(player->getPosition().x - overlapping - 2, player->getPosition().y));
 					player->setVelocity(glm::vec2(0, player->getVelocity().y));
 				}
@@ -304,9 +325,12 @@ bool CollisionManager::lineRectCheck(Player* player, glm::vec2 line1End, Ground*
 
 
 
-		ground->playerAtGround = true;
-		player->stopJump(glm::vec2(player->getPosition().x, ground->getPosition().y - recHeight * 0.5));
-		return true;
+		if (ry < player->getPosition().y + 50 && player->getVelocity().y > 0)
+		{
+			ground->playerAtGround = true;
+			player->stopJump(glm::vec2(player->getPosition().x, ground->getPosition().y - recHeight * 0.5));
+			return true;
+		}
 		
 	} 	
 	ground->playerAtGround = false;
@@ -319,8 +343,8 @@ bool CollisionManager::lineRectCheck(Player* player, glm::vec2 line1End, GroundP
 	float x2 = line1End.x;
 	float y1 = player->getPosition().y;
 	float y2 = line1End.y;
-	float rx = ground->getPosition().x - ground->getWidth() / 2;
-	float ry = ground->getPosition().y;
+	float rx = ground->getPosition().x - ground->getWidth() * 0.5f;
+	float ry = ground->getPosition().y - ground->getHeight() * 0.5f;
 	float rw = recWidth;
 	float rh = recHeight;
 
@@ -337,9 +361,14 @@ bool CollisionManager::lineRectCheck(Player* player, glm::vec2 line1End, GroundP
 	// has hit the rectangle
 	if (top) {
 
-		ground->playerAtGround = true;
-		player->stopJump(glm::vec2(player->getPosition().x, ground->getPosition().y - recHeight * 0.5));
-		return true;
+		if(ry < player->getPosition().y +20 && player->getVelocity().y > 0)
+		{
+			ground->playerAtGround = true;
+			player->stopJump(glm::vec2(player->getPosition().x, ground->getPosition().y - recHeight * 0.5));
+			return true;
+		}
+
+
 
 	}
 	ground->playerAtGround = false;

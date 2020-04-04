@@ -47,7 +47,7 @@ void Level2Scene::update()
 	}
 
 	for (GroundPlatform* ground : m_pGroundPlatforms) {
-		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2 + ground->getHeight() * 0.5);
+		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2);
 		Collision::lineRectCheck(m_pPlayer, bottomLine, ground, ground->getWidth(), ground->getHeight());
 
 		Collision::squaredRadiusCheckPlayer(m_pPlayer, ground);
@@ -243,8 +243,6 @@ void Level2Scene::handleEvents()
 void Level2Scene::start()
 {
 
-	TheSoundManager::Instance()->stopMusic();
-
 	TheSoundManager::Instance()->load("../Assets/audio/key.wav", "eg", SOUND_SFX);
 	TheSoundManager::Instance()->load("../Assets/audio/key.wav", "eg", SOUND_SFX);
 	//TheSoundManager::Instance()->playSound("eg", 1);
@@ -302,7 +300,7 @@ void Level2Scene::start()
 	addChild(m_pFinishLevel);
 
 	m_pKey = new Key();
-	m_pKey->setPosition(glm::vec2(35, 150));
+	m_pKey->setPosition(glm::vec2(35, 160));
 
 	// Player
 	m_pPlayer = new Player();
