@@ -144,8 +144,6 @@
     <ClCompile Include="..\src\TutorialInfo.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-<<<<<<< HEAD
-=======
     <ClCompile Include="..\src\Level2Scene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
@@ -155,7 +153,6 @@
     <ClCompile Include="..\src\Door.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
->>>>>>> cd2fa7eeb4cbe53d2166f106616360eef573a0c5
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Game.h">
@@ -302,8 +299,6 @@
     <ClInclude Include="..\src\TutorialInfo.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-<<<<<<< HEAD
-=======
     <ClInclude Include="..\src\Level2Scene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
@@ -313,6 +308,5 @@
     <ClInclude Include="..\src\Door.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
->>>>>>> cd2fa7eeb4cbe53d2166f106616360eef573a0c5
   </ItemGroup>
 </Project>
