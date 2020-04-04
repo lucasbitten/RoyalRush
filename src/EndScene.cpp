@@ -4,6 +4,7 @@
 #include "GLM/gtx/string_cast.hpp"
 #include <algorithm>
 #include <iomanip>
+#include "SoundManager.h"
 
 EndScene::EndScene()
 {
@@ -88,6 +89,9 @@ void EndScene::handleEvents()
 
 void EndScene::start()
 {
+	
+	TheSoundManager::Instance()->stopMusic();
+
 	SDL_Color blue = { 0, 0, 255, 255 };
 	m_Label = new Label("You have been spotted!", "Dock51", 50, blue, glm::vec2(Config::SCREEN_WIDTH * 0.5f, 200.0f));
 	m_Label->setParent(this);

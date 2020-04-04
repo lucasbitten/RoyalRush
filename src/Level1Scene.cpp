@@ -57,6 +57,7 @@ void Level1Scene::update()
 		{
 			
 			TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+
 			return;
 		}
 		if(Collision::squaredRadiusCheck(m_pPlayer, enemy))

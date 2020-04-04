@@ -27,6 +27,7 @@ void Level2Scene::update()
 	{
 		if (Collision::AABBCheckPlayer(m_pPlayer, m_pFinishLevel))
 		{
+			
 			TheGame::Instance()->changeSceneState(LEVEL_COMPLETE_SCENE);
 			return;
 		}
@@ -71,6 +72,7 @@ void Level2Scene::update()
 	if (!isKeyPickedUp) {
 		if (Collision::AABBCheckPlayer(m_pPlayer, m_pKey))
 		{
+			TheSoundManager::Instance()->playSound("eg",0);
 			isKeyPickedUp = true;
 		}
 	}
@@ -242,6 +244,13 @@ void Level2Scene::handleEvents()
 void Level2Scene::start()
 {
 
+	TheSoundManager::Instance()->stopMusic();
+
+	TheSoundManager::Instance()->load("../Assets/audio/key.wav", "eg", SOUND_SFX);
+	TheSoundManager::Instance()->load("../Assets/audio/key.wav", "eg", SOUND_SFX);
+	//TheSoundManager::Instance()->playSound("eg", 1);
+
+	
 	m_background = new Background();
 	addChild(m_background);
 
