@@ -16,12 +16,14 @@ LevelCompleteScene::~LevelCompleteScene()
 
 void LevelCompleteScene::draw()
 {
+	m_background->draw();
 	m_Label->draw();
 	m_pPlayAgain->draw();
 }
 
 void LevelCompleteScene::update()
 {
+	m_background->update();
 	m_pPlayAgain->setMousePosition(m_mousePosition);
 	m_pPlayAgain->ButtonClick();
 }
@@ -88,13 +90,19 @@ void LevelCompleteScene::handleEvents()
 
 void LevelCompleteScene::start()
 {
-	SDL_Color blue = { 0, 0, 255, 255 };
-	m_Label = new Label("Level Completed!", "Dock51", 50, blue, glm::vec2(Config::SCREEN_WIDTH * 0.5f, 200.0f));
+
+	m_background = new Background();
+	addChild(m_background);
+	
+	SDL_Color white = { 255, 255, 255, 255 };
+	m_Label = new Label("CONGRATULATIONS, YOU FINISHED THE GAME!", "viking", 40, white, glm::vec2(Config::SCREEN_WIDTH * 0.5f, 100.0f));
 	m_Label->setParent(this);
 	addChild(m_Label);
 
 	m_pPlayAgain = new PlayAgain();
 	m_pPlayAgain->setParent(this);
+	m_pPlayAgain->setPosition(glm::vec2(Config::SCREEN_WIDTH * 0.5f, 420.0f));
+
 	addChild(m_pPlayAgain);
 }
 

@@ -27,8 +27,7 @@ void Level2Scene::update()
 	{
 		if (Collision::AABBCheckPlayer(m_pPlayer, m_pFinishLevel))
 		{
-			
-			TheGame::Instance()->changeSceneState(LEVEL_COMPLETE_SCENE);
+			TheGame::Instance()->changeSceneState(LEVEL3_SCENE);
 			return;
 		}
 	}

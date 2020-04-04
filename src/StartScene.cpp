@@ -94,6 +94,12 @@ void StartScene::handleEvents()
 			case SDLK_3:
 				TheGame::Instance()->changeSceneState(SceneState::LEVEL3_SCENE);
 				break;
+			case SDLK_4:
+				TheGame::Instance()->changeSceneState(SceneState::LEVEL_COMPLETE_SCENE);
+				break;
+			case SDLK_5:
+				TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+				break;
 			}
 			break;
 
@@ -106,6 +112,12 @@ void StartScene::handleEvents()
 // this function is used for initialization
 void StartScene::start()
 {
+
+	TheSoundManager::Instance()->load("../Assets/audio/Music.mp3", "music", SOUND_MUSIC);
+	TheSoundManager::Instance()->playMusic("music", 1);
+	
+	TheSoundManager::Instance()->load("../Assets/audio/lose.wav", "detected", SOUND_SFX);
+	
 	m_background = new Background();
 	addChild(m_background);
 	
@@ -115,8 +127,8 @@ void StartScene::start()
 
 
 	SDL_Color white = { 255, 255, 255, 255 };
-	m_pStartLabel = new Label("Royal Rush", "Minecraft", 95, white,
-		glm::vec2(Config::SCREEN_WIDTH * 0.5f, 150.0f));
+	m_pStartLabel = new Label("Royal Rush", "viking", 80, white,
+		glm::vec2(Config::SCREEN_WIDTH * 0.5f, 100.0f));
 	m_pStartLabel->setParent(this);
 	addChild(m_pStartLabel);
 

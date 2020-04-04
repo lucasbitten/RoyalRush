@@ -278,14 +278,8 @@ void Level1Scene::handleEvents()
 
 void Level1Scene::start()
 {
-	//sounds add
-	TheSoundManager::Instance()->load("../Assets/audio/lose.wav", "yay", SOUND_SFX);
-
-	TheSoundManager::Instance()->load("../Assets/audio/jing.ogg", "bg", SOUND_SFX);
-	TheSoundManager::Instance()->playSound("bg", 1);
 
 	// allocates memory on the heap for this game object
-
 
 	m_background = new Background();
 	addChild(m_background);

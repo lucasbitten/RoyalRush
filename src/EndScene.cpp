@@ -17,6 +17,7 @@ EndScene::~EndScene()
 
 void EndScene::draw()
 {
+	m_background->draw();
 	m_Label->draw();
 	m_pPlayAgain->draw();
 }
@@ -89,16 +90,18 @@ void EndScene::handleEvents()
 
 void EndScene::start()
 {
+	m_background = new Background();
+	addChild(m_background);
 	
-	TheSoundManager::Instance()->stopMusic();
-
-	SDL_Color blue = { 0, 0, 255, 255 };
-	m_Label = new Label("You have been spotted!", "Dock51", 50, blue, glm::vec2(Config::SCREEN_WIDTH * 0.5f, 200.0f));
+	SDL_Color white = { 255, 255, 255, 255 };
+	m_Label = new Label("OH, NO! YOU HAVE BEEN SPOTTED!", "viking", 45, white, glm::vec2(Config::SCREEN_WIDTH * 0.5f, 100.0f));
 	m_Label->setParent(this);
 	addChild(m_Label);
 
 	m_pPlayAgain = new PlayAgain();
 	m_pPlayAgain->setParent(this);
+	m_pPlayAgain->setPosition(glm::vec2(Config::SCREEN_WIDTH * 0.5f, 420.0f));
+
 	addChild(m_pPlayAgain);
 }
 

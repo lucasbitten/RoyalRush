@@ -2,6 +2,7 @@
 #ifndef __LEVEL_COMPLETE_SCENE_
 #define __LEVEL_COMPLETE_SCENE_
 
+#include "Background.h"
 #include "Scene.h"
 #include "Label.h"
 #include "PlayAgain.h"
@@ -21,6 +22,10 @@ public:
 
 	glm::vec2 getMousePosition();
 private:
+
+	Background* m_background;
+
+	
 	glm::vec2 m_mousePosition;
 	Label* m_Label;
 	PlayAgain* m_pPlayAgain;

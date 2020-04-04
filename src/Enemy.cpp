@@ -108,6 +108,7 @@ bool Enemy::detectPlayer(Player* player)
 			{
 				if (player->getPosition().x > getPosition().x && player->getPosition().x - getPosition().x < detectDistance)
 				{
+					TheSoundManager::Instance()->playSound("detected", 0);
 
 					return true;
 				}
@@ -116,6 +117,8 @@ bool Enemy::detectPlayer(Player* player)
 			{
 				if (player->getPosition().x < getPosition().x && getPosition().x - player->getPosition().x < detectDistance)
 				{
+					TheSoundManager::Instance()->playSound("detected", 0);
+
 					return true;
 
 				}
