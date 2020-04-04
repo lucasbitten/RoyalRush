@@ -1,0 +1,20 @@
+#pragma once
+#ifndef __GAME_OBJECT_TYPE__
+#define __GAME_OBJECT_TYPE__
+enum GameObjectType {
+	NONE = -1,
+	PLAYER,
+	ENEMY,
+	START_BUTTON,
+	SHADOW,
+	GROUND,
+	BACKGROUND,
+	FINISH_LEVEL,
+	EXPLOSION,
+	NUM_OF_TYPES,
+	CONTROLS_IMAGE,
+	DOOR,
+	KEY,
+	SHADOW_INFO
+};
+#endif /* defined (__GAME_OBJECT_TYPE__) */
