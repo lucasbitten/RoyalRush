@@ -50,3 +50,10 @@ void SoundManager::playSound(std::string id, int loop)
 {
 	Mix_PlayChannel(-1, m_sfxs[id], loop);
 }
+
+void SoundManager::stopMusic()
+{
+	Mix_HaltMusic();
+
+}
+

@@ -6,6 +6,9 @@ Player* Player::s_pInstance;
 
 Player::Player(): m_currentFrame(0), m_currentAnimationState(PLAYER_IDLE_RIGHT), m_maxSpeed(3.0f)
 {
+	TheSoundManager::Instance()->load("../Assets/audio/jump_02.wav", "jj", SOUND_SFX);
+
+	
 	TheTextureManager::Instance()->loadSpriteSheet(
 		"../Assets/sprites/atlas.txt",
 		"../Assets/sprites/atlas.png", 
@@ -66,7 +69,6 @@ void Player::draw()
 
 void Player::update()
 {
-
 	auto currentPosition = getPosition();
 
 	if (getVelocity().x > 0.0f && getVelocity().x - currentPosition.x < m_maxSpeed)
@@ -137,8 +139,12 @@ void Player::stopJump(glm::vec2 newPos)
 
 }
 
+
+
 void Player::jump()
 {
+	TheSoundManager::Instance()->playSound("jj", 0);
+
 	isGrounded = false;
 	setVelocity(glm::vec2(getVelocity().x, -11));
 
