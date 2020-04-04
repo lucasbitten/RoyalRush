@@ -5,6 +5,7 @@
 #include "glm/gtx/string_cast.hpp"
 #include "IMGUI_SDL/imgui_sdl.h"
 #include "LevelCompleteScene.h"
+#include "Level2Scene.h"
 
 
 Game* Game::s_pInstance = nullptr;
@@ -152,6 +153,10 @@ void Game::changeSceneState(const SceneState new_state)
 		case SceneState::LEVEL_COMPLETE_SCENE:
 			m_currentScene = new LevelCompleteScene();
 			std::cout << "end scene activated" << std::endl;
+			break;
+		case SceneState::LEVEL2_SCENE:
+			m_currentScene = new Level2Scene();
+			std::cout << "Level 2 scene activated" << std::endl;
 			break;
 		case SceneState::END_SCENE:
 			m_currentScene = new EndScene();

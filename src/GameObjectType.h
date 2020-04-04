@@ -13,6 +13,8 @@ enum GameObjectType {
 	EXPLOSION,
 	NUM_OF_TYPES,
 	CONTROLS_IMAGE,
+	DOOR,
+	KEY,
 	SHADOW_INFO
 };
 #endif /* defined (__GAME_OBJECT_TYPE__) */
