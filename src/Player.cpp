@@ -40,12 +40,12 @@ void Player::draw()
 	{
 	case PLAYER_IDLE_RIGHT:
 		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["idle"],
-			getPosition().x, getPosition().y, m_currentFrame, 1.3f,
+			getPosition().x, getPosition().y, m_currentFrame, 0.8f,
 			TheGame::Instance()->getRenderer(), 0, 255, true);
 		break;
 	case PLAYER_IDLE_LEFT:
 		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["idle"],
-			getPosition().x, getPosition().y, m_currentFrame, 1.3f,
+			getPosition().x, getPosition().y, m_currentFrame, 0.8f,
 			TheGame::Instance()->getRenderer(), 0, 255, true, SDL_FLIP_HORIZONTAL);
 		break;
 	case PLAYER_RUN_RIGHT:
@@ -68,6 +68,7 @@ void Player::update()
 {
 
 	auto currentPosition = getPosition();
+
 	if (getVelocity().x > 0.0f && getVelocity().x - currentPosition.x < m_maxSpeed)
 	{
 		setVelocity(glm::vec2(m_maxSpeed, getVelocity().y));
@@ -78,13 +79,20 @@ void Player::update()
 		setVelocity(glm::vec2(-m_maxSpeed, getVelocity().y));
 	}
 
+	if (currentPosition.x < 5)
+	{
+		setPosition(glm::vec2(5, currentPosition.y));
+	} else
+	{
+		setPosition(glm::vec2(currentPosition.x + getVelocity().x, currentPosition.y + getVelocity().y));
 
-	setPosition(glm::vec2(currentPosition.x + getVelocity().x, currentPosition.y + getVelocity().y));
+	}
+
 
 
 	//glm::vec2 mouseVector = TheGame::Instance()->getMousePosition();
 
-
+	
 	if (!isGrounded)
 	{
 		setVelocity(glm::vec2(getVelocity().x, getVelocity().y + 0.5f));
@@ -120,14 +128,19 @@ void Player::move(Move newMove)
 
 void Player::stopJump(glm::vec2 newPos)
 {
+	setVelocity(getVelocity().x, 0);
 	jumping = false;
 	jumpTime = 0;
-	setPosition(newPos);
+	isGrounded = true;
+	//setPosition(newPos);
+
+
 }
 
 void Player::jump()
 {
-	setVelocity(glm::vec2(getVelocity().x, -10));
+	isGrounded = false;
+	setVelocity(glm::vec2(getVelocity().x, -11));
 
 }
 

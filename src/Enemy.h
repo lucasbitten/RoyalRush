@@ -20,7 +20,7 @@ public:
 	// Update the object
 	void update();
 
-	void detectPlayer(Player*);
+	bool detectPlayer(Player*);
 	void move();
 
 	// remove anything that needs to be deleted
@@ -42,10 +42,8 @@ public:
 	void setAnimation(const Animation& animation);
 private:
 
-	SDL_RendererFlip flip;
 	float patrolRange = 70;
-	float speed = 0.008;
-	float m_maxSpeed;
+	float speed = 3;
 	float maxPos;
 	float minPos;
 

@@ -27,7 +27,6 @@ void StartScene::update()
 	m_pStartButton->setMousePosition(m_mousePosition);
 	m_pStartButton->ButtonClick();
 
-	TheSoundManager::Instance()->load("../Assets/audio/door-01.flac", "dr", SOUND_SFX);
 
 	//if(m_pStartButton->ButtonClick())
 	//{
@@ -117,5 +116,7 @@ void StartScene::start()
 
 glm::vec2 StartScene::getMousePosition()
 {
+	TheSoundManager::Instance()->load("../Assets/audio/door-01.flac", "dr", SOUND_SFX);
+
 	return m_mousePosition;
 }

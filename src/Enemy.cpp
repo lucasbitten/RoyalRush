@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Player.h"
 
-Enemy::Enemy() :m_maxSpeed(1.0f)
+Enemy::Enemy() :speed(1.0f)
 {
 	/*TheTextureManager::Instance()->load("../Assets/textures/Enemy.png", "enemy", TheGame::Instance()->getRenderer());
 	setPosition(glm::vec2(200, 200));*/
@@ -16,9 +16,8 @@ Enemy::Enemy() :m_maxSpeed(1.0f)
 	
 	std::cout << "Enemy on scene!" << std::endl;
 
-	glm::vec2 size = TheTextureManager::Instance()->getTextureSize("enemy");
-	setWidth(size.x);
-	setHeight(size.y);
+	setWidth(35);
+	setHeight(35);
 	setIsColliding(false);
 	setType(GameObjectType::ENEMY);
 
@@ -73,18 +72,17 @@ void Enemy::draw()
 	const int xComponent = getPosition().x;
 	const int yComponent = getPosition().y;
 
-	switch (m_currentAnimationState)
+	if (facingRight)
 	{
-	case ENEMY_RUN_RIGHT:
 		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["run"],
-			getPosition().x, getPosition().y, m_currentFrame, 0.7f,
-			TheGame::Instance()->getRenderer(), 0, 255, true, SDL_FLIP_HORIZONTAL);
-		break;
-	case ENEMY_RUN_LEFT:
+			getPosition().x, getPosition().y, m_currentFrame, 0.4f,
+			TheGame::Instance()->getRenderer(), 0, 255, true);
+
+	} else {
+		
 		TheTextureManager::Instance()->playAnimation("spritesheet", m_pAnimations["run"],
-			getPosition().x, getPosition().y, m_currentFrame, 0.7f,
+			getPosition().x, getPosition().y, m_currentFrame, 0.4f,
 			TheGame::Instance()->getRenderer(), 0, 255, true, SDL_FLIP_HORIZONTAL); 
-		break;
 	}
 	//TheTextureManager::Instance()->draw("enemy", getPosition().x, getPosition().y, TheGame::Instance()->getRenderer(), true, flip);
 }
@@ -96,7 +94,7 @@ void Enemy::update()
 
 }
 
-void Enemy::detectPlayer(Player* player)
+bool Enemy::detectPlayer(Player* player)
 {
 
 	
@@ -111,19 +109,22 @@ void Enemy::detectPlayer(Player* player)
 				if (player->getPosition().x > getPosition().x && player->getPosition().x - getPosition().x < detectDistance)
 				{
 
-					TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+					return true;
 				}
 			}
 			else
 			{
 				if (player->getPosition().x < getPosition().x && getPosition().x - player->getPosition().x < detectDistance)
 				{
-					TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+					return true;
+
 				}
 			}
 		}
 
 	}
+
+	return false;
 }
 
 void Enemy::move()
@@ -132,32 +133,26 @@ void Enemy::move()
 
 	if ( facingRight)
 	{
-		setVelocity(glm::vec2(currentVelocity.x + speed, currentVelocity.y));
+		setVelocity(glm::vec2(speed, currentVelocity.y));
 		if(getPosition().x >= maxPos)
 		{
 			facingRight = false;
 			setVelocity(glm::vec2(0, currentVelocity.y));
-			flip = SDL_FLIP_HORIZONTAL;
 		}
 
 	} else
 	{
-		setVelocity(glm::vec2(currentVelocity.x - speed, currentVelocity.y));
+		setVelocity(glm::vec2(-speed, currentVelocity.y));
 		if (getPosition().x <= minPos)
 		{
 			facingRight = true;
 			setVelocity(glm::vec2(0, currentVelocity.y));
-			flip = SDL_FLIP_NONE;
 
 		}
 	}
 
 	setPosition(glm::vec2(getPosition().x + getVelocity().x, getPosition().y + getVelocity().y));
-	if (!isGrounded)
-	{
-		setVelocity(glm::vec2(getVelocity().x, getVelocity().y + 0.5f));
 
-	}
 	
 }
 

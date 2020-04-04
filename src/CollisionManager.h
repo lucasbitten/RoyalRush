@@ -9,6 +9,7 @@
 #include <GLM/gtx/norm.hpp>
 #include "SoundManager.h"
 #include "Player.h"
+class GroundPlatform;
 class Enemy;
 class Ground;
 
@@ -24,7 +25,8 @@ public:
 
 	static bool lineLineCheck(glm::vec2 line1Start, glm::vec2 line1End, glm::vec2 line2Start, glm::vec2 line2End);
 	static bool lineRectCheck(Player* player, glm::vec2 line1End, Ground* ground, float recWidth, float recHeight);
-	static bool lineRectCheck(Enemy* player, glm::vec2 line1End, Ground* ground, float recWidth, float recHeight);
+	static bool lineRectCheck(Player* player, glm::vec2 line1End, GroundPlatform* ground, float recWidth, float recHeight);
+
 	static int minSquaredDistanceLineLine(glm::vec2 line1Start, glm::vec2 line1End, glm::vec2 line2Start, glm::vec2 line2End);
 
 

@@ -58,6 +58,7 @@ public:
 	void setAnimationState(PlayerAnimationState new_state);
 	void setAnimation(const Animation& animation);
 
+	
 private:
 
 	static Player* s_pInstance;

@@ -28,7 +28,7 @@ void Level1Scene::update()
 	if (m_pPlayer->getPosition().x > m_pFinishLevel->getPosition().x + 50)
 	{
 		TheGame::Instance()->changeSceneState(SceneState::LEVEL_COMPLETE_SCENE);
-
+		return;
 	}
 
 	for (Shadow* shadow : m_pShadows)
@@ -36,32 +36,28 @@ void Level1Scene::update()
 		DetectShadowManager::playerOnShadow(shadow, m_pPlayer);
 	}
 
-
 	for (Ground* ground : m_pGrounds) {
 
 		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2 + 22);
 		Collision::lineRectCheck(m_pPlayer, bottomLine, ground, ground->getWidth(), ground->getHeight());
 
-		for (Enemy* enemy : m_pEnemy) {
-			bottomLine = glm::vec2(enemy->getPosition().x, enemy->getPosition().y + enemy->getHeight() / 2 + 22);
-			Collision::lineRectCheck(enemy, bottomLine, ground, ground->getWidth(), ground->getHeight());
-		}
-
-
-
 	}
-	for (Ground* ground : m_pGroundsVertical) {
-		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2 + 22);
+
+	for (GroundPlatform* ground : m_pGroundPlatforms) {
+		auto bottomLine = glm::vec2(m_pPlayer->getPosition().x, m_pPlayer->getPosition().y + m_pPlayer->getHeight() / 2 + ground->getHeight()*0.5);
 		Collision::lineRectCheck(m_pPlayer, bottomLine, ground, ground->getWidth(), ground->getHeight());
 
 		Collision::squaredRadiusCheckPlayer(m_pPlayer, ground);
 
 	}
 
-
 	for (Enemy* enemy : m_pEnemy) {
 		Collision::squaredRadiusCheck(m_pPlayer, enemy);
-		enemy->detectPlayer(m_pPlayer);
+		if (enemy->detectPlayer(m_pPlayer))
+		{
+			TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+			return;
+		}
 		if(Collision::squaredRadiusCheck(m_pPlayer, enemy))
 		{
 			TheSoundManager::Instance()->playSound("yay", 0);
@@ -93,7 +89,7 @@ bool Level1Scene::playerIsGrounded()
 		}
 	}
 
-	for (Ground* ground : m_pGroundsVertical) {
+	for (GroundPlatform* ground : m_pGroundPlatforms) {
 
 		if (ground->playerAtGround == true)
 		{
@@ -130,7 +126,7 @@ void Level1Scene::clean()
 		delete ground;
 	}
 
-	for (Ground* ground : m_pGroundsVertical) {
+	for (GroundPlatform* ground : m_pGroundPlatforms) {
 
 		delete ground;
 
@@ -157,6 +153,34 @@ void Level1Scene::handleEvents()
 	SDL_Keycode keyReleased;
 	
 	SDL_Event event;
+
+
+	const Uint8* state = SDL_GetKeyboardState(NULL);
+	
+	/*if (state[SDL_SCANCODE_S]) {
+
+	}*/
+
+	if (state[SDL_SCANCODE_W]) {
+		if (m_pPlayer->isGrounded)
+		{
+			m_pPlayer->jump();
+
+		}
+	}
+
+	if (state[SDL_SCANCODE_A]) {
+		m_pPlayer->move(LEFT);
+		m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
+	}
+
+	if (state[SDL_SCANCODE_D]) {
+		m_pPlayer->move(RIGHT);
+		m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
+	}
+
+
+	
 	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)
@@ -191,38 +215,39 @@ void Level1Scene::handleEvents()
 			case SDLK_2:
 				//TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
 				break;
+			default: ;
 			}
 			// movement keys
-			{
-				if(keyPressed == SDLK_w)
-				{
-					if (m_pPlayer->isGrounded)
-					{
-						m_pPlayer->jump();
+			//{
+			//	if(keyPressed == SDLK_w)
+			//	{
+			//		if (m_pPlayer->isGrounded)
+			//		{
+			//			m_pPlayer->jump();
 
-					}
-				}
+			//		}
+			//	}
 
-				if (keyPressed == SDLK_a)
-				{
-					//std::cout << "move left" << std::endl;
-					m_pPlayer->move(LEFT);
-					m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
-				}
+			//	if (keyPressed == SDLK_a)
+			//	{
+			//		//std::cout << "move left" << std::endl;
+			//		m_pPlayer->move(LEFT);
+			//		m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
+			//	}
 
-				if (keyPressed == SDLK_s)
-				{
-					std::cout << "move back" << std::endl;
-				
-				}
+			//	if (keyPressed == SDLK_s)
+			//	{
+			//		std::cout << "move back" << std::endl;
+			//	
+			//	}
 
-				if (keyPressed == SDLK_d)
-				{
-					//std::cout << "move right" << std::endl;
-					m_pPlayer->move(RIGHT);
-					m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
-				}
-			}
+			//	if (keyPressed == SDLK_d)
+			//	{
+			//		//std::cout << "move right" << std::endl;
+			//		m_pPlayer->move(RIGHT);
+			//		m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
+			//	}
+			//}
 			
 			break;
 		case SDL_KEYUP:
@@ -242,7 +267,7 @@ void Level1Scene::handleEvents()
 				m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
 			}
 			break;
-			
+		default: ;
 		}
 	}
 }
@@ -250,16 +275,27 @@ void Level1Scene::handleEvents()
 void Level1Scene::start()
 {
 	//sounds add
-	TheSoundManager::Instance()->load("../Assets/audio/lose.wav", "yay", SOUND_SFX);
+	/*TheSoundManager::Instance()->load("../Assets/audio/lose.wav", "yay", SOUND_SFX);
 
 	TheSoundManager::Instance()->load("../Assets/audio/jing.ogg", "bg", SOUND_SFX);
-	TheSoundManager::Instance()->playSound("bg", 1);
+	TheSoundManager::Instance()->playSound("bg", 1);*/
 
 	// allocates memory on the heap for this game object
 
 
 	m_background = new Background();
 	addChild(m_background);
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		auto ground = new GroundPlatform();
+		m_pGroundPlatforms.push_back(ground);
+		addChild(ground);
+	}
+
+	m_pGroundPlatforms[0]->setPosition(glm::vec2(150, 490));
+	m_pGroundPlatforms[1]->setPosition(glm::vec2(400, 490));
+	m_pGroundPlatforms[2]->setPosition(glm::vec2(800, 490));
 
 
 	int j = 0;
@@ -269,41 +305,17 @@ void Level1Scene::start()
 		auto ground = new Ground();
 		m_pGrounds.push_back(ground);
 		addChild(ground);
-		ground->setPosition(glm::vec2(j, 330));
-		j += 50;
+		ground->setPosition(glm::vec2(j, 550));
+		j += 32;
 
 	}
-
-
-	for (size_t i = 0; i < 7; i++)
-	{
-		auto ground = new Ground();
-		m_pGroundsVertical.push_back(ground);
-		addChild(ground);
-	}
-
-	j = 0;
-
-	for (int i = 0; i < 3; ++i)
-	{
-		m_pGroundsVertical[i]->setPosition(glm::vec2(300, 330 - j));
-		j += 50;
-	}
-	j = 0;
-
-	for (int i = 4; i < 7; ++i)
-	{
-		m_pGroundsVertical[i]->setPosition(glm::vec2(600, 330 - j));
-		j += 50;
-	}
-
 
 	m_pFinishLevel = new FinishLevel();
-	m_pFinishLevel->setPosition(glm::vec2(1300, 295));
+	m_pFinishLevel->setPosition(glm::vec2(1300, 515));
 	addChild(m_pFinishLevel);
 	
 	m_pPlayer = new Player();
-	m_pPlayer->setPosition(glm::vec2(120, 150));
+	m_pPlayer->setPosition(glm::vec2(30, 505));
 
 	addChild(m_pPlayer);
 
@@ -315,17 +327,15 @@ void Level1Scene::start()
 
 	}
 
-	m_pEnemy[0]->setPosition(glm::vec2(400, 300));
-	m_pEnemy[1]->setPosition(glm::vec2(770, 300));
-	m_pEnemy[2]->setPosition(glm::vec2(1100, 300));
+	m_pEnemy[0]->setPosition(glm::vec2(600, 515));
+	m_pEnemy[1]->setPosition(glm::vec2(970, 515));
+	m_pEnemy[2]->setPosition(glm::vec2(1100, 515));
 
-	m_pEnemy[0]->setSpeed(0.01);
-	m_pEnemy[1]->setSpeed(0.009);
-	m_pEnemy[2]->setSpeed(0.007);
 
-	for (Enemy* enemy : m_pEnemy) {
+	for (auto enemy : m_pEnemy) {
 		enemy->setRange();
 	}
+	m_pEnemy[0]->setPatrolRange(120);
 
 	m_pEnemy[2]->setPatrolRange(100);
 
@@ -337,8 +347,9 @@ void Level1Scene::start()
 
 	}
 
-	m_pShadows[0]->setPosition(glm::vec2(375, 265));
-	m_pShadows[1]->setPosition(glm::vec2(675, 265));
+	m_pShadows[0]->setPosition(glm::vec2(245, 485));
+	m_pShadows[1]->setPosition(glm::vec2(495, 485));
+	m_pShadows[2]->setPosition(glm::vec2(895, 485));
 
 
 }

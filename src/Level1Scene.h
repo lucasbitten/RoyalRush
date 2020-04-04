@@ -14,6 +14,7 @@
 #include "Enemy.h"
 #include "Background.h"
 #include "FinishLevel.h"
+#include "GroundPlatform.h"
 
 
 class Level1Scene : public Scene
@@ -40,12 +41,12 @@ private:
 	Player* m_pPlayer;
 	FinishLevel* m_pFinishLevel;
 
-	const int totalGroundElements = 35;
-	int m_shadowNum = 2;
+	const int totalGroundElements = 55;
+	int m_shadowNum = 3;
 	std::vector<Shadow*> m_pShadows;
 
 	std::vector<Ground*> m_pGrounds;
-	std::vector<Ground*> m_pGroundsVertical;
+	std::vector<GroundPlatform*> m_pGroundPlatforms;
 
 	glm::vec2 m_mousePosition;
 
