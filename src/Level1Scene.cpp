@@ -278,6 +278,7 @@ void Level1Scene::handleEvents()
 
 void Level1Scene::start()
 {
+	TheGame::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
 
 	// allocates memory on the heap for this game object
 

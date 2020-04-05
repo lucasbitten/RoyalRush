@@ -113,6 +113,9 @@ void StartScene::handleEvents()
 void StartScene::start()
 {
 
+	TheGame::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
+
+	
 	TheSoundManager::Instance()->load("../Assets/audio/Music.mp3", "music", SOUND_MUSIC);
 	TheSoundManager::Instance()->playMusic("music", 1);
 	

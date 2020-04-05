@@ -20,7 +20,7 @@ bool PlayAgain::ButtonClick()
 	{
 		if (!m_isClicked)
 		{
-			TheGame::Instance()->changeSceneState(SceneState::START_SCENE);
+			TheGame::Instance()->changeSceneState(TheGame::Instance()->m_currentLevel);
 			m_isClicked = true;
 		}
 		return true;

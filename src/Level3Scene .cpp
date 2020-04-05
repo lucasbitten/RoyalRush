@@ -230,6 +230,7 @@ void Level3Scene::handleEvents()
 
 void Level3Scene::start()
 {
+	TheGame::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
 
 	m_background = new Background();
 	addChild(m_background);

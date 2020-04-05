@@ -90,6 +90,7 @@ void LevelCompleteScene::handleEvents()
 
 void LevelCompleteScene::start()
 {
+	TheGame::Instance()->m_currentLevel = START_SCENE;
 
 	m_background = new Background();
 	addChild(m_background);

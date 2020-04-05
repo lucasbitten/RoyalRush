@@ -242,6 +242,7 @@ void Level2Scene::handleEvents()
 
 void Level2Scene::start()
 {
+	TheGame::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
 
 	TheSoundManager::Instance()->load("../Assets/audio/key.wav", "eg", SOUND_SFX);
 	TheSoundManager::Instance()->load("../Assets/audio/key.wav", "eg", SOUND_SFX);
