@@ -16,6 +16,7 @@ enum GameObjectType {
 	CONTROLS_IMAGE,
 	DOOR,
 	KEY,
+	HEART,
 	SHADOW_INFO
 };
 #endif /* defined (__GAME_OBJECT_TYPE__) */

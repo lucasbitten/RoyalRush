@@ -1,6 +1,7 @@
 #include "Level3Scene.h"
 #include "Game.h"
 #include "DetectShadowManager.h"
+#include "GameManager.h"
 
 Level3Scene::Level3Scene()
 {
@@ -14,7 +15,10 @@ Level3Scene::~Level3Scene()
 void Level3Scene::draw()
 {
 	drawDisplayList();
-
+	for (int i = 0; i < GameManager::Instance()->getPlayerLives(); ++i)
+	{
+		m_pPlayerLives[i]->draw();
+	}
 }
 
 void Level3Scene::update()
@@ -53,7 +57,16 @@ void Level3Scene::update()
 		Collision::squaredRadiusCheck(m_pPlayer, enemy);
 		if (enemy->detectPlayer(m_pPlayer))
 		{
-			TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+			if (TheGameManager::Instance()->getPlayerLives() == 0)
+			{
+				TheGame::Instance()->changeSceneState(SceneState::GAME_OVER_SCENE);
+
+			}
+			else
+			{
+				TheGameManager::Instance()->setPlayerLives(TheGameManager::Instance()->getPlayerLives() - 1);
+				TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+			}
 			return;
 		}
 		if (Collision::squaredRadiusCheck(m_pPlayer, enemy))
@@ -230,7 +243,7 @@ void Level3Scene::handleEvents()
 
 void Level3Scene::start()
 {
-	TheGame::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
+	TheGameManager::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
 
 	m_background = new Background();
 	addChild(m_background);
@@ -246,6 +259,13 @@ void Level3Scene::start()
 	m_pGroundPlatforms[1]->setPosition(glm::vec2(550, 490));
 	m_pGroundPlatforms[2]->setPosition(glm::vec2(950, 490));
 
+	for (int i = 0; i < 3; i++)
+	{
+		auto heart = new Heart();
+		heart->setPosition(glm::vec2(15 + 45 * i, 15));
+		m_pPlayerLives.push_back(heart);
+
+	}
 
 	int j = 0;
 	int k = 550;

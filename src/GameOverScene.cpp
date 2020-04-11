@@ -1,4 +1,4 @@
-#include "LevelCompleteScene.h"
+#include "GameOverScene.h"
 #include "Game.h"
 #include <ctime>
 #include "GLM/gtx/string_cast.hpp"
@@ -6,37 +6,37 @@
 #include <iomanip>
 
 #include "GameManager.h"
+#include "SoundManager.h"
 
-LevelCompleteScene::LevelCompleteScene()
+GameOverScene::GameOverScene()
 {
-	LevelCompleteScene::start();
+	GameOverScene::start();
 }
 
-LevelCompleteScene::~LevelCompleteScene()
+GameOverScene::~GameOverScene()
 {
 }
 
-void LevelCompleteScene::draw()
+void GameOverScene::draw()
 {
 	m_background->draw();
 	m_Label->draw();
 	m_pPlayAgain->draw();
 }
 
-void LevelCompleteScene::update()
+void GameOverScene::update()
 {
-	m_background->update();
 	m_pPlayAgain->setMousePosition(m_mousePosition);
 	m_pPlayAgain->ButtonClick();
 }
 
-void LevelCompleteScene::clean()
+void GameOverScene::clean()
 {
 	delete m_Label;
 	removeAllChildren();
 }
 
-void LevelCompleteScene::handleEvents()
+void GameOverScene::handleEvents()
 {
 	SDL_Event event;
 	if (SDL_PollEvent(&event))
@@ -90,15 +90,14 @@ void LevelCompleteScene::handleEvents()
 	}
 }
 
-void LevelCompleteScene::start()
+void GameOverScene::start()
 {
-	TheGameManager::Instance()->m_currentLevel = START_SCENE;
-
+	TheGameManager::Instance()->m_currentLevel = GAME_OVER_SCENE;
 	m_background = new Background();
 	addChild(m_background);
-	
+
 	SDL_Color white = { 255, 255, 255, 255 };
-	m_Label = new Label("CONGRATULATIONS, YOU FINISHED THE GAME!", "viking", 40, white, glm::vec2(Config::SCREEN_WIDTH * 0.5f, 100.0f));
+	m_Label = new Label("GAME OVER!", "viking", 45, white, glm::vec2(Config::SCREEN_WIDTH * 0.5f, 100.0f));
 	m_Label->setParent(this);
 	addChild(m_Label);
 
@@ -109,7 +108,7 @@ void LevelCompleteScene::start()
 	addChild(m_pPlayAgain);
 }
 
-glm::vec2 LevelCompleteScene::getMousePosition()
+glm::vec2 GameOverScene::getMousePosition()
 {
 	return m_mousePosition;
 }

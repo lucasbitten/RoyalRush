@@ -5,6 +5,7 @@
 #include "Ground.h"
 #include "Enemy.h"
 #include "Game.h"
+#include "GameManager.h"
 
 
 int CollisionManager::squaredDistance(glm::vec2 P1, glm::vec2 P2)
@@ -181,7 +182,17 @@ bool CollisionManager::AABBCheckPlayer(Player* player, GameObject* object2)
 				player->jumpTime = 0;
 				player->setPosition(glm::vec2(P1.x, P2.y - object2->getHeight() / 2 - player->getHeight() / 2));
 				object2->setPosition(glm::vec2(P2.x, P2.y));
-				TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+
+				if(TheGameManager::Instance()->getPlayerLives() == 0)
+				{
+					TheGame::Instance()->changeSceneState(SceneState::GAME_OVER_SCENE);
+
+				} else
+				{
+					TheGameManager::Instance()->setPlayerLives(TheGameManager::Instance()->getPlayerLives() - 1);
+					TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+				}
+				
 				break;
 			default:
 				//std::cout << "Collision with unknown type!" << std::endl;

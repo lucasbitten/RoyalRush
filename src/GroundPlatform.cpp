@@ -1,5 +1,6 @@
 #include  "GroundPlatform.h"
 #include "Game.h"
+#include "GameManager.h"
 
 GroundPlatform::GroundPlatform()
 {

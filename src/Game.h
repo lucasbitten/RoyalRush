@@ -63,8 +63,7 @@ public:
 	void quit();
 
 	SceneState m_currentSceneState;
-	SceneState m_currentLevel;
-	
+
 private:
 	Game();
 	~Game();

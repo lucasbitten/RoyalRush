@@ -1,5 +1,6 @@
 #include "PlayAgain.h"
 #include "Game.h"
+#include "GameManager.h"
 
 PlayAgain::PlayAgain()
 	:Button(
@@ -20,7 +21,15 @@ bool PlayAgain::ButtonClick()
 	{
 		if (!m_isClicked)
 		{
-			TheGame::Instance()->changeSceneState(TheGame::Instance()->m_currentLevel);
+			if (TheGameManager::Instance()->m_currentLevel != GAME_OVER_SCENE)
+			{
+				TheGame::Instance()->changeSceneState(TheGameManager::Instance()->m_currentLevel);
+			} else
+			{
+				TheGame::Instance()->changeSceneState(START_SCENE);
+
+			}
+			
 			m_isClicked = true;
 		}
 		return true;

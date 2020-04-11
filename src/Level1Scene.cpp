@@ -2,6 +2,7 @@
 
 #include "DetectShadowManager.h"
 #include "Game.h"
+#include "GameManager.h"
 
 Level1Scene::Level1Scene()
 {
@@ -16,7 +17,10 @@ void Level1Scene::draw()
 	drawDisplayList();
 	//ExplosionManager::Instance()->draw();
 
-	
+	for (int i = 0; i < GameManager::Instance()->getPlayerLives(); ++i)
+	{
+		m_pPlayerLives[i]->draw();
+	}
 }
 
 void Level1Scene::update()
@@ -56,8 +60,17 @@ void Level1Scene::update()
 		if (enemy->detectPlayer(m_pPlayer))
 		{
 			
-			TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+			if (TheGameManager::Instance()->getPlayerLives() == 0)
+			{
+				TheGame::Instance()->changeSceneState(SceneState::GAME_OVER_SCENE);
 
+			}
+			else
+			{
+				TheGameManager::Instance()->setPlayerLives(TheGameManager::Instance()->getPlayerLives() - 1);
+				TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+			}
+			
 			return;
 		}
 		if(Collision::squaredRadiusCheck(m_pPlayer, enemy))
@@ -278,7 +291,7 @@ void Level1Scene::handleEvents()
 
 void Level1Scene::start()
 {
-	TheGame::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
+	TheGameManager::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
 
 	// allocates memory on the heap for this game object
 
@@ -296,6 +309,13 @@ void Level1Scene::start()
 	m_pGroundPlatforms[1]->setPosition(glm::vec2(400, 490));
 	m_pGroundPlatforms[2]->setPosition(glm::vec2(800, 490));
 
+	for (int i = 0; i < 3; i++)
+	{
+		auto heart = new Heart();
+		heart->setPosition(glm::vec2(15 + 45 * i, 15));
+		m_pPlayerLives.push_back(heart);
+
+	}
 
 	int j = 0;
 

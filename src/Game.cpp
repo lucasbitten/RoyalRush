@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <ctime>
 #include <iomanip>
+
+#include "GameOverScene.h"
 #include "glm/gtx/string_cast.hpp"
 #include "IMGUI_SDL/imgui_sdl.h"
 #include "LevelCompleteScene.h"
@@ -166,6 +168,10 @@ void Game::changeSceneState(const SceneState new_state)
 		case SceneState::END_SCENE:
 			m_currentScene = new EndScene();
 			std::cout << "end scene activated" << std::endl;
+			break;
+		case SceneState::GAME_OVER_SCENE:
+			m_currentScene = new GameOverScene();
+			std::cout << "Game Over scene activated" << std::endl;
 			break;
 		default:
 			std::cout << "default case activated" << std::endl;

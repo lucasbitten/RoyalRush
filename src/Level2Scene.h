@@ -19,6 +19,7 @@
 #include "TutorialInfo.h"
 #include "Key.h"
 #include "Door.h"
+#include "Heart.h"
 
 
 class Level2Scene : public Scene
@@ -54,6 +55,7 @@ private:
 
 	std::vector<Ground*> m_pGrounds;
 	std::vector<GroundPlatform*> m_pGroundPlatforms;
+	std::vector<Heart*> m_pPlayerLives;
 
 	glm::vec2 m_mousePosition;
 

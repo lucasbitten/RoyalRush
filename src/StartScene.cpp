@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <iomanip>
 
+#include "GameManager.h"
+
 StartScene::StartScene()
 {
 	StartScene::start();
@@ -112,8 +114,9 @@ void StartScene::handleEvents()
 // this function is used for initialization
 void StartScene::start()
 {
+	TheGameManager::Instance()->reset();
 
-	TheGame::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
+	TheGameManager::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
 
 	
 	TheSoundManager::Instance()->load("../Assets/audio/Music.mp3", "music", SOUND_MUSIC);

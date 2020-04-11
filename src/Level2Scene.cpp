@@ -1,6 +1,7 @@
 #include "Level2Scene.h"
 #include "Game.h"
 #include "DetectShadowManager.h"
+#include "GameManager.h"
 
 Level2Scene::Level2Scene()
 {
@@ -17,6 +18,10 @@ void Level2Scene::draw()
 	if(!isKeyPickedUp)
 	{
 		m_pKey->draw();
+	}
+	for (int i = 0; i < GameManager::Instance()->getPlayerLives(); ++i)
+	{
+		m_pPlayerLives[i]->draw();
 	}
 }
 
@@ -58,7 +63,16 @@ void Level2Scene::update()
 		Collision::squaredRadiusCheck(m_pPlayer, enemy);
 		if (enemy->detectPlayer(m_pPlayer))
 		{
-			TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+			if (TheGameManager::Instance()->getPlayerLives() == 0)
+			{
+				TheGame::Instance()->changeSceneState(SceneState::GAME_OVER_SCENE);
+
+			}
+			else
+			{
+				TheGameManager::Instance()->setPlayerLives(TheGameManager::Instance()->getPlayerLives() - 1);
+				TheGame::Instance()->changeSceneState(SceneState::END_SCENE);
+			}
 			return;
 		}
 		if (Collision::squaredRadiusCheck(m_pPlayer, enemy))
@@ -242,7 +256,7 @@ void Level2Scene::handleEvents()
 
 void Level2Scene::start()
 {
-	TheGame::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
+	TheGameManager::Instance()->m_currentLevel = TheGame::Instance()->m_currentSceneState;
 
 	TheSoundManager::Instance()->load("../Assets/audio/key.wav", "eg", SOUND_SFX);
 	TheSoundManager::Instance()->load("../Assets/audio/key.wav", "eg", SOUND_SFX);
@@ -263,6 +277,13 @@ void Level2Scene::start()
 	m_pGroundPlatforms[1]->setPosition(glm::vec2(400, 490));
 	m_pGroundPlatforms[2]->setPosition(glm::vec2(800, 490));
 
+	for (int i = 0; i < 3; i++)
+	{
+		auto heart = new Heart();
+		heart->setPosition(glm::vec2(15 + 45 * i, 15));
+		m_pPlayerLives.push_back(heart);
+
+	}
 
 	int j = 0;
 	int k = 550;

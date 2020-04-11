@@ -16,6 +16,7 @@
 #include "FinishLevel.h"
 #include "GroundPlatform.h"
 #include "ControlsImage.h"
+#include "Heart.h"
 #include "TutorialInfo.h"
 
 
@@ -49,6 +50,7 @@ private:
 
 	std::vector<Ground*> m_pGrounds;
 	std::vector<GroundPlatform*> m_pGroundPlatforms;
+	std::vector<Heart*> m_pPlayerLives;
 
 	glm::vec2 m_mousePosition;
 

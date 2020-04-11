@@ -10,6 +10,7 @@ enum SceneState
 	LEVEL2_SCENE,
 	LEVEL3_SCENE,
 	LEVEL_COMPLETE_SCENE,
+	GAME_OVER_SCENE,
 	NUM_OF_SCENES
 };
 #endif /* defined (__SCENE_STATE__) */

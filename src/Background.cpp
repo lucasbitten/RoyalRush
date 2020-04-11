@@ -1,6 +1,7 @@
 #include "Background.h"
 #include "TextureManager.h"
 #include "Game.h"
+#include "GameManager.h"
 
 Background::Background()
 {

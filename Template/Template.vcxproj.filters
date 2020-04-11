@@ -156,6 +156,15 @@
     <ClCompile Include="..\src\Level3Scene .cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\GameManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Heart.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameOverScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Game.h">
@@ -312,6 +321,15 @@
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Level3Scene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Heart.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameOverScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #include  "FinishLevel.h"
 #include "Game.h"
+#include "GameManager.h"
 
 FinishLevel::FinishLevel()
 {

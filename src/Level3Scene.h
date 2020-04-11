@@ -19,6 +19,7 @@
 #include "TutorialInfo.h"
 #include "Key.h"
 #include "Door.h"
+#include "Heart.h"
 
 
 class Level3Scene : public Scene
@@ -54,6 +55,8 @@ private:
 	std::vector<GroundPlatform*> m_pGroundPlatforms;
 
 	glm::vec2 m_mousePosition;
+
+	std::vector<Heart*> m_pPlayerLives;
 
 
 	std::vector<Enemy*> m_pEnemy;
